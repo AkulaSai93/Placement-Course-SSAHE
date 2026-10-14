@@ -10,6 +10,9 @@
 
 html { scroll-behavior: smooth; }
 
+/* clears the fixed header when jumping to an anchor */
+section[id] { scroll-margin-top: 88px; }
+
 body {
   background: #0a0708;
   color: #fff;

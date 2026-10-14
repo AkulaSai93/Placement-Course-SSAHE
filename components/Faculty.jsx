@@ -1,5 +1,5 @@
 /**
- * Faculty rail — Figma node 37:1109, reproduced to the design's exact geometry.
+ * Mentor rail — Figma node 1193:4280 (Catalyst file).
  *
  * Every card keeps its own photo offset/size, text-block width and logo row
  * layout. Each logo carries the width, height and crop inset Figma applies to
@@ -44,8 +44,14 @@ const L = {
   ineuron: { src: "/logos/ineuron.png", name: "iNeuron" },
 };
 
-/** size helper: [logo, width, height] */
+/** size helper: stores the exact Figma frame for each logo */
 const s = (logo, w, h) => ({ ...logo, w, h });
+
+/** Logos keep Figma's relative sizes, scaled down a little as a set. */
+const LOGO_SCALE = 0.85;
+
+const COPY_LIFT = 0;
+const CARD_H = 426;
 
 const FACULTY = [
   {
@@ -78,8 +84,30 @@ const FACULTY = [
   {
     name: "Vivek Sridhar",
     role: "CTO - Microsoft for Startups | AI Advisor | Investor Founder",
-    photo: { src: "/faculty/vivek-sridhar.png", left: 46.56, top: 8.65, width: 228.942, height: 228.942 },
+    photo: { src: "/faculty/vivek-sridhar.png" },
+    // the masked composite is 246.961 wide vs 273 for the plain portraits —
+    // scale it so every mentor reads at the same size
+    groupScale: 273 / 246.961,
     shape: { left: 37.02, top: 49.99, width: 246.961, height: 204.363 },
+    // Figma draws the shape, then the photo's top portion, then the photo
+    // masked to that same shape.
+    layers: [
+      {
+        left: 46.56,
+        top: 8.65,
+        width: 228.942,
+        height: 171.707,
+        img: { w: "113.56%", h: "151.42%", left: "0%", top: "-8.33%" },
+      },
+      {
+        left: 46.56,
+        top: 8.65,
+        width: 228.942,
+        height: 246.113,
+        mask: { position: "-9.54px 41.336px", size: "246.961px 204.363px" },
+        img: { w: "113.56%", h: "105.64%", left: "0%", top: "-5.81%" },
+      },
+    ],
     text: { top: 282, width: 279, gap: 16, centered: true },
     roleSize: 10,
     wrap: true,
@@ -96,7 +124,7 @@ const FACULTY = [
   {
     name: "Divyansh Dubey",
     role: "Gen AI @ Google",
-    photo: { src: "/faculty/divyansh-dubey.png", left: 37.02, top: 8.65, width: 246.35, height: 246.35 },
+    photo: { src: "/faculty/divyansh-dubey.png", size: 273, top: 0, offset: -0.5 },
     text: { top: 281.66, width: 279, height: 118, centered: true, spread: true },
     roleSize: 10,
     logoRows: [[s(L.google, 68.846, 25), s(L.tiger, 50, 25), s(L.maybank, 114.286, 25)]],
@@ -113,8 +141,26 @@ const FACULTY = [
   {
     name: "Shubham Lal",
     role: "Founder AILinc | Former Developer at Microsoft",
-    photo: { src: "/faculty/shubham-lal.png", left: 41.02, top: 8.65, width: 246, height: 246 },
+    photo: { src: "/faculty/shubham-lal.png" },
+    groupScale: 273 / 246.961,
     shape: { left: 37.02, top: 50.65, width: 246.961, height: 204.363 },
+    layers: [
+      {
+        left: 41.02,
+        top: 8.65,
+        width: 246,
+        height: 171,
+        img: { w: "100.04%", h: "143.92%", left: "0%", top: "0%" },
+      },
+      {
+        left: 41.02,
+        top: 8.65,
+        width: 246.11,
+        height: 246.11,
+        mask: { position: "-4px 42px", size: "246.961px 204.363px" },
+        cover: true,
+      },
+    ],
     text: { top: 281.66, width: 279, height: 118, centered: true, spread: true },
     roleSize: 10,
     wrap: true,
@@ -123,7 +169,7 @@ const FACULTY = [
   {
     name: "Gladden Rumao",
     role: "Staff Software AI Engineer",
-    photo: { src: "/faculty/gladden-rumao.png", size: 268, top: 14, offset: -3 },
+    photo: { src: "/faculty/gladden-rumao.png", size: 273, top: 3, offset: -0.5 },
     text: { left: 20, top: 289, width: 224, height: 118, gap: 40 },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 78.049, 25), s(L.barclays, 128.026, 25)]],
@@ -178,7 +224,7 @@ function Logo({ logo }) {
   return (
     <li
       className="relative shrink-0"
-      style={{ width: `${logo.w}px`, height: `${logo.h}px` }}
+      style={{ width: `${logo.w * LOGO_SCALE}px`, height: `${logo.h * LOGO_SCALE}px` }}
     >
       {logo.crop ? (
         <span className="pointer-events-none absolute inset-0 block overflow-hidden">
@@ -212,9 +258,11 @@ function FacultyCard({ person }) {
   const photo = person.photo;
 
   return (
-    <article className="relative h-[426px] w-[320px] shrink-0 overflow-hidden rounded-[14px] bg-white">
+    <article className="relative w-[320px] shrink-0 overflow-hidden rounded-[14px] bg-white"
+      style={{ height: `${CARD_H}px` }}>
       {/* portrait */}
       {photo.size ? (
+        /* centred square portrait */
         <div
           className="absolute left-1/2 overflow-hidden"
           style={{
@@ -231,35 +279,88 @@ function FacultyCard({ person }) {
             loading="lazy"
           />
         </div>
-      ) : (
-        <>
-          {person.shape && (
-            <img
-              src="/faculty/card-shape.svg"
-              alt=""
-              aria-hidden="true"
-              className="pointer-events-none absolute"
-              style={{
-                left: `${person.shape.left}px`,
-                top: `${person.shape.top}px`,
-                width: `${person.shape.width}px`,
-                height: `${person.shape.height}px`,
-              }}
-            />
-          )}
+      ) : person.layers ? (
+        /* red shape + the photo's top portion + the photo masked to the shape */
+        <span
+          className="pointer-events-none absolute inset-0 block"
+          style={{
+            transform: `translateY(-11px) scale(${person.groupScale})`,
+            transformOrigin: "160px 0px",
+          }}
+        >
           <img
-            src={photo.src}
-            alt={person.name}
-            className="pointer-events-none absolute object-contain"
+            src="/faculty/card-shape.svg"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute"
             style={{
-              left: `${photo.left}px`,
-              top: `${photo.top}px`,
-              width: `${photo.width}px`,
-              height: `${photo.height}px`,
+              left: `${person.shape.left}px`,
+              top: `${person.shape.top}px`,
+              width: `${person.shape.width}px`,
+              height: `${person.shape.height}px`,
             }}
-            loading="lazy"
           />
-        </>
+          {person.layers.map((layer, i) => (
+            <span
+              key={i}
+              className="pointer-events-none absolute block overflow-hidden"
+              style={{
+                left: `${layer.left}px`,
+                top: `${layer.top}px`,
+                width: `${layer.width}px`,
+                height: `${layer.height}px`,
+                ...(layer.mask
+                  ? {
+                      maskImage: "url(/faculty/card-mask.svg)",
+                      WebkitMaskImage: "url(/faculty/card-mask.svg)",
+                      maskPosition: layer.mask.position,
+                      WebkitMaskPosition: layer.mask.position,
+                      maskSize: layer.mask.size,
+                      WebkitMaskSize: layer.mask.size,
+                      maskRepeat: "no-repeat",
+                      WebkitMaskRepeat: "no-repeat",
+                    }
+                  : null),
+              }}
+            >
+              {layer.cover ? (
+                <img
+                  src={photo.src}
+                  alt={i === 0 ? person.name : ""}
+                  className="absolute inset-0 size-full max-w-none object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={photo.src}
+                  alt={i === 0 ? person.name : ""}
+                  className="absolute max-w-none"
+                  style={{
+                    width: layer.img.w,
+                    height: layer.img.h,
+                    left: layer.img.left,
+                    top: layer.img.top,
+                  }}
+                  loading="lazy"
+                />
+              )}
+            </span>
+          ))}
+        </span>
+      ) : (
+        /* plain positioned portrait */
+        <img
+          src={photo.src}
+          alt={person.name}
+          className="pointer-events-none absolute object-cover"
+          style={{
+            left: `${photo.left}px`,
+            top: `${photo.top}px`,
+            width: `${photo.width}px`,
+            height: `${photo.height}px`,
+          }}
+          loading="lazy"
+        />
       )}
 
       {/* copy */}
@@ -268,7 +369,7 @@ function FacultyCard({ person }) {
           t.justifyEnd ? "justify-end" : ""
         }`}
         style={{
-          top: `${t.top}px`,
+          top: `${t.top - COPY_LIFT}px`,
           width: `${t.width}px`,
           height: t.height ? `${t.height}px` : undefined,
           gap: t.gap ? `${t.gap}px` : undefined,
@@ -278,7 +379,9 @@ function FacultyCard({ person }) {
         }}
       >
         <div
-          className={`flex flex-col gap-2 ${t.align === "center" ? "items-center text-center" : "items-start"}`}
+          className={`flex flex-col gap-2 ${
+            t.align === "center" ? "items-center text-center" : "items-start"
+          }`}
           style={{ width: t.nameWidth ? `${t.nameWidth}px` : "100%" }}
         >
           <p className="font-montserrat text-[18px] font-semibold leading-normal text-[#272727]">
@@ -322,9 +425,9 @@ function CardGroup({ ariaHidden }) {
 
 export default function Faculty() {
   return (
-    <section className="bg-mist px-6 py-20 lg:px-20">
-      <div className="mx-auto flex max-w-[694px] flex-col items-center gap-5 text-center text-ink-900">
-        <h2 className="font-display text-[30px] font-medium leading-normal tracking-[-0.0206em] sm:text-[38px] lg:text-[48px]">
+    <section id="mentors" className="bg-mist px-6 py-20 lg:px-20">
+      <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 text-center text-ink-900">
+        <h2 className="font-display text-[30px] font-medium leading-normal tracking-[-0.0206em] sm:text-[38px] lg:text-[44px] min-[1240px]:whitespace-nowrap min-[1240px]:text-[48px]">
           Taught by{" "}
           <span className="font-accent font-medium text-flame">World&apos;s Top Tech</span> and
           Academic Minds

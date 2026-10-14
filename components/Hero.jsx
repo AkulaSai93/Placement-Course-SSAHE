@@ -1,73 +1,57 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
-const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Curriculum", href: "#curriculum" },
-  { label: "Student Journey", href: "#journey" },
-  { label: "FAQs", href: "#faqs" },
-];
+/** Polaris lags its hero at 30% of scroll while the next section slides over
+ *  it at full speed — measured as translateY = scrollY * 0.3. */
+const PARALLAX = 0.3;
 
-/** White CTA with the dark arrow chip — used in the header and the hero body. */
-function ApplyButton({ className = "" }) {
-  return (
-    <a
-      href="#apply"
-      className={`group inline-flex items-center justify-center gap-3 bg-white py-[10px] pl-4 pr-[14px] text-[13px] font-semibold uppercase leading-[19.048px] text-black transition-colors hover:bg-mist ${className}`}
-    >
-      <span className="whitespace-nowrap">
-        Apply to <span className="lowercase">u</span>GSOT Catalyst
-      </span>
-      <span className="flex size-6 shrink-0 items-center justify-center bg-ink-900 text-[10.56px] text-white">
-        <span className="transition-transform duration-300 group-hover:translate-x-[1px] group-hover:-translate-y-[1px]">
-          ↗
-        </span>
-      </span>
-    </a>
-  );
-}
-
-function Header() {
-  return (
-    <header className="absolute inset-x-0 top-0 z-20 px-6 py-[26px] lg:px-20">
-      <div className="mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
-        <a href="#home" className="relative h-[28px] w-[221.233px] shrink-0">
-          <Image
-            src="/images/ugsot-logo.png"
-            alt="upGrad School of Technology"
-            fill
-            priority
-            sizes="222px"
-            className="object-contain object-left"
-          />
-        </a>
-
-        <nav className="hidden items-start gap-[30.476px] lg:flex" aria-label="Primary">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="whitespace-nowrap font-display text-[15.238px] text-white opacity-90 transition-opacity hover:opacity-100"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <ApplyButton className="hidden h-10 sm:inline-flex" />
-      </div>
-    </header>
-  );
-}
-
+/**
+ * Hero — Figma node 48:4084. Content is exactly what the node contains.
+ *
+ * NOTE ON THE BACKGROUND: the node's bg image is Polaris School of Technology's
+ * own building, with their signage on the facade. Using it would put a
+ * competitor's campus (and trademark) on this page, so the SSAHE campus photo
+ * supplied earlier is used instead. Everything else follows the node.
+ */
 export default function Hero() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const limit = el.offsetHeight;
+      const offset = Math.min(window.scrollY * PARALLAX, limit);
+      el.style.transform = `translate3d(0, ${offset}px, 0)`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <section
       id="home"
-      className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink px-6 lg:min-h-[788px] lg:px-20"
+      ref={ref}
+      className="relative z-0 flex h-[720px] items-center overflow-hidden bg-white will-change-transform lg:h-[900px]"
     >
-      {/* background plate */}
       <Image
-        src="/images/hero-bg.jpg"
+        src="/images/campus-hero-2.webp"
         alt=""
         fill
         priority
@@ -75,52 +59,64 @@ export default function Hero() {
         className="pointer-events-none object-cover"
       />
 
-      {/* vignette + top/bottom scrims, matching the design's gradient stack */}
+      {/* node 48:4087 — transparent to 80% black by 60.096%, then deepening to
+          black at the foot, matching how the node renders */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          background: [
-            "radial-gradient(66.24% 36.25% at 50% 54%, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 72%)",
-            "radial-gradient(101.82% 55.72% at 50% 50%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55) 100%)",
-            "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.75) 100%)",
-          ].join(", "),
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 60.096%, rgba(0,0,0,0.92) 80%, rgba(0,0,0,1) 100%)",
         }}
       />
 
-      <Header />
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:pl-[92px] lg:pr-[240px]">
+        <div className="flex w-full max-w-[1108px] flex-col gap-8 lg:translate-y-[80.5px]">
+          {/* node 48:4107 */}
+          <h1 className="font-display text-[34px] font-medium leading-normal tracking-[-0.038em] text-white sm:text-[46px] lg:text-[60px]">
+            Your college gives you a degree.
+            <br />
+            <span className="text-flame">uGSOT Lastmile</span> helps you catalyze it.
+          </h1>
 
-      <div className="relative z-10 flex w-full max-w-[1280px] flex-col items-center pb-16 pt-32 text-center lg:pb-0 lg:pt-0">
-        <h1 className="flex max-w-[972px] flex-col gap-2 font-display text-[32px] font-medium leading-normal tracking-[-0.038em] text-white sm:text-[44px] lg:text-[60px]">
-          <span>Your college gives you a degree.</span>
-          <span>
-            <span className="font-accent font-medium text-flame">uGSOT Catalyst</span>{" "}
-            helps you catalyze it.
-          </span>
-        </h1>
+          {/* node 48:4108 */}
+          <div className="flex w-full flex-col font-montserrat text-[16px] leading-normal text-white lg:text-[18px]">
+            <p>
+              <span className="italic">Quantum </span>
+              An online 2-year technology accelerator you pursue alongside your existing B.Tech /
+              B.E. / BCA / B.Sc. program.
+            </p>
+            <p>We become your parallel technology ecosystem.</p>
+          </div>
 
-        <div className="flex max-w-[875px] flex-col gap-1.5 pt-[22px] font-display text-base leading-[28px] text-white/80 lg:text-[18px]">
-          <p>
-            An online 2-year technology accelerator you pursue alongside your existing B.Tech /
-            B.E. / BCA / B.Sc. program.
-          </p>
-          <p>We become your parallel technology ecosystem.</p>
-        </div>
-
-        <div className="flex w-full max-w-[824px] flex-col items-center gap-5 pt-6">
-          <p className="font-display text-base font-medium leading-[28px] text-white lg:text-[18px]">
-            Designed primarily for ambitious Year 1 &amp; Year 2 students.
-          </p>
-
-          <div className="flex flex-col items-center gap-[22px] sm:flex-row">
-            <ApplyButton />
+          {/* node 48:4121 */}
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="#apply"
+              className="group flex h-12 items-center justify-center gap-2 rounded-full bg-flame px-5 transition-opacity hover:opacity-90"
+            >
+              <span className="font-montserrat text-[15.6px] font-medium leading-6 text-white">
+                Apply Now
+              </span>
+              <span className="flex size-6 items-center justify-center">
+                <img
+                  src="/icons/chevron-right-white.svg"
+                  alt=""
+                  width="8"
+                  height="14"
+                  className="transition-transform duration-300 group-hover:translate-x-[2px]"
+                />
+              </span>
+            </a>
 
             <a
               href="#brochure"
-              className="inline-flex h-[44px] items-center justify-center gap-3 border border-solid border-white px-4 py-[10px] text-[13px] font-semibold uppercase leading-[19.048px] text-white transition-colors hover:bg-white/10"
+              className="flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-[21px] py-px transition-colors hover:border-white/50 hover:bg-white/5"
             >
-              <span className="whitespace-nowrap">Download Brochure</span>
-              <img src="/icons/download.svg" alt="" width="24" height="24" className="shrink-0" />
+              <img src="/icons/download-round.svg" alt="" width="24" height="24" />
+              <span className="whitespace-nowrap text-center font-montserrat text-[16px] font-medium leading-normal text-white">
+                Download Brochure
+              </span>
             </a>
           </div>
         </div>

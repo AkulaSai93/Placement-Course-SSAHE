@@ -150,7 +150,7 @@ function Tile({ tile }) {
 
 export default function Legacy() {
   return (
-    <section className="bg-ink-soft px-6 py-20 lg:px-20">
+    <section id="ecosystem" className="bg-ink-soft px-6 py-20 lg:px-20">
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-[60px] lg:gap-[100px]">
         <div className="flex w-full flex-col items-center gap-[40px] lg:gap-[52px]">
           <div className="flex max-w-[1023px] flex-col items-center gap-5 text-center text-white">
@@ -163,7 +163,7 @@ export default function Legacy() {
             </h2>
             <p className="font-display text-base leading-normal lg:text-[24px]">
               uGSOT Campus is building a full-time campus technology education experience. uGSOT
-              Catalyst takes a focused technology-acceleration layer to ambitious students who are
+              Lastmile takes a focused technology-acceleration layer to ambitious students who are
               already pursuing degrees elsewhere.
             </p>
           </div>
@@ -181,13 +181,13 @@ export default function Legacy() {
               </div>
             </div>
 
-            <ul className="flex flex-wrap items-center justify-center gap-x-[30px] gap-y-8 lg:flex-nowrap">
+            <ul className="flex flex-wrap items-center justify-center gap-x-[30px] gap-y-8 min-[1360px]:flex-nowrap">
               {STATS.map((stat, i) => (
                 <li key={stat.label} className="flex shrink-0 items-center gap-x-[30px]">
                   {i > 0 && (
                     <span
                       aria-hidden="true"
-                      className="hidden h-20 w-px shrink-0 bg-white/25 lg:block"
+                      className="hidden h-20 w-px shrink-0 bg-white/25 min-[1360px]:block"
                     />
                   )}
                   <div className="flex flex-col items-center gap-4 text-center">

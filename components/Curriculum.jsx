@@ -1,38 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * Curriculum tabs — Figma node 37:943.
+ * Curriculum timeline.
  *
- * NOTE: the Figma specifies copy for Semester 1 only, and this section is scoped
- * to Semesters 3 and 4. The projects, skills and subjects below are PLACEHOLDER
- * content carried over from the earlier build — swap them for the real syllabus.
- * `image` is left null on each project until real stills are supplied.
+ * ⚠️ PLACEHOLDER CONTENT. This section is scoped to Semesters 3 and 4, and the
+ * Figma only ever specified copy for Semester 1 — so the themes, descriptions,
+ * concepts, projects and skills below are stand-ins carried over from the
+ * earlier build. Swap them for the real syllabus. Project stills are unset
+ * Project stills are placeholder artwork reused from the Figma Semester-1 export —
+ * they do NOT depict these projects. Swap them for real stills.
  */
+const ICONS = {
+  code: "M8 6L2 12l6 6M16 6l6 6-6 6",
+  cloud: "M7 18a4 4 0 0 1 0-8 5.5 5.5 0 0 1 10.6 1.5A3.5 3.5 0 0 1 17 18H7Z",
+  server: "M4 5h16v5H4zM4 14h16v5H4zM8 7.5h.01M8 16.5h.01",
+  chip: "M7 7h10v10H7zM4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3",
+  graph: "M4 19V5M4 19h16M8 15l3-4 3 3 4-6",
+  people: "M15 20v-2a4 4 0 0 0-8 0v2M11 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20 20v-2a3 3 0 0 0-2.5-3",
+};
+
 const SEMESTERS = [
   {
     id: 3,
     label: "Semester 3",
-    title: "Software Engineering & Cloud",
-    projects: [
-      {
-        name: "Scalable Microservices Backend",
-        blurb: "Design, containerise and deploy services that survive real traffic.",
-        image: null,
-      },
-      {
-        name: "CI/CD Pipeline & Observability Stack",
-        blurb:
-          "Automate builds, tests and deployments with monitoring and alerting built in.",
-        image: null,
-      },
-      {
-        name: "Distributed Caching Layer",
-        blurb: "Cut read latency with a cache that stays correct under concurrent writes.",
-        image: null,
-      },
-    ],
+    // accent is used only by the projects panel + end-of-semester strip
+    accent: "#1D6FE0",
+    accentSoft: "rgba(29,111,224,0.08)",
+    theme: "Scale",
+    lead: "By Semester 3,",
+    description:
+      "students design systems that survive real traffic — containerised services, cloud deployment and the operational discipline that production demands.",
+    bold: "move from writing code to running it",
     skills: [
       "System Design",
       "Cloud Computing (AWS)",
@@ -42,36 +42,45 @@ const SEMESTERS = [
       "Computer Networks",
       "Competitive Programming",
     ],
-    subjects: [
-      "Data Structures & Algorithms II",
-      "Operating Systems & Networks",
-      "System Design",
-      "Cloud Computing (AWS)",
-      "DevOps & Containers",
-      "Competitive Programming",
+    concepts: [
+      {
+        icon: "server",
+        title: "System Design",
+        body: "Learn how large systems are structured, and why they fail when they do.",
+      },
+      {
+        icon: "cloud",
+        title: "Cloud Computing",
+        body: "Deploy and operate real services on AWS, not a local sandbox.",
+      },
+      {
+        icon: "chip",
+        title: "Operating Systems",
+        body: "Understand processes, memory and the machine under your code.",
+      },
+      {
+        icon: "code",
+        title: "DSA II",
+        body: "Advanced data structures and the problem-solving depth interviews probe.",
+      },
     ],
+    projects: [
+      { name: "Scalable Microservices Backend", image: "/projects/enterprise-integration.png" },
+      { name: "CI/CD Pipeline & Observability Stack", image: "/projects/linux-security.png" },
+      { name: "Distributed Caching Layer", image: "/projects/food-delivery.png" },
+    ],
+    outcome: "Design, deploy and operate cloud services end to end.",
   },
   {
     id: 4,
     label: "Semester 4",
-    title: "AI Engineering & Career Accelerator",
-    projects: [
-      {
-        name: "Production GenAI Application",
-        blurb: "Build with LLM APIs, retrieval and evaluation wired into the loop.",
-        image: null,
-      },
-      {
-        name: "Autonomous AI Agent",
-        blurb: "Tool-using agents that plan, act and recover from their own failures.",
-        image: null,
-      },
-      {
-        name: "Capstone Product Build",
-        blurb: "Ship one substantial product end to end and defend your design choices.",
-        image: null,
-      },
-    ],
+    accent: "#0E9F6E",
+    accentSoft: "rgba(14,159,110,0.09)",
+    theme: "Ship",
+    lead: "By Semester 4,",
+    description:
+      "students build with LLMs, retrieval and agents — then defend a capstone they shipped and can explain line by line.",
+    bold: "become AI-native engineers",
     skills: [
       "Machine Learning",
       "Generative AI & LLMs",
@@ -80,165 +89,267 @@ const SEMESTERS = [
       "Open Source Contribution",
       "Interview Preparation",
     ],
-    subjects: [
-      "Machine Learning Foundations",
-      "Generative AI & LLMs",
-      "AI Agents & Tooling",
-      "Open Source & GSoC Preparation",
-      "Interview & Aptitude Prep",
-      "Capstone Project",
+    concepts: [
+      {
+        icon: "graph",
+        title: "Machine Learning",
+        body: "The foundations behind models, training and evaluation.",
+      },
+      {
+        icon: "chip",
+        title: "Generative AI & LLMs",
+        body: "Build with language models: prompting, retrieval and guardrails.",
+      },
+      {
+        icon: "code",
+        title: "AI Agents & Tooling",
+        body: "Agents that plan, call tools and recover from their own failures.",
+      },
+      {
+        icon: "people",
+        title: "Career Readiness",
+        body: "Interviews, aptitude and the communication the job actually needs.",
+      },
     ],
+    projects: [
+      { name: "Production GenAI Application", image: "/projects/portfolio.png" },
+      { name: "Autonomous AI Agent", image: "/projects/enterprise-integration.png" },
+      { name: "Capstone Product Build", image: "/projects/linux-security.png" },
+    ],
+    outcome: "Ship an AI product you can defend in an interview.",
   },
 ];
 
-function ProjectCard({ project }) {
+function Icon({ name }) {
   return (
-    <li className="flex w-[314px] shrink-0 flex-col gap-4 rounded-[11.5px] bg-mist p-[15.6px]">
-      <div className="h-[178.8px] w-full overflow-hidden rounded-[9.8px] bg-white">
-        {project.image ? (
-          <img
-            src={project.image}
-            alt=""
-            className="size-full object-cover"
-            loading="lazy"
-          />
-        ) : (
-          <div
-            aria-hidden="true"
-            className="flex size-full items-center justify-center bg-[linear-gradient(135deg,#fafafa_0%,#eceef1_100%)] text-[11px] font-medium uppercase tracking-[0.14em] text-ink-900/25"
+    <span className="flex size-8 items-center justify-center rounded-[7px] bg-flame/10">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d={ICONS[name]}
+          stroke="#E7000B"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
+const Semester = ({ sem, reached, innerRef }) => {
+  return (
+    <div ref={innerRef} className="relative grid grid-cols-1 gap-x-10 gap-y-6 lg:grid-cols-[132px_1fr]">
+      {/* rail */}
+      <div className="relative lg:pt-1.5">
+        <div className="flex items-center justify-between gap-3">
+          <span
+            className={`font-display text-[12px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
+              reached ? "text-flame" : "text-ink-900/45"
+            }`}
           >
-            Project still
+            {sem.label}
+          </span>
+          <span
+            aria-hidden="true"
+            className={`hidden size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 lg:block ${
+              reached ? "border-flame" : "border-ink-900/20"
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* content */}
+      <div className="flex flex-col gap-6 pb-14">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
+          <div className="flex flex-col gap-3">
+            <h3 className="font-display text-[30px] font-medium leading-tight tracking-[-0.02em] text-flame lg:text-[34px]">
+              {sem.theme}
+            </h3>
+            <p className="max-w-[460px] font-display text-[15px] leading-[1.6] text-ink-900/70">
+              <span className="font-medium text-ink-900">{sem.lead}</span>{" "}
+              <span className="font-medium text-ink-900">{sem.bold}</span> — {sem.description}
+            </p>
           </div>
-        )}
-      </div>
 
-      <div className="flex flex-col gap-[9.4px]">
-        <p className="font-display text-[13.1px] font-medium leading-normal tracking-[-0.024em] text-[#1e2022]">
-          {project.name}
-        </p>
-        <p className="font-display text-[11.5px] leading-normal text-[#1e2022]">
-          {project.blurb}
-        </p>
-      </div>
-    </li>
-  );
-}
+          <div className="flex flex-col gap-3">
+            <p className="font-display text-[14px] font-medium text-ink-900">
+              What you&apos;ll learn
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {sem.skills.map((skill) => (
+                <li
+                  key={skill}
+                  className="rounded-full border border-ink-900/10 bg-white px-3 py-1.5 font-display text-[12.5px] text-ink-900/75"
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-function SubjectRow({ subject }) {
-  return (
-    <li className="flex items-center gap-[9.8px] py-[6.6px] pr-[6.6px]">
-      <img src="/icons/chevron-right.svg" alt="" width="13" height="13" className="shrink-0" />
-      <span className="font-display text-[11.5px] leading-[16.4px] text-[#1e2022]">
-        {subject}
-      </span>
-    </li>
+        {/* classroom concepts */}
+        <div className="rounded-[16px] bg-ink-900/[0.035] p-5 sm:p-6">
+          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
+            In classroom concepts
+          </p>
+          <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {sem.concepts.map((c) => (
+              <li
+                key={c.title}
+                className="flex flex-col gap-3 rounded-[12px] border border-ink-900/8 bg-white p-4"
+              >
+                <Icon name={c.icon} />
+                <p className="font-display text-[14px] font-medium leading-snug text-ink-900">
+                  {c.title}
+                </p>
+                <p className="font-display text-[12.5px] leading-[1.5] text-ink-900/55">
+                  {c.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* projects */}
+        <div className="rounded-[16px] p-5 sm:p-6" style={{ backgroundColor: sem.accentSoft }}>
+          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
+            Projects you&apos;ll work on
+          </p>
+          <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {sem.projects.map((p) => (
+              <li key={p.name} className="flex flex-col gap-3">
+                <div className="aspect-[4/3] w-full overflow-hidden rounded-[12px] bg-white">
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt=""
+                      className="size-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div
+                      aria-hidden="true"
+                      className="flex size-full items-center justify-center bg-[linear-gradient(135deg,#fff_0%,#f1f2f4_100%)] text-[10px] font-medium uppercase tracking-[0.14em] text-ink-900/25"
+                    >
+                      Project still
+                    </div>
+                  )}
+                </div>
+                <p className="font-display text-[13px] font-medium leading-snug text-ink-900">
+                  {p.name}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* end-of-semester outcome */}
+        <div
+          className="rounded-[12px] border-l-[3px] px-5 py-4"
+          style={{ borderColor: sem.accent, backgroundColor: sem.accentSoft }}
+        >
+          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
+            By the end of {sem.label}
+          </p>
+          <p className="mt-1.5 font-display text-[16px] font-medium leading-snug text-ink-900">
+            {sem.outcome}
+          </p>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default function Curriculum() {
-  const [activeId, setActiveId] = useState(SEMESTERS[0].id);
-  const active = SEMESTERS.find((s) => s.id === activeId);
-  const half = Math.ceil(active.subjects.length / 2);
-  const columns = [active.subjects.slice(0, half), active.subjects.slice(half)];
+  const trackRef = useRef(null);
+  const blockRefs = useRef([]);
+  const [progress, setProgress] = useState(0);
+  const [reached, setReached] = useState(() => SEMESTERS.map((_, i) => i === 0));
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const rect = track.getBoundingClientRect();
+      // the line follows a point ~45% down the viewport
+      const anchor = window.innerHeight * 0.45;
+      const raw = (anchor - rect.top) / Math.max(rect.height, 1);
+      setProgress(Math.min(1, Math.max(0, raw)));
+      setReached(
+        blockRefs.current.map((el) => (el ? el.getBoundingClientRect().top <= anchor : false))
+      );
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   return (
     <section id="curriculum" className="bg-mist px-6 py-20 lg:px-20">
-      <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-10">
-        <div className="flex w-full max-w-[699px] flex-col items-center gap-5 text-center text-[#1e2022]">
-          <h2 className="font-display text-[32px] font-medium leading-[1.02] tracking-[-0.008em] sm:text-[42px] lg:text-[52px]">
-            A <span className="font-accent text-flame">Curriculum</span> Built Around How
-            Engineers Actually Learn.
+      <div className="mx-auto max-w-[1280px]">
+        <div className="flex max-w-[760px] flex-col gap-4">
+          <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
+            A <span className="font-accent font-medium text-flame">Curriculum</span> Built Around
+            How Engineers Actually Learn.
           </h2>
-          <p className="font-display text-base leading-normal lg:text-[24px]">
-            Learn the fundamentals. Build real projects. Grow your career.
+          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px]">
+            Hands-on learning, curated semester by semester.
           </p>
         </div>
 
-        <div className="w-full max-w-[927px] overflow-hidden rounded-[16px] bg-white">
-          {/* tab strip */}
-          <div role="tablist" aria-label="Semesters" className="flex">
-            {SEMESTERS.map((sem) => {
-              const isActive = sem.id === activeId;
-              return (
-                <button
-                  key={sem.id}
-                  role="tab"
-                  type="button"
-                  aria-selected={isActive}
-                  onClick={() => setActiveId(sem.id)}
-                  className={`flex min-h-[67px] flex-1 flex-col items-start gap-[6.6px] px-[18px] py-[11.5px] text-left transition-colors ${
-                    isActive
-                      ? "bg-flame text-[#f5f5f5]"
-                      : "border border-[#e5e5e5] bg-white text-[#1e2022] hover:bg-mist"
-                  }`}
-                >
-                  <span className="font-display text-[11.5px] font-medium uppercase leading-[16.9px]">
-                    {sem.label}
-                  </span>
-                  <span className="font-display text-[11.5px] font-medium leading-[18.7px] tracking-[-0.027em]">
-                    {sem.title}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* panel */}
-          <div className="flex flex-col gap-5 border border-[#e5e5e5] border-t-0 p-5">
-            <div className="flex flex-col gap-[18.7px]">
-              <p className="font-display text-[15.6px] font-medium leading-[18.7px] tracking-[-0.02em] text-[#1e2022]">
-                Projects you&apos;ll be working on:
-              </p>
-              <ul className="no-scrollbar -mx-1 flex gap-[18px] overflow-x-auto px-1 pb-1">
-                {active.projects.map((p) => (
-                  <ProjectCard key={p.name} project={p} />
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex flex-col gap-[18.7px]">
-              <p className="font-display text-[15.6px] font-medium leading-[18.7px] tracking-[-0.02em] text-[#1e2022]">
-                Skills you&apos;ll Build:
-              </p>
-              <ul className="flex flex-wrap gap-x-[15.6px] gap-y-5">
-                {active.skills.map((skill) => (
-                  <li
-                    key={skill}
-                    className="flex h-[31.2px] items-center rounded-[7.8px] border border-flame bg-white px-[9.4px] py-[6.2px]"
-                  >
-                    <span className="font-display text-[12.5px] font-medium leading-[15px] tracking-[-0.02em] text-flame">
-                      {skill}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="h-px w-full bg-[#e5e5e5]" />
-
-            <div className="rounded-[9.8px] border border-[#e5e5e5] bg-white p-[9.8px]">
-              <div className="flex flex-col gap-[13.1px]">
-                <div className="flex items-center gap-[9px]">
-                  <span className="flex size-[26.2px] items-center justify-center rounded-[4.4px] bg-white">
-                    <img src="/icons/book-text.svg" alt="" width="15" height="15" />
-                  </span>
-                  <p className="font-display text-[12.5px] font-medium leading-[18.7px] tracking-[-0.02em] text-[#1e2022]">
-                    All Subjects
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-x-[70px] sm:flex-row sm:items-start">
-                  {columns.map((col, i) => (
-                    <ul key={i} className="flex w-full flex-col gap-[6.6px] sm:w-[244px]">
-                      {col.map((subject) => (
-                        <SubjectRow key={subject} subject={subject} />
-                      ))}
-                    </ul>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div ref={trackRef} className="relative mt-14">
+          {/* rail track — sits under the dots at the right edge of the rail column */}
+          <span
+            aria-hidden="true"
+            className="absolute left-[126.5px] top-[7px] hidden w-px bg-ink-900/12 lg:block"
+            style={{ bottom: "56px" }}
+          />
+          {/* filled portion, driven by scroll */}
+          <span
+            aria-hidden="true"
+            className="absolute left-[126.5px] top-[7px] hidden w-px origin-top bg-flame lg:block"
+            style={{ height: `calc((100% - 63px) * ${progress})` }}
+          />
+          {/* arrow riding the tip of the fill */}
+          <span
+            aria-hidden="true"
+            className="absolute left-[126.5px] z-10 hidden size-[22px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-flame shadow-[0_2px_8px_rgba(230,22,31,0.45)] lg:flex"
+            style={{ top: `calc(7px + (100% - 63px) * ${progress})` }}
+          >
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M6 2.5v7M3 6.5l3 3 3-3"
+                stroke="#fff"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          {SEMESTERS.map((sem, i) => (
+            <Semester
+              key={sem.id}
+              sem={sem}
+              reached={reached[i]}
+              innerRef={(el) => {
+                blockRefs.current[i] = el;
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>

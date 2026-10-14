@@ -53,7 +53,7 @@ function SpriteIcon({ frame, img }) {
 
 export default function InternshalaPro() {
   return (
-    <section className="bg-mist px-6 py-16 lg:px-20 lg:py-20">
+    <section id="internshala" className="bg-mist px-6 py-16 lg:px-20 lg:py-20">
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-10 lg:gap-[60px]">
         <h2 className="flex flex-wrap items-end justify-center gap-x-[18px] gap-y-3 font-display text-[30px] font-medium tracking-[-0.0054em] text-ink-900 sm:text-[40px] lg:text-[52px]">
           <span className="whitespace-nowrap">Get 6 Months of</span>
