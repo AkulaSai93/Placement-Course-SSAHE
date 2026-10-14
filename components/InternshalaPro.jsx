@@ -73,13 +73,13 @@ export default function InternshalaPro() {
           <span className="whitespace-nowrap">Pro</span>
         </h2>
 
-        <ul className="grid w-full grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:flex lg:items-center lg:justify-between lg:gap-0">
+        <ul className="grid w-full grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 min-[1360px]:flex min-[1360px]:items-center min-[1360px]:justify-between min-[1360px]:gap-0">
           {CARDS.map((card, i) => {
             const isLast = i === CARDS.length - 1;
             return (
-            <li key={card.title} className={`flex items-center gap-3 ${isLast ? "" : "lg:w-[304.5px]"}`}>
+            <li key={card.title} className={`flex items-center gap-3 ${isLast ? "" : "min-[1360px]:w-[304.5px]"}`}>
               <SpriteIcon frame={card.frame} img={card.img} />
-              <div className={`flex flex-col gap-[9px] text-[#1e2022] ${isLast ? "lg:w-[243px]" : "lg:w-[228px]"}`}>
+              <div className={`flex flex-col gap-[9px] text-[#1e2022] ${isLast ? "min-[1360px]:w-[243px]" : "min-[1360px]:w-[228px]"}`}>
                 <p className="font-display text-[19.5px] font-medium leading-normal">
                   {card.title}
                 </p>

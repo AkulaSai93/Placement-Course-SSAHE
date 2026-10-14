@@ -142,8 +142,8 @@ export default function Curriculum() {
   const columns = [active.subjects.slice(0, half), active.subjects.slice(half)];
 
   return (
-    <section id="curriculum" className="bg-mist px-6 py-20">
-      <div className="mx-auto flex max-w-[1131px] flex-col items-center gap-10">
+    <section id="curriculum" className="bg-mist px-6 py-20 lg:px-20">
+      <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-10">
         <div className="flex w-full max-w-[699px] flex-col items-center gap-5 text-center text-[#1e2022]">
           <h2 className="font-display text-[32px] font-medium leading-[1.02] tracking-[-0.008em] sm:text-[42px] lg:text-[52px]">
             A <span className="font-accent text-flame">Curriculum</span> Built Around How

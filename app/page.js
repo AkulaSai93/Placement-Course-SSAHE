@@ -6,6 +6,8 @@ import Curriculum from "@/components/Curriculum";
 import Certificate from "@/components/Certificate";
 import Faculty from "@/components/Faculty";
 import Legacy from "@/components/Legacy";
+import Faq from "@/components/Faq";
+import SiteFooter from "@/components/SiteFooter";
 
 export default function Page() {
   return (
@@ -18,6 +20,8 @@ export default function Page() {
       <Certificate />
       <Faculty />
       <Legacy />
+      <Faq />
+      <SiteFooter />
     </main>
   );
 }

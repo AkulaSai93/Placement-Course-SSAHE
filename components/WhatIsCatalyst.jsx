@@ -9,9 +9,9 @@ export default function WhatIsCatalyst() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <section id="what-is-catalyst" className="relative bg-mist text-ink-900">
+    <section id="what-is-catalyst" className="relative bg-mist px-6 text-ink-900 lg:px-20">
       {/* copy block */}
-      <div className="mx-auto max-w-shell px-6 pb-14 pt-20 lg:pb-20 lg:pt-24">
+      <div className="mx-auto max-w-shell pb-14 pt-20 lg:pb-20 lg:pt-24">
         <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1.5 text-[12px] font-semibold tracking-[0.01em] text-brand">
           <span className="size-1.5 rounded-full bg-brand" />
           Technology accelerator
@@ -58,7 +58,7 @@ export default function WhatIsCatalyst() {
 
       {/* video */}
       <div className="relative">
-        <div className="relative mx-auto max-w-shell px-6 pb-12 lg:pb-16">
+        <div className="relative mx-auto max-w-shell pb-12 lg:pb-16">
           <div className="group relative mx-auto aspect-[16/9] w-full max-w-[880px] overflow-hidden rounded-2xl bg-ink">
             {playing ? (
               <iframe

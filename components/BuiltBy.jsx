@@ -65,9 +65,9 @@ function LogoGroup({ ariaHidden }) {
 
 export default function BuiltBy() {
   return (
-    <section className="bg-mist pb-20 pt-4 lg:pb-24">
+    <section className="bg-mist px-6 pb-20 pt-4 lg:px-20 lg:pb-24">
       <div className="flex flex-col items-center gap-6">
-        <h2 className="px-6 text-center font-accent text-[22px] font-medium leading-normal text-ink-900 sm:text-[28px]">
+        <h2 className="text-center font-accent text-[22px] font-medium leading-normal text-ink-900 sm:text-[28px]">
           Built by people who&apos;ve worked at
         </h2>
 

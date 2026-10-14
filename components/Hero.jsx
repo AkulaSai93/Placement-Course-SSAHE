@@ -28,7 +28,7 @@ function ApplyButton({ className = "" }) {
 
 function Header() {
   return (
-    <header className="absolute inset-x-0 top-0 z-20 px-6 py-[26px] lg:px-[52px]">
+    <header className="absolute inset-x-0 top-0 z-20 px-6 py-[26px] lg:px-20">
       <div className="mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
         <a href="#home" className="relative h-[28px] w-[221.233px] shrink-0">
           <Image
@@ -63,7 +63,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink lg:min-h-[788px]"
+      className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink px-6 lg:min-h-[788px] lg:px-20"
     >
       {/* background plate */}
       <Image
@@ -90,7 +90,7 @@ export default function Hero() {
 
       <Header />
 
-      <div className="relative z-10 flex w-full max-w-[1201px] flex-col items-center px-6 pb-16 pt-32 text-center lg:pb-0 lg:pt-0">
+      <div className="relative z-10 flex w-full max-w-[1280px] flex-col items-center pb-16 pt-32 text-center lg:pb-0 lg:pt-0">
         <h1 className="flex max-w-[972px] flex-col gap-2 font-display text-[32px] font-medium leading-normal tracking-[-0.038em] text-white sm:text-[44px] lg:text-[60px]">
           <span>Your college gives you a degree.</span>
           <span>

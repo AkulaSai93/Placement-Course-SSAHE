@@ -17,8 +17,9 @@ module.exports = {
         display: ["var(--font-display)", "ui-sans-serif", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
         accent: ["var(--font-accent)", "ui-sans-serif", "system-ui", "sans-serif"],
+        montserrat: ["var(--font-montserrat)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
-      maxWidth: { shell: "1200px" },
+      maxWidth: { shell: "1280px" },
       keyframes: {
         marquee: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
         fadeUp: { "0%": { opacity: 0, transform: "translateY(16px)" }, "100%": { opacity: 1, transform: "translateY(0)" } },

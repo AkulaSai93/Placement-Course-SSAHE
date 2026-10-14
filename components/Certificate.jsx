@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Certificate() {
   return (
-    <section className="relative bg-ink pb-24 pt-24">
+    <section className="relative bg-ink px-6 pb-24 pt-24 lg:px-20">
       {/* fades from the dark section above into the light section below */}
       <div
         aria-hidden="true"
@@ -10,7 +10,7 @@ export default function Certificate() {
         style={{ background: "linear-gradient(rgba(0,0,0,0) 35%, #F4F4F5)" }}
       />
 
-      <div className="relative mx-auto max-w-shell px-6">
+      <div className="relative mx-auto max-w-shell">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-[30px] font-semibold leading-tight tracking-[-0.02em] text-white sm:text-[41px]">
             Earn a Completion Certificate
