@@ -118,7 +118,7 @@ export default function Partners() {
     if (isPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setTimeout(() => {
       setActiveIndex((current) => (current + 1) % PARTNERS.length);
-    }, 2600);
+    }, 1900);
     return () => window.clearTimeout(timer);
   }, [activeIndex, isPaused]);
 

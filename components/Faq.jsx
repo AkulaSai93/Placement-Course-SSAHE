@@ -61,8 +61,8 @@ const FAQS = [
     a: "No. Campus immersions are selective and depend on your progress through the programme. They are an opportunity Lastmile opens up, not an entitlement that comes with enrolment.",
   },
   {
-    q: "What's included in ₹50,000/year?",
-    a: "The whole programme, not a module of it: programming and maths, DSA, competitive programming and ICPC preparation, full stack development, systems and cloud, AI and GenAI, open source and GSoC guidance, real projects, free access to ProjectBuilder Pro, the AI Mentor, industry mentorship, competitions, Career OS and the internship ecosystem. The total programme fee is ₹1,00,000 across two years.",
+    q: "What's included in the ₹50,000 fee?",
+    a: "The whole programme, not a module of it: programming and maths, DSA, competitive programming and ICPC preparation, full stack development, systems and cloud, AI and GenAI, open source and GSoC guidance, real projects, free access to ProjectBuilder Pro, the AI Mentor, industry mentorship, competitions, Career OS and the internship ecosystem. ₹50,000 is the total fee for the full two years, not a yearly charge.",
   },
 ];
 
