@@ -23,7 +23,7 @@ export default function Certificate() {
           <div className="rounded-sm bg-white p-2 shadow-[0_30px_70px_-26px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-transform duration-700 ease-out [transform:rotateX(7deg)] group-hover:[transform:rotateX(0deg)]">
             <div className="relative aspect-[3508/2480] w-full overflow-hidden">
               <Image
-                src="/images/certificate.png"
+                src="/images/certificate.webp"
                 alt="uGSOT Lastmile certificate of completion"
                 fill
                 sizes="(min-width: 1024px) 1024px, 100vw"

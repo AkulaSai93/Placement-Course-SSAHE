@@ -9,14 +9,14 @@
 const TILES = [
   {
     name: "upGrad KnowledgeHut",
-    src: "/brands/upgrad-knowledgehut.png",
+    src: "/brands/upgrad-knowledgehut.webp",
     box: { left: 705.3, top: 28.61, w: 153.946, h: 153.942 },
     card: { w: 151.43, h: 151.426, radius: 22.16, rotate: 0.96 },
     logo: { w: 123.792, h: 44.488, dx: 0.39, dy: -1.09 },
   },
   {
     name: "upGrad Rekrut",
-    src: "/brands/upgrad-rekrut.png",
+    src: "/brands/upgrad-rekrut.webp",
     box: { left: 545.7, top: 2, w: 190.812, h: 190.809 },
     card: { w: 151.43, h: 151.426, radius: 22.16, rotate: 18 },
     logo: {
@@ -29,7 +29,7 @@ const TILES = [
   },
   {
     name: "upGrad Abroad",
-    src: "/brands/upgrad-abroad.png",
+    src: "/brands/upgrad-abroad.webp",
     box: { left: 426.7, top: 6, w: 182.752, h: 182.749 },
     card: { w: 152.38, h: 152.376, radius: 22.3, rotate: -13 },
     logo: {
@@ -42,7 +42,7 @@ const TILES = [
   },
   {
     name: "upGrad",
-    src: "/brands/upgrad.png",
+    src: "/brands/upgrad.webp",
     box: { left: 0, top: 0.06, w: 206.227, h: 206.225 },
     card: { w: 153.33, h: 153.326, radius: 22.439, rotate: -27 },
     logo: {
@@ -55,7 +55,7 @@ const TILES = [
   },
   {
     name: "Internshala",
-    src: "/images/internshala.png",
+    src: "/images/internshala.webp",
     box: { left: 157.7, top: 13, w: 156.142, h: 156.138 },
     card: { w: 148.57, h: 148.566, radius: 21.742, rotate: -3 },
     logo: {
@@ -68,7 +68,7 @@ const TILES = [
   },
   {
     name: "upGrad Campus",
-    src: "/brands/upgrad-campus.png",
+    src: "/brands/upgrad-campus.webp",
     box: { left: 288.7, top: 0, w: 188.642, h: 188.639 },
     card: { w: 159.05, h: 159.046, radius: 23.276, rotate: 12 },
     logo: { w: 89.74, h: 89.74, dx: 0.41, dy: -0.98 },

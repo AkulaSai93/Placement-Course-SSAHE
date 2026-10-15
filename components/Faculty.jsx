@@ -21,27 +21,27 @@ const CROP = {
 };
 
 const L = {
-  linkedin: { src: "/logos/linkedin.png", name: "LinkedIn", crop: CROP.linkedin },
-  walmart: { src: "/logos/walmart.png", name: "Walmart", crop: CROP.walmart },
-  upgradSot: { src: "/logos/upgrad-sot.png", name: "upGrad School of Technology" },
-  paypal: { src: "/logos/paypal.png", name: "PayPal", crop: CROP.paypal },
-  oracle: { src: "/logos/oracle.png", name: "Oracle", crop: CROP.oracle },
-  physicsWallah: { src: "/logos/physics-wallah.png", name: "Physics Wallah" },
-  hotstar: { src: "/logos/hotstar.png", name: "Hotstar" },
-  vmware: { src: "/logos/vmware.png", name: "VMware", crop: CROP.vmware },
-  microsoft: { src: "/logos/microsoft.png", name: "Microsoft", crop: CROP.microsoft },
-  digitalocean: { src: "/logos/digitalocean.png", name: "DigitalOcean" },
-  pinnum: { src: "/logos/pinnum.png", name: "Pinnum" },
-  hcltech: { src: "/logos/hcltech.png", name: "HCLTech" },
-  ibm: { src: "/logos/ibm.png", name: "IBM" },
-  google: { src: "/logos/google.png", name: "Google", crop: CROP.google },
-  tiger: { src: "/logos/tiger-analytics.png", name: "Tiger Analytics" },
-  maybank: { src: "/logos/maybank.png", name: "Maybank", crop: CROP.maybank },
-  salesforce: { src: "/logos/salesforce.png", name: "Salesforce" },
-  ailinc: { src: "/logos/ailinc.png", name: "AILinc", crop: CROP.ailinc },
-  barclays: { src: "/logos/barclays.png", name: "Barclays", crop: CROP.barclays },
-  cisco: { src: "/logos/cisco.png", name: "Cisco" },
-  ineuron: { src: "/logos/ineuron.png", name: "iNeuron" },
+  linkedin: { src: "/logos/linkedin.webp", name: "LinkedIn", crop: CROP.linkedin },
+  walmart: { src: "/logos/walmart.webp", name: "Walmart", crop: CROP.walmart },
+  upgradSot: { src: "/logos/upgrad-sot.webp", name: "upGrad School of Technology" },
+  paypal: { src: "/logos/paypal.webp", name: "PayPal", crop: CROP.paypal },
+  oracle: { src: "/logos/oracle.webp", name: "Oracle", crop: CROP.oracle },
+  physicsWallah: { src: "/logos/physics-wallah.webp", name: "Physics Wallah" },
+  hotstar: { src: "/logos/hotstar.webp", name: "Hotstar" },
+  vmware: { src: "/logos/vmware.webp", name: "VMware", crop: CROP.vmware },
+  microsoft: { src: "/logos/microsoft.webp", name: "Microsoft", crop: CROP.microsoft },
+  digitalocean: { src: "/logos/digitalocean.webp", name: "DigitalOcean" },
+  pinnum: { src: "/logos/pinnum.webp", name: "Pinnum" },
+  hcltech: { src: "/logos/hcltech.webp", name: "HCLTech" },
+  ibm: { src: "/logos/ibm.webp", name: "IBM" },
+  google: { src: "/logos/google.webp", name: "Google", crop: CROP.google },
+  tiger: { src: "/logos/tiger-analytics.webp", name: "Tiger Analytics" },
+  maybank: { src: "/logos/maybank.webp", name: "Maybank", crop: CROP.maybank },
+  salesforce: { src: "/logos/salesforce.webp", name: "Salesforce" },
+  ailinc: { src: "/logos/ailinc.webp", name: "AILinc", crop: CROP.ailinc },
+  barclays: { src: "/logos/barclays.webp", name: "Barclays", crop: CROP.barclays },
+  cisco: { src: "/logos/cisco.webp", name: "Cisco" },
+  ineuron: { src: "/logos/ineuron.webp", name: "iNeuron" },
 };
 
 /** size helper: stores the exact Figma frame for each logo */
@@ -57,7 +57,7 @@ const FACULTY = [
   {
     name: "Vishwa Mohan",
     role: "CEO of upGrad SOT",
-    photo: { src: "/faculty/vishwa-mohan.png", size: 273, top: 0, offset: -0.5 },
+    photo: { src: "/faculty/vishwa-mohan.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 223.813, gap: 20, align: "center", nameWidth: 136 },
     roleSize: 12,
     logoRows: [
@@ -68,7 +68,7 @@ const FACULTY = [
   {
     name: "Rishi Saraf",
     role: "Cofounder & CEO DevDynamics",
-    photo: { src: "/faculty/rishi-saraf.png", size: 273, top: 0, offset: 0.5 },
+    photo: { src: "/faculty/rishi-saraf.webp", size: 273, top: 0, offset: 0.5 },
     text: { left: 20, top: 285, width: 277, gap: 20 },
     roleSize: 12,
     wrap: true,
@@ -84,7 +84,7 @@ const FACULTY = [
   {
     name: "Vivek Sridhar",
     role: "CTO - Microsoft for Startups | AI Advisor | Investor Founder",
-    photo: { src: "/faculty/vivek-sridhar.png" },
+    photo: { src: "/faculty/vivek-sridhar.webp" },
     // the masked composite is 246.961 wide vs 273 for the plain portraits —
     // scale it so every mentor reads at the same size
     groupScale: 273 / 246.961,
@@ -124,7 +124,7 @@ const FACULTY = [
   {
     name: "Divyansh Dubey",
     role: "Gen AI @ Google",
-    photo: { src: "/faculty/divyansh-dubey.png", size: 273, top: 0, offset: -0.5 },
+    photo: { src: "/faculty/divyansh-dubey.webp", size: 273, top: 0, offset: -0.5 },
     text: { top: 281.66, width: 279, height: 118, centered: true, spread: true },
     roleSize: 10,
     logoRows: [[s(L.google, 68.846, 25), s(L.tiger, 50, 25), s(L.maybank, 114.286, 25)]],
@@ -133,7 +133,7 @@ const FACULTY = [
   {
     name: "Gaurav Kaushik",
     role: "Senior Staff Software Engineer & Problem Solving Track Lead",
-    photo: { src: "/faculty/gaurav-kaushik.png", size: 273, top: 0, offset: 0.5 },
+    photo: { src: "/faculty/gaurav-kaushik.webp", size: 273, top: 0, offset: 0.5 },
     text: { left: 20, top: 285, width: 277, gap: 20 },
     roleSize: 12,
     logoRows: [[s(L.salesforce, 32.143, 22.5), s(L.microsoft, 104, 25), s(L.paypal, 81.295, 22.5)]],
@@ -141,7 +141,7 @@ const FACULTY = [
   {
     name: "Shubham Lal",
     role: "Founder AILinc | Former Developer at Microsoft",
-    photo: { src: "/faculty/shubham-lal.png" },
+    photo: { src: "/faculty/shubham-lal.webp" },
     groupScale: 273 / 246.961,
     shape: { left: 37.02, top: 50.65, width: 246.961, height: 204.363 },
     layers: [
@@ -169,7 +169,7 @@ const FACULTY = [
   {
     name: "Gladden Rumao",
     role: "Staff Software AI Engineer",
-    photo: { src: "/faculty/gladden-rumao.png", size: 273, top: 3, offset: -0.5 },
+    photo: { src: "/faculty/gladden-rumao.webp", size: 273, top: 3, offset: -0.5 },
     text: { left: 20, top: 289, width: 224, height: 118, gap: 40 },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 78.049, 25), s(L.barclays, 128.026, 25)]],
@@ -178,7 +178,7 @@ const FACULTY = [
   {
     name: "Mithun S",
     role: "SDE II at Cisco",
-    photo: { src: "/faculty/mithun-s.png", size: 273, top: 0, offset: -0.5 },
+    photo: { src: "/faculty/mithun-s.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 284.66, width: 224, height: 118, spread: true, align: "center", nameWidth: 136 },
     roleSize: 12,
     logoRows: [
@@ -189,7 +189,7 @@ const FACULTY = [
   {
     name: "Rishab Bafna",
     role: "Senior AI Engineer & Lead Instructor",
-    photo: { src: "/faculty/rishab-bafna.png", size: 273, top: 15, offset: -0.5 },
+    photo: { src: "/faculty/rishab-bafna.webp", size: 273, top: 15, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, gap: 32, justifyEnd: true },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
@@ -197,7 +197,7 @@ const FACULTY = [
   {
     name: "Piyush Jain",
     role: "Senior Mathematician and Lead Instructor",
-    photo: { src: "/faculty/piyush-jain.png", size: 273, top: 7, offset: -0.5 },
+    photo: { src: "/faculty/piyush-jain.webp", size: 273, top: 7, offset: -0.5 },
     text: { left: 20, top: 292, width: 224, height: 118, spread: true },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
@@ -205,7 +205,7 @@ const FACULTY = [
   {
     name: "Rahul Yadav",
     role: "SDE 2 + Lead Instructor",
-    photo: { src: "/faculty/rahul-yadav.png", size: 273, top: 0, offset: -0.5 },
+    photo: { src: "/faculty/rahul-yadav.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, spread: true },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
@@ -213,7 +213,7 @@ const FACULTY = [
   {
     name: "Jyoti Nigam",
     role: "Data Scientist at upGrad SOT",
-    photo: { src: "/faculty/jyoti-nigam.png", size: 273, top: 0, offset: -0.5 },
+    photo: { src: "/faculty/jyoti-nigam.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, spread: true },
     roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],

@@ -3,7 +3,7 @@
  * The four icons come from one sprite sheet; each card crops its own slice,
  * so the frame + offsets below are kept exactly as the design specifies.
  */
-const ICON_SPRITE = "/images/internshala-icons.png";
+const ICON_SPRITE = "/images/internshala-icons.webp";
 
 const CARDS = [
   {
@@ -63,7 +63,7 @@ export default function InternshalaPro() {
           >
             <span className="pointer-events-none absolute inset-0 block overflow-hidden">
               <img
-                src="/images/internshala.png"
+                src="/images/internshala.webp"
                 alt="Internshala"
                 className="absolute max-w-none"
                 style={{ width: "125.55%", height: "232.12%", left: "-12.8%", top: "-69.52%" }}

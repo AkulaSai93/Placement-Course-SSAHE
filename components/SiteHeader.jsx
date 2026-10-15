@@ -54,7 +54,7 @@ export default function SiteHeader() {
       <div className="relative mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
         <a href="#home" className="relative h-[26px] w-[205px] shrink-0">
           <img
-            src="/images/ugsot-logo.png"
+            src="/images/ugsot-logo.webp"
             alt="upGrad School of Technology"
             className="absolute inset-0 size-full object-contain object-left"
           />

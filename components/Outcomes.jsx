@@ -23,18 +23,18 @@ const START_SECONDS = 593;
 const FRAME_H = 24;
 
 const TICKER_LOGOS = [
-  { src: "/logos/flipkart.png", name: "Flipkart", w: 118.009, h: 35.702, crop: { w: "100.5%", h: "187.04%", left: "-0.31%", top: "-43.69%" } },
-  { src: "/logos/goldman-sachs.png", name: "Goldman Sachs", w: 77.272, h: 35.705, crop: { w: "103.45%", h: "125.93%", left: "-1.72%", top: "-12.59%" } },
-  { src: "/logos/google.png", name: "Google", w: 98.326, h: 35.705, crop: { w: "104.75%", h: "120.19%", left: "-2.79%", top: "-10.77%" } },
-  { src: "/logos/accenture.png", name: "Accenture", w: 126.067, h: 35.705, crop: { w: "100.05%", h: "198.71%", left: "-0.03%", top: "-48.76%" } },
-  { src: "/logos/adobe.png", name: "Adobe", w: 119.356, h: 35.705, crop: { w: "141.45%", h: "315%", left: "-20.3%", top: "-107.5%" } },
-  { src: "/logos/amazon.png", name: "Amazon", w: 111.623, h: 35.705, crop: { w: "128.11%", h: "176.77%", left: "-14.22%", top: "-48.99%" } },
-  { src: "/logos/cisco.png", name: "Cisco", w: 62.686, h: 35.705, crop: null },
-  { src: "/logos/dell.png", name: "Dell", w: 89.782, h: 35.705, crop: { w: "122.78%", h: "154.37%", left: "-11.2%", top: "-29.13%" } },
-  { src: "/logos/microsoft.png", name: "Microsoft", w: 104, h: 25, crop: { w: "123.08%", h: "188.13%", left: "-11.54%", top: "-45.81%" } },
-  { src: "/logos/paypal.png", name: "PayPal", w: 81.295, h: 22.5, crop: { w: "123.56%", h: "297.62%", left: "-12.03%", top: "-100.6%" } },
-  { src: "/logos/oracle.png", name: "Oracle", w: 131.719, h: 22.5, crop: { w: "112.1%", h: "366.67%", left: "-6.76%", top: "-129.17%" } },
-  { src: "/logos/walmart.png", name: "Walmart", w: 86.834, h: 22.5, crop: { w: "106.87%", h: "232.01%", left: "-3.42%", top: "-66.17%" } },
+  { src: "/logos/flipkart.webp", name: "Flipkart", w: 118.009, h: 35.702, crop: { w: "100.5%", h: "187.04%", left: "-0.31%", top: "-43.69%" } },
+  { src: "/logos/goldman-sachs.webp", name: "Goldman Sachs", w: 77.272, h: 35.705, crop: { w: "103.45%", h: "125.93%", left: "-1.72%", top: "-12.59%" } },
+  { src: "/logos/google.webp", name: "Google", w: 98.326, h: 35.705, crop: { w: "104.75%", h: "120.19%", left: "-2.79%", top: "-10.77%" } },
+  { src: "/logos/accenture.webp", name: "Accenture", w: 126.067, h: 35.705, crop: { w: "100.05%", h: "198.71%", left: "-0.03%", top: "-48.76%" } },
+  { src: "/logos/adobe.webp", name: "Adobe", w: 119.356, h: 35.705, crop: { w: "141.45%", h: "315%", left: "-20.3%", top: "-107.5%" } },
+  { src: "/logos/amazon.webp", name: "Amazon", w: 111.623, h: 35.705, crop: { w: "128.11%", h: "176.77%", left: "-14.22%", top: "-48.99%" } },
+  { src: "/logos/cisco.webp", name: "Cisco", w: 62.686, h: 35.705, crop: null },
+  { src: "/logos/dell.webp", name: "Dell", w: 89.782, h: 35.705, crop: { w: "122.78%", h: "154.37%", left: "-11.2%", top: "-29.13%" } },
+  { src: "/logos/microsoft.webp", name: "Microsoft", w: 104, h: 25, crop: { w: "123.08%", h: "188.13%", left: "-11.54%", top: "-45.81%" } },
+  { src: "/logos/paypal.webp", name: "PayPal", w: 81.295, h: 22.5, crop: { w: "123.56%", h: "297.62%", left: "-12.03%", top: "-100.6%" } },
+  { src: "/logos/oracle.webp", name: "Oracle", w: 131.719, h: 22.5, crop: { w: "112.1%", h: "366.67%", left: "-6.76%", top: "-129.17%" } },
+  { src: "/logos/walmart.webp", name: "Walmart", w: 86.834, h: 22.5, crop: { w: "106.87%", h: "232.01%", left: "-3.42%", top: "-66.17%" } },
 ];
 
 const STATS = [
