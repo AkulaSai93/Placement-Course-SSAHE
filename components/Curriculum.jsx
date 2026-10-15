@@ -25,7 +25,7 @@ const SEMESTERS = [
   {
     id: 3,
     label: "Semester 3",
-    // accent is used only by the projects panel + end-of-semester strip
+    // accent drives the mobile accordion header; accentSoft tints the panels
     accent: "#1D6FE0",
     accentSoft: "rgba(29,111,224,0.08)",
     theme: "Scale",
@@ -69,7 +69,6 @@ const SEMESTERS = [
       { name: "CI/CD Pipeline & Observability Stack", image: "/projects/linux-security.webp" },
       { name: "Distributed Caching Layer", image: "/projects/food-delivery.webp" },
     ],
-    outcome: "Design, deploy and operate cloud services end to end.",
   },
   {
     id: 4,
@@ -116,7 +115,6 @@ const SEMESTERS = [
       { name: "Autonomous AI Agent", image: "/projects/enterprise-integration.webp" },
       { name: "Capstone Product Build", image: "/projects/linux-security.webp" },
     ],
-    outcome: "Ship an AI product you can defend in an interview.",
   },
 ];
 
@@ -136,12 +134,132 @@ function Icon({ name }) {
   );
 }
 
-const Semester = ({ sem, reached, innerRef }) => {
+/**
+ * Panel whose items scroll horizontally on mobile (with prev/next arrows, as in
+ * the reference) and fall back to the plain grid from `lg` up.
+ */
+function CarouselPanel({ title, className, style, children, count }) {
+  const scrollerRef = useRef(null);
+
+  // Native `behavior: "smooth"` is unreliable inside a scroll-snap container,
+  // so the arrows animate scrollLeft directly.
+  const animRef = useRef(0);
+  const nudge = (dir) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
+    const max = el.scrollWidth - el.clientWidth;
+    const from = el.scrollLeft;
+    const to = Math.max(0, Math.min(max, from + dir * step));
+    if (to === from) return;
+
+    cancelAnimationFrame(animRef.current);
+    const start = performance.now();
+    const DURATION = 320;
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / DURATION);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.scrollLeft = from + (to - from) * eased;
+      if (t < 1) animRef.current = requestAnimationFrame(tick);
+    };
+    animRef.current = requestAnimationFrame(tick);
+  };
+
+  useEffect(() => () => cancelAnimationFrame(animRef.current), []);
+
   return (
-    <div ref={innerRef} className="relative grid grid-cols-1 gap-x-10 gap-y-6 lg:grid-cols-[132px_1fr]">
-      {/* rail */}
+    <div className={`rounded-[16px] p-4 sm:p-6 ${className}`} style={style}>
+      <div className="flex items-center justify-between gap-4">
+        <p className="whitespace-nowrap font-display text-[11px] font-medium uppercase tracking-[0.1em] text-ink-900/45 sm:text-[11.5px] sm:tracking-[0.14em]">
+          {title}
+        </p>
+        <div className="flex shrink-0 gap-2 lg:hidden">
+          {[-1, 1].map((dir) => (
+            <button
+              key={dir}
+              type="button"
+              onClick={() => nudge(dir)}
+              aria-label={dir < 0 ? `Previous ${title}` : `Next ${title}`}
+              className="flex size-8 items-center justify-center rounded-[9px] border border-ink-900/10 bg-white text-ink-900/70 transition-colors active:bg-ink-900/5"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d={dir < 0 ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"}
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+      <ul
+        ref={scrollerRef}
+        className={`mt-5 flex gap-4 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:overflow-visible lg:pb-0 ${
+          count >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+        }`}
+      >
+        {children}
+      </ul>
+    </div>
+  );
+}
+
+const Semester = ({ sem, reached, innerRef, open, onToggle }) => {
+  return (
+    <div
+      ref={innerRef}
+      className={`relative grid grid-cols-1 gap-x-10 gap-y-6 lg:grid-cols-[132px_1fr] lg:pb-0 ${
+        open ? "" : "pb-3"
+      }`}
+    >
+      {/* rail / accordion header */}
       <div className="relative lg:pt-1.5">
-        <div className="flex items-center justify-between gap-3">
+        {/* mobile: tinted, tappable header */}
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          aria-controls={`sem-${sem.id}-body`}
+          className="flex w-full items-center justify-between gap-4 rounded-[12px] px-4 py-3.5 text-left lg:hidden"
+          style={{ backgroundColor: sem.accentSoft }}
+        >
+          <span className="flex flex-col gap-0.5">
+            <span
+              className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em]"
+              style={{ color: sem.accent }}
+            >
+              {sem.label}
+            </span>
+            <span className="font-display text-[22px] font-medium leading-tight tracking-[-0.02em] text-ink-900">
+              {sem.theme}
+            </span>
+          </span>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+            className={`shrink-0 text-ink-900 transition-transform duration-300 ${
+              open ? "" : "rotate-180"
+            }`}
+          >
+            <path
+              d="M6 14.5l6-6 6 6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+
+        {/* desktop: rail label + dot */}
+        <div className="hidden items-center justify-between gap-3 lg:flex">
           <span
             className={`font-display text-[12px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
               reached ? "text-flame" : "text-ink-900/45"
@@ -151,7 +269,7 @@ const Semester = ({ sem, reached, innerRef }) => {
           </span>
           <span
             aria-hidden="true"
-            className={`hidden size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 lg:block ${
+            className={`size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 ${
               reached ? "border-flame" : "border-ink-900/20"
             }`}
           />
@@ -159,10 +277,13 @@ const Semester = ({ sem, reached, innerRef }) => {
       </div>
 
       {/* content */}
-      <div className="flex flex-col gap-6 pb-14">
+      <div
+        id={`sem-${sem.id}-body`}
+        className={`flex-col gap-6 pb-14 ${open ? "flex" : "hidden"} lg:flex`}
+      >
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
           <div className="flex flex-col gap-3">
-            <h3 className="font-display text-[30px] font-medium leading-tight tracking-[-0.02em] text-flame lg:text-[34px]">
+            <h3 className="hidden font-display text-[30px] font-medium leading-tight tracking-[-0.02em] text-flame lg:block lg:text-[34px]">
               {sem.theme}
             </h3>
             <p className="max-w-[460px] font-display text-[15px] leading-[1.6] text-ink-900/70">
@@ -189,15 +310,15 @@ const Semester = ({ sem, reached, innerRef }) => {
         </div>
 
         {/* classroom concepts */}
-        <div className="rounded-[16px] bg-ink-900/[0.035] p-5 sm:p-6">
-          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
-            In classroom concepts
-          </p>
-          <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <CarouselPanel
+          title="In classroom concepts"
+          className="bg-ink-900/[0.035]"
+          count={sem.concepts.length}
+        >
             {sem.concepts.map((c) => (
               <li
                 key={c.title}
-                className="flex flex-col gap-3 rounded-[12px] border border-ink-900/8 bg-white p-4"
+                className="flex w-[78%] shrink-0 flex-col gap-3 rounded-[12px] border border-ink-900/8 bg-white p-4 sm:w-[48%] lg:w-auto"
               >
                 <Icon name={c.icon} />
                 <p className="font-display text-[14px] font-medium leading-snug text-ink-900">
@@ -208,17 +329,19 @@ const Semester = ({ sem, reached, innerRef }) => {
                 </p>
               </li>
             ))}
-          </ul>
-        </div>
+        </CarouselPanel>
 
         {/* projects */}
-        <div className="rounded-[16px] p-5 sm:p-6" style={{ backgroundColor: sem.accentSoft }}>
-          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
-            Projects you&apos;ll work on
-          </p>
-          <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <CarouselPanel
+          title="Projects you'll work on"
+          style={{ backgroundColor: sem.accentSoft }}
+          count={sem.projects.length}
+        >
             {sem.projects.map((p) => (
-              <li key={p.name} className="flex flex-col gap-3">
+              <li
+                key={p.name}
+                className="flex w-[78%] shrink-0 flex-col gap-3 sm:w-[48%] lg:w-auto"
+              >
                 <div className="aspect-[4/3] w-full overflow-hidden rounded-[12px] bg-white">
                   {p.image ? (
                     <img
@@ -241,21 +364,7 @@ const Semester = ({ sem, reached, innerRef }) => {
                 </p>
               </li>
             ))}
-          </ul>
-        </div>
-
-        {/* end-of-semester outcome */}
-        <div
-          className="rounded-[12px] border-l-[3px] px-5 py-4"
-          style={{ borderColor: sem.accent, backgroundColor: sem.accentSoft }}
-        >
-          <p className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em] text-ink-900/45">
-            By the end of {sem.label}
-          </p>
-          <p className="mt-1.5 font-display text-[16px] font-medium leading-snug text-ink-900">
-            {sem.outcome}
-          </p>
-        </div>
+        </CarouselPanel>
       </div>
     </div>
   );
@@ -266,6 +375,8 @@ export default function Curriculum() {
   const blockRefs = useRef([]);
   const [progress, setProgress] = useState(0);
   const [reached, setReached] = useState(() => SEMESTERS.map((_, i) => i === 0));
+  // mobile accordion: first semester open, the rest collapsed
+  const [openId, setOpenId] = useState(SEMESTERS[0].id);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -311,23 +422,23 @@ export default function Curriculum() {
           </p>
         </div>
 
-        <div ref={trackRef} className="relative mt-14">
+        <div ref={trackRef} className="relative mt-14 pl-6 lg:pl-0">
           {/* rail track — sits under the dots at the right edge of the rail column */}
           <span
             aria-hidden="true"
-            className="absolute left-[126.5px] top-[7px] hidden w-px bg-ink-900/12 lg:block"
+            className="absolute left-[3px] top-[7px] w-px bg-ink-900/12 lg:left-[126.5px]"
             style={{ bottom: "56px" }}
           />
           {/* filled portion, driven by scroll */}
           <span
             aria-hidden="true"
-            className="absolute left-[126.5px] top-[7px] hidden w-px origin-top bg-flame lg:block"
+            className="absolute left-[3px] top-[7px] w-px origin-top bg-flame lg:left-[126.5px]"
             style={{ height: `calc((100% - 63px) * ${progress})` }}
           />
           {/* arrow riding the tip of the fill */}
           <span
             aria-hidden="true"
-            className="absolute left-[126.5px] z-10 hidden size-[22px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-flame shadow-[0_2px_8px_rgba(230,22,31,0.45)] lg:flex"
+            className="absolute left-[3px] z-10 flex size-[22px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-flame shadow-[0_2px_8px_rgba(230,22,31,0.45)] lg:left-[126.5px]"
             style={{ top: `calc(7px + (100% - 63px) * ${progress})` }}
           >
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
@@ -345,6 +456,8 @@ export default function Curriculum() {
               key={sem.id}
               sem={sem}
               reached={reached[i]}
+              open={openId === sem.id}
+              onToggle={() => setOpenId((cur) => (cur === sem.id ? null : sem.id))}
               innerRef={(el) => {
                 blockRefs.current[i] = el;
               }}

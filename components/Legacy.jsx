@@ -77,13 +77,23 @@ const TILES = [
 
 const FAN = { width: 859.25, height: 206.29 };
 
+// Reading order for the stacked mobile grid (the desktop fan uses paint order).
+const MOBILE_ORDER = [
+  "upGrad",
+  "Internshala",
+  "upGrad Campus",
+  "upGrad Abroad",
+  "upGrad Rekrut",
+  "upGrad KnowledgeHut",
+];
+
 const STATS = [
   { value: "10 M+", label: "Learners" },
   { value: "3000+", label: "Hiring Partners" },
   { value: "300+", label: "Global Universities" },
   { value: "70+", label: "Countries" },
   { value: "110K+", label: "Placements" },
-  { value: "600+", label: "Corporate clients trained annually", width: 143 },
+  { value: "600+", label: "Corporate clients trained annually", wrap: true },
   { value: "28L+", label: "Internships Enabled" },
 ];
 
@@ -148,6 +158,64 @@ function Tile({ tile }) {
   );
 }
 
+/**
+ * Same artwork as `Tile`, but every logo dimension is expressed as a percentage
+ * of the card instead of a fixed pixel size, so the tile can be any width. Used
+ * for the stacked grid below `lg`.
+ */
+function MobileTile({ tile }) {
+  const { card, logo } = tile;
+  const pctW = (v) => `${(v / card.w) * 100}%`;
+  const pctH = (v) => `${(v / card.h) * 100}%`;
+
+  return (
+    <li className="flex items-center justify-center">
+      <div
+        className="relative aspect-square w-full overflow-hidden border-2 border-solid border-black bg-white shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)]"
+        style={{
+          borderRadius: `${(card.radius / card.w) * 100}%`,
+          transform: `rotate(${card.rotate}deg)`,
+        }}
+      >
+        <div
+          className="absolute"
+          style={{
+            width: pctW(logo.w),
+            height: pctH(logo.h),
+            left: `calc(50% + ${pctW(logo.dx)})`,
+            top: `calc(50% + ${pctH(logo.dy)})`,
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          {logo.crop ? (
+            <span className="pointer-events-none absolute inset-0 block overflow-hidden">
+              <img
+                src={tile.src}
+                alt={tile.name}
+                className="absolute max-w-none"
+                style={{
+                  width: logo.crop.w,
+                  height: logo.crop.h,
+                  left: logo.crop.left,
+                  top: logo.crop.top,
+                }}
+                loading="lazy"
+              />
+            </span>
+          ) : (
+            <img
+              src={tile.src}
+              alt={tile.name}
+              className="pointer-events-none absolute inset-0 size-full max-w-none object-cover"
+              loading="lazy"
+            />
+          )}
+        </div>
+      </div>
+    </li>
+  );
+}
+
 export default function Legacy() {
   return (
     <section id="ecosystem" className="bg-ink-soft px-6 py-20 lg:px-20">
@@ -169,8 +237,16 @@ export default function Legacy() {
           </div>
 
           <div className="flex w-full flex-col items-center gap-10">
-            {/* brand tile fan — extra padding keeps the hover pop-up from clipping */}
-            <div className="w-full overflow-x-auto overflow-y-visible py-6">
+            {/* mobile: 3x2 stacked grid */}
+            <ul className="grid w-full max-w-[420px] grid-cols-3 gap-x-4 gap-y-5 px-1 py-4 lg:hidden">
+              {MOBILE_ORDER.map((name) => {
+                const tile = TILES.find((t) => t.name === name);
+                return tile ? <MobileTile key={name} tile={tile} /> : null;
+              })}
+            </ul>
+
+            {/* desktop: brand tile fan — extra padding keeps the hover pop-up from clipping */}
+            <div className="hidden w-full overflow-x-auto overflow-y-visible py-6 lg:block">
               <div
                 className="relative mx-auto shrink-0"
                 style={{ width: `${FAN.width}px`, height: `${FAN.height}px` }}
@@ -181,9 +257,16 @@ export default function Legacy() {
               </div>
             </div>
 
-            <ul className="flex flex-wrap items-center justify-center gap-x-[30px] gap-y-8 min-[1360px]:flex-nowrap">
+            <ul className="grid w-full max-w-[420px] grid-cols-2 gap-x-6 gap-y-10 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-[30px] sm:gap-y-8 min-[1360px]:flex-nowrap">
               {STATS.map((stat, i) => (
-                <li key={stat.label} className="flex shrink-0 items-center gap-x-[30px]">
+                <li
+                  key={stat.label}
+                  className={`flex items-center justify-center sm:shrink-0 sm:gap-x-[30px] ${
+                    i === STATS.length - 1 && STATS.length % 2 === 1
+                      ? "col-span-2 sm:col-span-1"
+                      : ""
+                  }`}
+                >
                   {i > 0 && (
                     <span
                       aria-hidden="true"
@@ -195,12 +278,9 @@ export default function Legacy() {
                       {stat.value}
                     </p>
                     <p
-                      className="font-display text-[15px] leading-normal text-white lg:text-base"
-                      style={
-                        stat.width
-                          ? { width: `${stat.width}px` }
-                          : { whiteSpace: "nowrap" }
-                      }
+                      className={`font-display text-[15px] leading-normal text-white lg:text-base ${
+                        stat.wrap ? "sm:w-[143px]" : "sm:whitespace-nowrap"
+                      }`}
                     >
                       {stat.label}
                     </p>
