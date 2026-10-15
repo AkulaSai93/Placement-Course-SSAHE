@@ -211,7 +211,7 @@ export default function OneJourney() {
             <span className="whitespace-normal sm:whitespace-pre-line">
               {"Why buy 10 different courses\nwhen you can have one"}
             </span>{" "}
-            <span className="font-accent text-brand">uGSOT Catalyst</span> journey?
+            <span className="font-accent text-brand">uGSOT Lastmile</span> journey?
           </h2>
 
           <div
