@@ -131,9 +131,13 @@ export default function SiteFooter() {
           {/* 0.79em clears the glyph ink exactly (baseline sits at 0.773em and the
               round letters overshoot it by ~0.015em), so the wordmark sits flush
               to the panel edge without slicing through the letterforms. */}
-          <div className="overflow-hidden" style={{ fontSize: "30.3cqw", height: "0.79em" }}>
+          <div className="overflow-hidden" style={{ fontSize: "29.85cqw", height: "0.79em" }}>
+            {/* The negative tracking also applies after the final letter, so the
+                text's advance width ends ~0.045em short of where the "e" actually
+                draws — clipping it. Zeroing the last letter's spacing makes the
+                advance match the ink. */}
             <p className="select-none whitespace-nowrap text-center font-display font-medium leading-[0.8] tracking-[-0.045em] text-white">
-              Lastmile
+              Lastmil<span className="tracking-normal">e</span>
             </p>
           </div>
         </div>
