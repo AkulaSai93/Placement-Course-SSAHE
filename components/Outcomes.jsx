@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 /**
- * Outcomes feature card — ticker band on top, copy left, video right.
+ * Outcomes feature card — copy left, video right.
  *
  * NOTE ON NUMBERS: every figure below is taken from sot.upgrad.com/catalyst.
  * The site states plainly that Lastmile is NOT a placement programme and does
@@ -14,96 +14,18 @@ import { useState } from "react";
 const VIDEO_ID = "Zmz5gE9nJqY";
 const START_SECONDS = 593;
 
-/**
- * Each logo carries the frame + crop Figma trims it to, so they all render at
- * one optical size. `w`/`h` are the Figma frame; they're scaled to FRAME_H
- * here, and `crop` is the image window inside that frame (percentages, so it
- * survives the scaling).
- */
-const FRAME_H = 24;
-
-const TICKER_LOGOS = [
-  { src: "/logos/flipkart.webp", name: "Flipkart", w: 118.009, h: 35.702, crop: { w: "100.5%", h: "187.04%", left: "-0.31%", top: "-43.69%" } },
-  { src: "/logos/goldman-sachs.webp", name: "Goldman Sachs", w: 77.272, h: 35.705, crop: { w: "103.45%", h: "125.93%", left: "-1.72%", top: "-12.59%" } },
-  { src: "/logos/google.webp", name: "Google", w: 98.326, h: 35.705, crop: { w: "104.75%", h: "120.19%", left: "-2.79%", top: "-10.77%" } },
-  { src: "/logos/accenture.webp", name: "Accenture", w: 126.067, h: 35.705, crop: { w: "100.05%", h: "198.71%", left: "-0.03%", top: "-48.76%" } },
-  { src: "/logos/adobe.webp", name: "Adobe", w: 119.356, h: 35.705, crop: { w: "141.45%", h: "315%", left: "-20.3%", top: "-107.5%" } },
-  { src: "/logos/amazon.webp", name: "Amazon", w: 111.623, h: 35.705, crop: { w: "128.11%", h: "176.77%", left: "-14.22%", top: "-48.99%" } },
-  { src: "/logos/cisco.webp", name: "Cisco", w: 62.686, h: 35.705, crop: null },
-  { src: "/logos/dell.webp", name: "Dell", w: 89.782, h: 35.705, crop: { w: "122.78%", h: "154.37%", left: "-11.2%", top: "-29.13%" } },
-  { src: "/logos/microsoft.webp", name: "Microsoft", w: 104, h: 25, crop: { w: "123.08%", h: "188.13%", left: "-11.54%", top: "-45.81%" } },
-  { src: "/logos/paypal.webp", name: "PayPal", w: 81.295, h: 22.5, crop: { w: "123.56%", h: "297.62%", left: "-12.03%", top: "-100.6%" } },
-  { src: "/logos/oracle.webp", name: "Oracle", w: 131.719, h: 22.5, crop: { w: "112.1%", h: "366.67%", left: "-6.76%", top: "-129.17%" } },
-  { src: "/logos/walmart.webp", name: "Walmart", w: 86.834, h: 22.5, crop: { w: "106.87%", h: "232.01%", left: "-3.42%", top: "-66.17%" } },
-];
-
 const STATS = [
   { value: "Top 20%", label: "get guaranteed paid internships" },
   { value: "350+", label: "live instructor-led classes" },
   { value: "10,000+", label: "opportunities to apply to" },
 ];
 
-function TickerGroup({ ariaHidden }) {
-  return (
-    <div
-      className="flex shrink-0 items-center gap-10 pr-10"
-      aria-hidden={ariaHidden || undefined}
-    >
-      {TICKER_LOGOS.map((logo) => {
-        const width = (logo.w * FRAME_H) / logo.h;
-        return (
-          <span
-            key={logo.name}
-            className="relative block shrink-0 brightness-0 invert"
-            style={{ width: `${width}px`, height: `${FRAME_H}px` }}
-          >
-            {logo.crop ? (
-              <span className="absolute inset-0 block overflow-hidden">
-                <img
-                  src={logo.src}
-                  alt={logo.name}
-                  className="absolute max-w-none"
-                  style={{ width: logo.crop.w, height: logo.crop.h, left: logo.crop.left, top: logo.crop.top }}
-                  loading="lazy"
-                />
-              </span>
-            ) : (
-              <img
-                src={logo.src}
-                alt={logo.name}
-                className="absolute inset-0 size-full max-w-none object-contain"
-                loading="lazy"
-              />
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function Outcomes() {
   const [playing, setPlaying] = useState(false);
 
   return (
     <section id="outcomes" className="relative z-10 bg-mist px-6 py-20 lg:px-20">
-      <div className="mx-auto max-w-[1280px] overflow-hidden rounded-[20px] border border-ink-900/8 bg-white">
-        {/* moving logo band */}
-        <div className="relative overflow-hidden bg-flame py-4">
-          <div className="marquee-track flex w-max animate-marquee motion-reduce:animate-none">
-            <TickerGroup />
-            <TickerGroup ariaHidden />
-          </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-flame to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-flame to-transparent"
-          />
-        </div>
-
+      <div className="mx-auto max-w-[1280px] rounded-[20px] border border-ink-900/8 bg-white">
         <div className="grid grid-cols-1 items-center gap-10 p-6 sm:p-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:p-12">
           {/* copy — left */}
           <div className="flex flex-col gap-5">

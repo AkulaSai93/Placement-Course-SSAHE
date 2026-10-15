@@ -1,10 +1,9 @@
 import SiteHeader from "@/components/SiteHeader";
 import Hero from "@/components/Hero";
-import InternshalaPro from "@/components/InternshalaPro";
+import HiringCompanies from "@/components/HiringCompanies";
 import Outcomes from "@/components/Outcomes";
 import Partners from "@/components/Partners";
 import Curriculum from "@/components/Curriculum";
-import OneJourney from "@/components/OneJourney";
 import Certificate from "@/components/Certificate";
 import Faculty from "@/components/Faculty";
 import Legacy from "@/components/Legacy";
@@ -17,13 +16,12 @@ export default function Page() {
       <SiteHeader />
       <main>
         <Hero />
+        <HiringCompanies />
       <Outcomes />
       <Partners />
-      <InternshalaPro />
-      <Curriculum />
-      <OneJourney />
-      <Certificate />
       <Faculty />
+      <Curriculum />
+      <Certificate />
       <Legacy />
       <Faq />
       <SiteFooter />
