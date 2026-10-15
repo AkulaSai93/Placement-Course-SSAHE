@@ -2,6 +2,7 @@ import SiteHeader from "@/components/SiteHeader";
 import Hero from "@/components/Hero";
 import InternshalaPro from "@/components/InternshalaPro";
 import Outcomes from "@/components/Outcomes";
+import Partners from "@/components/Partners";
 import Curriculum from "@/components/Curriculum";
 import OneJourney from "@/components/OneJourney";
 import Certificate from "@/components/Certificate";
@@ -17,6 +18,7 @@ export default function Page() {
       <main>
         <Hero />
       <Outcomes />
+      <Partners />
       <InternshalaPro />
       <Curriculum />
       <OneJourney />

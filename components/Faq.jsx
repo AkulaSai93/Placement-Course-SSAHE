@@ -71,9 +71,9 @@ export default function Faq() {
 
   return (
     <section id="faqs" className="bg-mist px-6 py-20 lg:px-20">
-      <div className="mx-auto flex max-w-[1280px] flex-col gap-12 min-[1380px]:flex-row min-[1380px]:items-stretch min-[1380px]:justify-between min-[1380px]:gap-10">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-12 min-[1380px]:flex-row min-[1380px]:items-start min-[1380px]:justify-between min-[1380px]:gap-10">
         {/* left column */}
-        <div className="flex flex-col gap-10 min-[1380px]:w-[496px] min-[1380px]:shrink-0">
+        <div className="flex flex-col gap-10 min-[1380px]:sticky min-[1380px]:top-[112px] min-[1380px]:w-[496px] min-[1380px]:shrink-0 min-[1380px]:self-start">
           <div className="flex flex-col">
             <h2 className="font-display text-[40px] font-medium leading-[1.15] tracking-[-0.013em] text-black sm:text-[54px] min-[1380px]:text-[68px] min-[1380px]:leading-[78px]">
               Got Questions?
