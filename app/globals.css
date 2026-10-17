@@ -10,11 +10,20 @@
 
 html { scroll-behavior: smooth; }
 
+/* clearance for the sticky mobile CTA bar so it never covers page content */
+@media (max-width: 1023px) {
+  body { padding-bottom: 76px; }
+}
+
 /* clears the fixed header when jumping to an anchor */
 section[id] { scroll-margin-top: 88px; }
 
 body {
-  background: #0a0708;
+  /* Light, because every section is now light. It used to be near-black for the
+     dark sections that have since been removed — and with a dark backdrop any
+     section boundary landing on a fractional pixel antialiased against it and
+     painted a faint 1px seam. */
+  background: #f3f4f6;
   color: #fff;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

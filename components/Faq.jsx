@@ -70,7 +70,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faqs" className="bg-mist px-6 py-20 lg:px-20">
+    <section id="faqs" className="bg-mist px-6 py-10 lg:px-20 lg:py-20">
       <div className="mx-auto flex max-w-[1280px] flex-col gap-12 min-[1380px]:flex-row min-[1380px]:items-start min-[1380px]:justify-between min-[1380px]:gap-10">
         {/* left column */}
         <div className="flex flex-col gap-10 min-[1380px]:sticky min-[1380px]:top-[112px] min-[1380px]:w-[496px] min-[1380px]:shrink-0 min-[1380px]:self-start">

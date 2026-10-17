@@ -77,7 +77,7 @@ export default function HiringCompanies() {
     <section
       id="hiring-companies"
       aria-labelledby="hiring-companies-heading"
-      className="relative overflow-hidden bg-mist py-12 lg:py-16"
+      className="relative z-10 overflow-hidden bg-mist py-10 lg:py-16"
     >
       {/* soft wash behind the heading, as in the reference */}
       <div

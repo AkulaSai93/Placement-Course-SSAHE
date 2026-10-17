@@ -71,29 +71,27 @@ export default function Hero() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:pl-[92px] lg:pr-[240px]">
-        <div className="flex w-full max-w-[1108px] flex-col gap-8 lg:translate-y-[80.5px]">
+        <div className="flex w-full max-w-[1108px] translate-y-[44px] flex-col gap-8 lg:translate-y-[80.5px]">
           {/* node 48:4107 */}
-          <h1 className="font-display text-[34px] font-medium leading-normal tracking-[-0.038em] text-white sm:text-[46px] lg:text-[60px]">
-            Your college gives you a degree.
+          <h1 className="max-w-[800px] font-display text-[26px] font-medium leading-[1.25] tracking-[-0.03em] text-white sm:text-[34px] lg:text-[44px]">
+            You&rsquo;ve come this far to not come just this far.
             <br />
-            <span className="text-flame">uGSOT Lastmile</span> helps you catalyze it.
+            Make the <span className="text-flame">Lastmile</span> count.
           </h1>
 
           {/* node 48:4108 */}
-          <div className="flex w-full flex-col font-montserrat text-[16px] leading-normal text-white lg:text-[18px]">
+          <div className="flex w-full max-w-[800px] flex-col font-montserrat text-[16px] leading-normal text-white lg:text-[18px]">
             <p>
-              <span className="italic">Quantum </span>
-              An online 2-year technology accelerator you pursue alongside your existing B.Tech /
-              B.E. / BCA / B.Sc. program.
+              uGSOT Lastmile is a 6-month rapid-learning offline course aimed to make you
+              placement ready. It is open for students in year 3rd and 4th.
             </p>
-            <p>We become your parallel technology ecosystem.</p>
           </div>
 
           {/* node 48:4121 */}
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#apply"
-              className="group flex h-12 items-center justify-center gap-2 rounded-full bg-flame px-5 transition-opacity hover:opacity-90"
+              className="group flex h-12 items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
             >
               <span className="font-montserrat text-[15.6px] font-medium leading-6 text-white">
                 Apply Now
@@ -111,7 +109,7 @@ export default function Hero() {
 
             <a
               href="#brochure"
-              className="flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-[21px] py-px transition-colors hover:border-white/50 hover:bg-white/5"
+              className="flex h-12 items-center justify-center gap-2 rounded border border-white/20 px-[21px] py-px transition-colors hover:border-white/50 hover:bg-white/5"
             >
               <img src="/icons/download-round.svg" alt="" width="24" height="24" />
               <span className="whitespace-nowrap text-center font-montserrat text-[16px] font-medium leading-normal text-white">

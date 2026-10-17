@@ -425,7 +425,7 @@ function CardGroup({ ariaHidden }) {
 
 export default function Faculty() {
   return (
-    <section id="mentors" className="bg-mist px-6 py-20 lg:px-20">
+    <section id="mentors" className="bg-mist px-6 py-10 lg:px-20 lg:py-20">
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 text-center text-ink-900">
         <h2 className="font-display text-[30px] font-medium leading-normal tracking-[-0.0206em] sm:text-[38px] lg:text-[44px] min-[1240px]:whitespace-nowrap min-[1240px]:text-[48px]">
           Taught by{" "}

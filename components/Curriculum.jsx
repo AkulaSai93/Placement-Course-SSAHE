@@ -410,7 +410,7 @@ export default function Curriculum() {
   }, []);
 
   return (
-    <section id="curriculum" className="bg-mist px-6 py-20 lg:px-20">
+    <section id="curriculum" className="bg-mist px-6 py-10 lg:px-20 lg:py-20">
       <div className="mx-auto max-w-[1280px]">
         <div className="flex max-w-[760px] flex-col gap-4">
           <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
