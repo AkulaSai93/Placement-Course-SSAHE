@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 /** Polaris lags its hero at 30% of scroll while the next section slides over
@@ -48,15 +47,29 @@ export default function Hero() {
     <section
       id="home"
       ref={ref}
-      className="relative z-0 flex h-[720px] items-center overflow-hidden bg-white will-change-transform lg:h-[900px]"
+      className="relative z-0 flex h-[76svh] min-h-[520px] items-center overflow-hidden bg-white will-change-transform lg:h-[900px] lg:min-h-0"
     >
-      <Image
-        src="/images/campus-hero-2.webp"
+      {/* Background film. Muted + playsInline so iOS plays it inline rather than
+          going fullscreen; the poster covers the gap before it buffers, and
+          prefers-reduced-motion users get the poster alone. */}
+      <video
+        src="/videos/hero.mp4"
+        poster="/videos/hero-poster.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+        tabIndex={-1}
+        className="pointer-events-none absolute inset-0 size-full object-cover motion-reduce:hidden"
+      />
+      {/* shown instead of the film when reduced motion is requested */}
+      <img
+        src="/videos/hero-poster.jpg"
         alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="pointer-events-none object-cover"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden size-full object-cover motion-reduce:block"
       />
 
       {/* node 48:4087 — transparent to 80% black by 60.096%, then deepening to
@@ -66,14 +79,14 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 60.096%, rgba(0,0,0,0.92) 80%, rgba(0,0,0,1) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 62%, rgba(0,0,0,0.74) 82%, rgba(0,0,0,0.84) 100%)",
         }}
       />
 
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:pl-[92px] lg:pr-[240px]">
         <div className="flex w-full max-w-[1108px] translate-y-[44px] flex-col gap-8 lg:translate-y-[80.5px]">
           {/* node 48:4107 */}
-          <h1 className="max-w-[800px] font-display text-[26px] font-medium leading-[1.25] tracking-[-0.03em] text-white sm:text-[34px] lg:text-[44px]">
+          <h1 className="max-w-[800px] text-balance font-display text-[26px] font-medium leading-[1.25] tracking-[-0.03em] text-white sm:text-[34px] lg:text-[44px]">
             You&rsquo;ve come this far to not come just this far.
             <br />
             Make the <span className="text-flame">Lastmile</span> count.

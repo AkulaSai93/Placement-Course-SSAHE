@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "Pricing", href: "#pricing" },
-  { label: "Outcomes", href: "#outcomes" },
   { label: "Curriculum", href: "#curriculum" },
   { label: "Mentors", href: "#mentors" },
   { label: "FAQs", href: "#faqs" },
@@ -94,7 +93,7 @@ export default function SiteHeader() {
             solid ? "opacity-0" : "opacity-100"
           }`}
           style={{
-            background: "linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%)",
+            background: "linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 100%)",
           }}
         />
 
