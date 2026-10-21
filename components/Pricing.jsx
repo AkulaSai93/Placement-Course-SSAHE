@@ -14,9 +14,8 @@
  * advance independently, so column 3 breaks at 555 while column 2 breaks at
  * 488.
  *
- * NOTE: this section owns `#pricing` and the nav's "Pricing" link, but the
- * node states no fee — ₹50,000 appears only in the Hero and the mobile sticky
- * bar. The node's subtitle drops the em dash ("six months not a certificate");
+ * NOTE: the node states no fee, so this section answers to `#walk-away`; the
+ * price lives in its own section below, which owns `#pricing`. The node's subtitle drops the em dash ("six months not a certificate");
  * that reads as a slip, so the dash is kept here.
  *
  * Assets come from the node: the device render, the Internshala wordmark and
@@ -258,7 +257,7 @@ function MockRounds() {
 export default function Pricing() {
   return (
     <section
-      id="pricing"
+      id="walk-away"
       aria-labelledby="usps-heading"
       className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20"
     >
@@ -279,9 +278,9 @@ export default function Pricing() {
         {/* the masonry */}
         <div className="mt-10 flex w-full flex-col gap-4 lg:mt-14 lg:flex-row">
           {/* column 1 */}
-          <div className="flex flex-col gap-4 lg:w-[416px] lg:shrink-0">
+          <div className="flex flex-col gap-4 lg:w-[calc((100%-32px)/3)] lg:shrink-0">
             {/* node 40:8929 — Internshala, 556 tall */}
-            <div className="relative overflow-hidden rounded-[12px] bg-black pb-6 pt-[27px] lg:h-[556px] lg:pb-0">
+            <div className="relative overflow-hidden rounded-[12px] bg-black pb-6 pt-[27px] lg:min-h-[556px] lg:pb-0">
               <div className="relative z-10 mx-auto flex max-w-[368px] flex-col items-center gap-2 px-6">
                 <div className="flex items-end gap-1.5">
                   <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
@@ -310,7 +309,7 @@ export default function Pricing() {
               </div>
 
               {/* node 40:8930 — the device sits at y=138 and the tile clips its foot */}
-              <div className="relative mx-auto mt-6 h-[380px] w-[256px] overflow-hidden sm:h-[450px] sm:w-[300px] lg:mt-[18px] lg:h-[418px]">
+              <div className="relative mx-auto mt-6 aspect-[300/418] w-full max-w-[256px] overflow-hidden sm:max-w-[300px] lg:mt-[18px]">
                 <img
                   src="/images/internshala-app-device.png"
                   alt="The Internshala app, showing internships, jobs and courses"
@@ -334,7 +333,7 @@ export default function Pricing() {
             {/* node 40:8939 — spans both columns */}
             <Tile
               tint="rgba(29,111,224,0.08)"
-              className="gap-6 lg:h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+              className="gap-6 lg:min-h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
             >
               <div className="flex max-w-[320px] flex-col gap-2">
                 <Title>Resume, LinkedIn profile and GitHub portfolio</Title>
@@ -343,13 +342,13 @@ export default function Pricing() {
               <ProfileMarks />
             </Tile>
 
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start">
               {/* column 2 */}
-              <div className="flex flex-col gap-4 lg:w-[416px] lg:shrink-0">
+              <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
                 {/* node 40:8958 */}
                 <Tile
                   tint="rgba(219,39,119,0.08)"
-                  className="justify-between gap-8 lg:h-[236px]"
+                  className="justify-between gap-8 sm:min-h-[236px]"
                 >
                   <MockRounds />
                   <div className="flex flex-col gap-2">
@@ -363,7 +362,7 @@ export default function Pricing() {
                 {/* node 40:9043 */}
                 <Tile
                   tint="rgba(217,119,6,0.09)"
-                  className="gap-8 lg:h-[236px] lg:gap-[42px]"
+                  className="gap-8 sm:min-h-[236px] lg:gap-[42px]"
                 >
                   <div className="flex items-center gap-4">
                     <CountdownDial />
@@ -386,14 +385,17 @@ export default function Pricing() {
               </div>
 
               {/* column 3 */}
-              <div className="flex flex-col gap-4 lg:w-[416px] lg:shrink-0">
+              <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
                 {/* node 40:9012 — 303 tall, the browser mock clipped at the foot */}
-                <Tile tint="rgba(14,159,110,0.09)" className="gap-5 lg:h-[303px]">
+                <Tile tint="rgba(14,159,110,0.09)" className="gap-5 sm:min-h-[303px]">
                   <div className="flex flex-col gap-2">
                     <Title>A deployed full-stack project with an AI feature</Title>
                     <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
                   </div>
-                  <div className="mt-4 self-end lg:absolute lg:left-[calc(50%+51px)] lg:top-[146px] lg:mt-0 lg:-translate-x-1/2 lg:self-auto">
+                  {/* below lg the mock is wider than the column, so it is
+                      left-anchored and runs off the right edge — the same way
+                      the tile clips it in the design */}
+                  <div className="-mr-6 mt-4 origin-bottom-left scale-[0.82] self-start sm:scale-100 lg:absolute lg:left-[calc(50%+51px)] lg:top-[146px] lg:mt-0 lg:mr-0 lg:-translate-x-1/2 lg:self-auto">
                     <DeployedApp />
                   </div>
                 </Tile>

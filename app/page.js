@@ -5,6 +5,7 @@ import Outcomes from "@/components/Outcomes";
 import Curriculum from "@/components/Curriculum";
 import Faculty from "@/components/Faculty";
 import Pricing from "@/components/Pricing";
+import Fee from "@/components/Fee";
 import Faq from "@/components/Faq";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -16,11 +17,12 @@ export default function Page() {
         <Hero />
         <HiringCompanies />
         <Pricing />
-      <Outcomes />
-      <Curriculum />
-      <Faculty />
-      <Faq />
-      <SiteFooter />
+        <Fee />
+        <Outcomes />
+        <Curriculum />
+        <Faculty />
+        <Faq />
+        <SiteFooter />
       </main>
     </>
   );

@@ -3,23 +3,29 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Curriculum — the eight modules of UGSOT LastMile 2026, taken from the
- * programme deck ("What students will learn", pages 4–7) and its at-a-glance
- * table on page 1.
+ * Curriculum — the eight modules of UGSOT LastMile 2026, from the programme
+ * deck ("What students will learn", pages 4–7) and the at-a-glance table on
+ * page 1.
+ *
+ * The layout follows Newton School's curriculum section: a thin rail on the
+ * left carrying the module label, a dot and a connecting line; beside it the
+ * module's headline and description, a "What you'll learn" pill cloud, a
+ * tinted panel of "In classroom concepts" cards that scroll sideways, and a
+ * closing "By the end of module N" banner. Their projects row is deliberately
+ * left out.
+ *
+ * On mobile each module collapses behind a tinted header, as theirs does.
  *
  * Every module carries its own session / week / hour counts; the totals in
- * STATS below are the deck's own footer figures and must stay in step with the
- * per-module numbers (70 sessions, 17.5 weeks, 210 hours).
- *
- * Layout follows the deck: a tinted header band with the module number, title,
- * one-line promise and the three counts, then the numbered topics in two
- * columns (one column on mobile). The scroll rail and its travelling arrow are
- * carried over from the previous build.
+ * STATS are the deck's own footer figures and must stay in step with them
+ * (70 sessions, 17.5 weeks, 210 hours).
  */
 const MODULES = [
   {
     id: 1,
-    accent: "#1D6FE0",
+    lead: "In Module 01,",
+    bold: "Python and problem-solving",
+    skills: ["Python", "Variables & Data Types", "Loops", "Functions", "Recursion", "Lists & Dictionaries", "File I/O", "Pseudocode"],
     title: "Programming",
     promise: "Write clean, working Python and break problems down before you code.",
     sessions: 6,
@@ -36,7 +42,9 @@ const MODULES = [
   },
   {
     id: 2,
-    accent: "#0E9F6E",
+    lead: "In Module 02,",
+    bold: "Data Structures & Algorithms",
+    skills: ["Big-O", "Arrays", "Strings", "Hashing", "Two Pointers", "Sorting", "Binary Search", "Linked Lists", "Stacks & Queues", "Trees", "Heaps", "Graphs", "Dynamic Programming"],
     title: "Data Structures & Algorithms",
     promise:
       "Solve coding-round problems with the right data structure and an efficient algorithm.",
@@ -68,7 +76,9 @@ const MODULES = [
   },
   {
     id: 3,
-    accent: "#7C3AED",
+    lead: "In Module 03,",
+    bold: "HTML, CSS and JavaScript",
+    skills: ["HTML", "CSS", "Flexbox & Grid", "Responsive Design", "JavaScript", "ES6+", "DOM & Events", "Fetch & APIs"],
     title: "Web Essentials",
     promise: "Build responsive, interactive web pages with HTML, CSS and JavaScript.",
     sessions: 6,
@@ -85,7 +95,9 @@ const MODULES = [
   },
   {
     id: 4,
-    accent: "#D97706",
+    lead: "In Module 04,",
+    bold: "the full stack, end to end",
+    skills: ["Git & GitHub", "React", "Hooks", "React Router", "Node.js", "Express", "REST APIs", "MongoDB", "JWT Auth", "Testing", "Deployment"],
     title: "Full Stack Development",
     promise: "Build, secure and deploy a complete web application as a team.",
     sessions: 16,
@@ -112,7 +124,9 @@ const MODULES = [
   },
   {
     id: 5,
-    accent: "#0891B2",
+    lead: "In Module 05,",
+    bold: "Generative AI",
+    skills: ["LLMs", "Prompt Engineering", "AI Coding Assistants", "LLM APIs", "Embeddings", "RAG"],
     title: "Generative AI & AI-Assisted Development",
     promise: "Use AI to build faster and responsibly, and ship an LLM-powered feature.",
     sessions: 4,
@@ -130,7 +144,9 @@ const MODULES = [
   },
   {
     id: 6,
-    accent: "#4F46E5",
+    lead: "In Module 06,",
+    bold: "core computer science",
+    skills: ["OOP", "SOLID", "DBMS", "SQL", "Transactions & Indexing", "Operating Systems", "Computer Networks", "System Design"],
     title: "Core CS Fundamentals",
     promise:
       "Answer interview questions on OOP, databases, operating systems and networks with confidence.",
@@ -152,7 +168,9 @@ const MODULES = [
   },
   {
     id: 7,
-    accent: "#DB2777",
+    lead: "In Module 07,",
+    bold: "aptitude and reasoning",
+    skills: ["Quantitative Aptitude", "Data Interpretation", "Logical Reasoning", "Verbal Ability", "Mock Tests"],
     title: "Aptitude & Reasoning",
     promise: "Clear the aptitude and reasoning rounds that open most placement drives.",
     sessions: 4,
@@ -167,7 +185,9 @@ const MODULES = [
   },
   {
     id: 8,
-    accent: "#E7000B",
+    lead: "In Module 08,",
+    bold: "how you present yourself",
+    skills: ["Communication", "Resume & LinkedIn", "GitHub Portfolio", "Group Discussion", "HR Interviews", "Mock Interviews"],
     title: "Soft Skills & Career Readiness",
     promise: "Present yourself well, from your resume to the final interview round.",
     sessions: 4,
@@ -181,155 +201,272 @@ const MODULES = [
     ],
   },
 ];
+/** the one accent this section uses */
+const FLAME = "#E7000B";
+/**
+ * The mobile accordion bars each carry their own tone, as on the reference —
+ * a pale tint with the label and title in the matching ink, so the stack reads
+ * as a run of colours. Kept deliberately light; the desktop layout stays on
+ * the single flame accent.
+ */
+const TONES = [
+  { fg: "#0E7A55", bg: "#ECFCF4" },
+  { fg: "#6D3FD6", bg: "#F7EEFF" },
+  { fg: "#1A73F2", bg: "#EEF5FF" },
+  { fg: "#B4690E", bg: "#FFF6E8" },
+  { fg: "#117E96", bg: "#EAF8FC" },
+  { fg: "#514BE0", bg: "#EFEEFE" },
+  { fg: "#C02466", bg: "#FDEEF5" },
+  { fg: "#C8232C", bg: "#FFEFEF" },
+];
 
-/** Deck footer, page 7 — the sum of the per-module counts above. */
+
+/** deck footer, page 7 — the sum of the per-module counts above */
 const STATS = [
-  ["8", "modules, taught in sequence"],
-  ["70", "three-hour teaching sessions"],
-  ["210", "hours of classroom teaching"],
-  ["17.5", "weeks of teaching, plus practice days"],
+  ["8", "modules, in sequence"],
+  ["70", "three-hour sessions"],
+  ["210", "hours of teaching"],
+  ["17.5", "weeks, plus practice days"],
+];
+
+/** cycled across the concept cards so each one carries a mark, and each mark
+ *  its own tint — the only place this section departs from the single accent */
+const ICON_COLOURS = [
+  { fg: "#E7000B", bg: "rgba(231,0,11,0.10)" },
+  { fg: "#1D6FE0", bg: "rgba(29,111,224,0.10)" },
+  { fg: "#0E9F6E", bg: "rgba(14,159,110,0.11)" },
+  { fg: "#7C3AED", bg: "rgba(124,58,237,0.10)" },
+  { fg: "#D97706", bg: "rgba(217,119,6,0.12)" },
+  { fg: "#0891B2", bg: "rgba(8,145,178,0.11)" },
+];
+
+
+const ICONS = [
+  "M19.75 4A2.25 2.25 0 0 1 22 6.25v11.5A2.25 2.25 0 0 1 19.75 20H4.25A2.25 2.25 0 0 1 2 17.75V6.25A2.25 2.25 0 0 1 4.25 4h15.5Zm-12.47 4.47a.75.75 0 1 0-1.06 1.06L8.69 12l-2.47 2.47a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3ZM11.25 14.25a.75.75 0 0 0 0 1.5H17.25a.75.75 0 0 0 0-1.5h-6Z",
+  "M12 2.25 2.25 7 12 11.75 21.75 7 12 2.25Zm9.75 9.25L12 16.25 2.25 11.5M21.75 16 12 20.75 2.25 16",
+  "M12 2.25a9.75 9.75 0 1 0 0 19.5 9.75 9.75 0 0 0 0-19.5Zm0 0c2.5 2.6 3.75 5.85 3.75 9.75S14.5 19.15 12 21.75m0-19.5C9.5 4.85 8.25 8.1 8.25 12s1.25 7.15 3.75 9.75M2.6 9h18.8M2.6 15h18.8",
+  "M12 3c4.14 0 7.5 1.34 7.5 3s-3.36 3-7.5 3-7.5-1.34-7.5-3 3.36-3 7.5-3ZM4.5 6v12c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6M4.5 12c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3",
+  "M9 3.75a3 3 0 0 0-3 3v.4a3 3 0 0 0-1.5 5.2v.3A3 3 0 0 0 6 18a3 3 0 0 0 6 0V6.75a3 3 0 0 0-3-3Zm6 0a3 3 0 0 1 3 3v.4a3 3 0 0 1 1.5 5.2v.3A3 3 0 0 1 18 18a3 3 0 0 1-6 0V6.75a3 3 0 0 1 3-3Z",
+  "M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z",
 ];
 
 const pad = (n) => String(n).padStart(2, "0");
 
-/** sessions / weeks / hours, as soft outlined pills */
-function Meta({ mod, className = "" }) {
+function Chevron({ className = "" }) {
   return (
-    <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
-      {[`${mod.sessions} sessions`, mod.weeks, `${mod.hours} hrs`].map((item) => (
-        <li
-          key={item}
-          className="whitespace-nowrap rounded-full border border-ink-900/12 bg-white px-4 py-2 font-display text-[13.5px] font-medium text-ink-900/65"
-        >
-          {item}
-        </li>
-      ))}
-    </ul>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="m6 9 6 6 6-6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
-const Module = ({ mod, reached, innerRef, open, onToggle }) => (
-  <div ref={innerRef} className="relative grid grid-cols-1 gap-x-10 lg:grid-cols-[132px_1fr]">
-    {/* rail / accordion header */}
-    <div className="relative lg:pt-1.5">
-      {/* mobile: tappable header */}
+/** the concept cards scroll sideways, with arrows to nudge them */
+function ConceptRail({ mod }) {
+  const scrollerRef = useRef(null);
+  const animRef = useRef(0);
+
+  // native smooth scrolling is unreliable inside a snap container, so the
+  // arrows animate scrollLeft directly
+  const nudge = (dir) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 20 : el.clientWidth * 0.8;
+    const from = el.scrollLeft;
+    const to = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, from + dir * step));
+    if (to === from) return;
+
+    cancelAnimationFrame(animRef.current);
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / 320);
+      el.scrollLeft = from + (to - from) * (1 - Math.pow(1 - t, 3));
+      if (t < 1) animRef.current = requestAnimationFrame(tick);
+    };
+    animRef.current = requestAnimationFrame(tick);
+  };
+
+  useEffect(() => () => cancelAnimationFrame(animRef.current), []);
+
+  return (
+    <div className="flex flex-col gap-5 rounded-[16px] bg-ink-900/[0.035] py-4 pl-4 sm:p-6">
+      <div className="flex items-center justify-between pr-4 sm:pr-0">
+        <span className="font-display text-[11px] font-medium uppercase leading-[1.16] tracking-[0.14em] text-ink-900/45 sm:text-[11.5px]">
+          In classroom concepts
+        </span>
+        <div className="flex shrink-0 gap-1 lg:hidden">
+          {[-1, 1].map((dir) => (
+            <button
+              key={dir}
+              type="button"
+              onClick={() => nudge(dir)}
+              aria-label={dir < 0 ? "Scroll back" : "Scroll forward"}
+              className="grid size-[31px] place-items-center rounded-[9px] border border-ink-900/10 bg-white text-ink-900/70 transition-colors active:bg-ink-900/5"
+            >
+              <Chevron className={`size-5 sm:size-6 ${dir < 0 ? "rotate-90" : "-rotate-90"}`} />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <ul
+        ref={scrollerRef}
+        className="flex snap-x gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-5 [&::-webkit-scrollbar]:hidden"
+      >
+        {mod.topics.map(([name, detail], i) => (
+          <li
+            key={name}
+            className="flex w-[229px] shrink-0 snap-start flex-col gap-3 rounded-[12px] border border-ink-900/8 bg-white p-4 sm:w-[278px] sm:p-5"
+          >
+            <span
+              className="flex size-9 items-center justify-center rounded-[9px]"
+              style={{ backgroundColor: ICON_COLOURS[i % ICON_COLOURS.length].bg }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                className="size-[18px]"
+                style={{ color: ICON_COLOURS[i % ICON_COLOURS.length].fg }}
+              >
+                <path
+                  d={ICONS[i % ICONS.length]}
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <p className="font-display text-[15px] font-medium leading-snug text-ink-900">
+              {name}
+            </p>
+            <p className="font-display text-[13px] leading-[1.5] text-ink-900/55">{detail}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Module({ mod, open, reached, onToggle, innerRef }) {
+  const tone = TONES[(mod.id - 1) % TONES.length];
+
+  return (
+    <div ref={innerRef} className="flex flex-col sm:flex-row sm:gap-10">
+      {/* mobile: a tinted header that opens the module */}
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        aria-controls={`module-${mod.id}-body`}
-        className="flex w-full items-center justify-between gap-4 border-t border-ink-900/15 py-4 text-left lg:hidden"
+        aria-controls={`module-${mod.id}`}
+        className="flex w-full items-center justify-between p-4 text-left sm:hidden"
+        style={
+          open
+            ? { backgroundImage: `linear-gradient(${tone.bg}, #ffffff)` }
+            : { backgroundColor: tone.bg }
+        }
       >
-        <span className="flex items-start gap-3.5">
+        <span className="flex flex-col gap-1">
           <span
-            className="font-display text-[12px] font-medium leading-6 tabular-nums"
-            style={{ color: mod.accent }}
+            className="font-display text-[10.5px] font-semibold uppercase leading-[1.12] tracking-[2px]"
+            style={{ color: tone.fg }}
           >
-            {pad(mod.id)}
+            Module {pad(mod.id)}
           </span>
-          <span className="flex flex-col gap-0.5">
-            <span
-              className="font-display text-[17px] font-medium leading-tight tracking-[-0.01em]"
-              style={{ color: mod.accent }}
-            >
-              {mod.title}
-            </span>
-            <span className="font-display text-[12.5px] text-ink-900/55">
-              {mod.sessions} sessions · {mod.hours} hrs
-            </span>
+          <span
+            className="font-display text-[17.2px] font-semibold leading-[1.12]"
+            style={{ color: tone.fg }}
+          >
+            {mod.title}
           </span>
         </span>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-          className={`shrink-0 text-ink-900 transition-transform duration-300 ${
-            open ? "" : "rotate-180"
+        <Chevron
+          className={`size-6 shrink-0 text-[#16191D] transition-transform ${
+            open ? "rotate-180" : ""
           }`}
-        >
-          <path
-            d="M6 14.5l6-6 6 6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </button>
 
-      {/* desktop: rail label + dot */}
-      <div className="hidden items-center justify-between gap-3 lg:flex">
+      {/* desktop: the rail — label, dot and the line down to the next module */}
+      <div className="relative hidden w-[72px] shrink-0 sm:block" aria-hidden="true">
         <span
-          className={`font-display text-[12px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
-            reached ? "text-flame" : "text-ink-900/45"
-          }`}
-        >
-          Module {pad(mod.id)}
-        </span>
-        <span
-          aria-hidden="true"
-          className={`size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 ${
+          className={`absolute right-0 top-1 size-3 rounded-full border-2 bg-white transition-colors duration-300 ${
             reached ? "border-flame" : "border-ink-900/20"
           }`}
         />
-      </div>
-    </div>
-
-    {/* module body — no card: a rule, a heading row, then the topics */}
-    <div
-      id={`module-${mod.id}-body`}
-      className={`mb-10 lg:mb-16 ${open ? "" : "hidden"} lg:block`}
-    >
-      {/* heading row */}
-      <div className="hidden flex-col gap-3 lg:flex lg:flex-row lg:items-baseline lg:justify-between lg:gap-10">
-        <div className="flex flex-col gap-1.5">
-          <h3
-            className="font-display text-[22px] font-medium leading-tight tracking-[-0.02em] sm:text-[28px]"
-            style={{ color: mod.accent }}
-          >
-            {mod.title}
-          </h3>
-          <p className="max-w-[560px] font-display text-[14px] leading-[1.55] text-ink-900/60 sm:text-[15px]">
-            {mod.promise}
-          </p>
-        </div>
-        <Meta mod={mod} className="shrink-0 lg:justify-end" />
+        <span
+          className={`absolute left-0 top-0 whitespace-nowrap font-display text-[14px] font-semibold leading-[1.335] transition-colors duration-300 ${
+            reached ? "text-flame" : "text-ink-900/40"
+          }`}
+        >
+          {pad(mod.id)}
+        </span>
       </div>
 
-      {/* topics */}
-      <ol className="mt-2 grid grid-cols-1 gap-x-14 lg:mt-3 lg:grid-cols-2">
-        {mod.topics.map(([name, detail], i) => (
-          <li key={name} className="flex gap-3.5 py-3">
-            <span
-              className="w-[18px] shrink-0 font-display text-[12px] font-medium leading-6 tabular-nums"
-              style={{ color: mod.accent }}
+      <div
+        id={`module-${mod.id}`}
+        className={`min-w-0 flex-1 flex-col gap-5 px-4 pb-5 pt-4 sm:flex sm:px-0 sm:pb-10 sm:pt-0 ${
+          open ? "flex" : "hidden"
+        }`}
+      >
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-20">
+          <div className="flex flex-col gap-2">
+            <p
+              className="hidden font-display text-[30px] font-medium leading-tight tracking-[-0.02em] sm:block lg:text-[34px]"
+              style={{ color: FLAME }}
             >
-              {pad(i + 1)}
-            </span>
-            <span className="flex flex-col gap-0.5">
-              <span className="font-display text-[15px] font-medium leading-6 text-ink-900">
-                {name}
-              </span>
-              <span className="font-display text-[13px] leading-[1.5] text-ink-900/55">
-                {detail}
-              </span>
-            </span>
-          </li>
-        ))}
-      </ol>
+              {mod.title}
+            </p>
+            <p className="max-w-[460px] font-display text-[14px] leading-[1.6] text-ink-900/70 sm:text-[15px]">
+              <span className="font-medium text-ink-900">{mod.lead}</span>{" "}
+              <span className="font-medium text-ink-900">{mod.bold}</span> — {mod.promise}
+            </p>
+            <p className="font-display text-[12.5px] text-ink-900/45">
+              {mod.sessions} sessions · {mod.weeks} · {mod.hours} hrs
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            <p className="font-display text-[14px] font-medium leading-[1.33] tracking-[0.25px] text-ink-900 sm:text-[15px]">
+              What you&rsquo;ll learn
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {mod.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full border border-ink-900/10 bg-white px-2.5 py-1 font-display text-[11.5px] font-medium text-ink-900/70 sm:px-3 sm:py-[5px] sm:text-[12.5px]"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <ConceptRail mod={mod} />
+
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 export default function Curriculum() {
+  // mobile only: the first module starts open, as on the reference
+  const [openId, setOpenId] = useState(MODULES[0].id);
+
+  // the rail's fill and arrow follow the scroll, as they did in the first
+  // build of this section
   const trackRef = useRef(null);
   const blockRefs = useRef([]);
   const [progress, setProgress] = useState(0);
   const [reached, setReached] = useState(() => MODULES.map((_, i) => i === 0));
-  // mobile accordion: first module open, the rest collapsed
-  const [openId, setOpenId] = useState(MODULES[0].id);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -339,7 +476,7 @@ export default function Curriculum() {
     const measure = () => {
       frame = 0;
       const rect = track.getBoundingClientRect();
-      // the line follows a point ~45% down the viewport
+      // the arrow follows a point ~45% down the viewport
       const anchor = window.innerHeight * 0.45;
       const raw = (anchor - rect.top) / Math.max(rect.height, 1);
       setProgress(Math.min(1, Math.max(0, raw)));
@@ -347,7 +484,6 @@ export default function Curriculum() {
         blockRefs.current.map((el) => (el ? el.getBoundingClientRect().top <= anchor : false))
       );
     };
-
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(measure);
     };
@@ -364,15 +500,15 @@ export default function Curriculum() {
 
   return (
     <section id="curriculum" className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20">
-      <div className="mx-auto max-w-[1280px]">
-        <div className="flex max-w-[760px] flex-col gap-4">
+      <div className="mx-auto max-w-[1232px]">
+        <div className="flex max-w-[760px] flex-col gap-2">
           <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
             A <span className="font-accent font-medium text-flame">Curriculum</span> Built Around
             How Engineers Actually Learn.
           </h2>
-          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px]">
-            Eight modules, taught in sequence — each one a focused block of three-hour sessions
-            with hands-on practice.
+          <p className="font-display text-[15px] font-medium leading-[1.6] text-[#5B6271] lg:text-[18px]">
+            Eight modules, taught in sequence — each a focused block of three-hour sessions with
+            hands-on practice.
           </p>
         </div>
 
@@ -390,24 +526,23 @@ export default function Curriculum() {
           ))}
         </dl>
 
-        <div ref={trackRef} className="relative mt-12 pl-6 lg:pl-0">
-          {/* rail track — sits under the dots at the right edge of the rail column */}
+        <div ref={trackRef} className="relative -mx-6 mt-6 flex flex-col sm:mx-0 sm:mt-10">
+          {/* the rail the dots sit on — one line for the whole list, with the
+              flame fill and its arrow driven by scroll */}
           <span
             aria-hidden="true"
-            className="absolute left-[3px] top-[7px] w-px bg-ink-900/12 lg:left-[126.5px]"
-            style={{ bottom: "56px" }}
+            className="absolute left-[66.5px] top-[10px] hidden w-px bg-[#E1E5EA] sm:block"
+            style={{ bottom: "24px" }}
           />
-          {/* filled portion, driven by scroll */}
           <span
             aria-hidden="true"
-            className="absolute left-[3px] top-[7px] w-px origin-top bg-flame lg:left-[126.5px]"
-            style={{ height: `calc((100% - 63px) * ${progress})` }}
+            className="absolute left-[66.5px] top-[10px] hidden w-px origin-top bg-flame sm:block"
+            style={{ height: `calc((100% - 34px) * ${progress})` }}
           />
-          {/* arrow riding the tip of the fill */}
           <span
             aria-hidden="true"
-            className="absolute left-[3px] z-10 flex size-[22px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-flame shadow-[0_2px_8px_rgba(230,22,31,0.45)] lg:left-[126.5px]"
-            style={{ top: `calc(7px + (100% - 63px) * ${progress})` }}
+            className="absolute left-[66.5px] z-10 hidden size-[22px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-flame shadow-[0_2px_8px_rgba(231,0,11,0.45)] sm:flex"
+            style={{ top: `calc(10px + (100% - 34px) * ${progress})` }}
           >
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
               <path
@@ -420,13 +555,13 @@ export default function Curriculum() {
             </svg>
           </span>
 
-          {MODULES.map((mod, i) => (
+          {MODULES.map((m, i) => (
             <Module
-              key={mod.id}
-              mod={mod}
+              key={m.id}
+              mod={m}
+              open={openId === m.id}
               reached={reached[i]}
-              open={openId === mod.id}
-              onToggle={() => setOpenId((cur) => (cur === mod.id ? null : mod.id))}
+              onToggle={() => setOpenId((cur) => (cur === m.id ? null : m.id))}
               innerRef={(el) => {
                 blockRefs.current[i] = el;
               }}
