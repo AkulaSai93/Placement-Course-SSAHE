@@ -1,145 +1,106 @@
 /**
- * "What you walk away with" — the seven USPs as a bento grid.
+ * "What you walk away with" — Figma node 36:7297.
  *
- * The layout follows the supplied reference: four columns over a six-row
- * track, with a tall hero in the second column and the remaining tiles
- * staggered either side of it so no two columns break at the same height.
- * Each tile carries its own little component — an inner card of marks, a chip
- * cluster, a browser mock, a stat, an avatar cluster — rather than a number.
+ * Seven tiles on a three-column, three-row bento (416 x 236 cells, 16px
+ * gutters). The Internshala tile is black and spans rows 1–2 of the first
+ * column; the resume tile spans columns 2–3 of the first row. The other five
+ * are soft tints of their own accent.
  *
- * Internshala Pro is the hero tile. NOTE: the fee and the Apply Now button
- * were removed from it, so this section no longer states a price even though
- * it still owns `#pricing` — the ₹50,000 figure now lives only in the Hero and
- * the mobile sticky bar.
+ * NOTE: this section owns `#pricing` and the nav's "Pricing" link, but the
+ * node states no fee — ₹50,000 appears only in the Hero and the mobile sticky
+ * bar.
  *
- * `relative z-10` is required — the Hero parallaxes down over whatever follows
- * it, and any section without it gets covered.
+ * Assets come from the node: the device render, the Internshala wordmark, the
+ * three profile marks and the countdown dial. The browser mock, the chips and
+ * the avatars are drawn in code, as they were before the design was made from
+ * them.
  */
-const INTERNSHALA_CROP = {
-  w: "125.55%",
-  h: "232.12%",
-  left: "-12.8%",
-  top: "-69.52%",
+
+/** node 36:7313 — a 200.875 x 113.031 image inside a 160 x 48.695 window */
+const WORDMARK_CROP = {
+  width: "200.875px",
+  height: "113.031px",
+  left: "-20.48px",
+  top: "-33.85px",
 };
 
-/** the near-black used by the reference's "feature" tiles */
-const DARK = "#141417";
-
-function Tile({ className = "", tint, dark = false, children }) {
+function Tile({ className = "", tint, children }) {
   return (
     <li
-      className={`relative flex flex-col gap-5 overflow-hidden rounded-[12px] p-5 sm:p-6 ${className}`}
-      style={{ backgroundColor: dark ? DARK : tint }}
+      className={`relative flex flex-col overflow-hidden rounded-[12px] p-6 ${className}`}
+      style={{ backgroundColor: tint }}
     >
       {children}
     </li>
   );
 }
 
-function Title({ dark = false, children }) {
+/** node 36:3990 — the headline on the four larger tiles */
+function Title({ children }) {
   return (
-    <p
-      className={`font-display text-[19px] font-medium leading-[1.25] tracking-[-0.015em] sm:text-[21px] ${
-        dark ? "text-white" : "text-ink-900"
-      }`}
-    >
+    <p className="font-display text-[19px] font-medium leading-[1.25] tracking-[-0.015em] text-ink-900 sm:text-[21px] sm:leading-[26.25px] sm:tracking-[-0.315px]">
       {children}
     </p>
   );
 }
 
-function Note({ dark = false, children }) {
+/** node 36:3977 — the smaller headline on the bottom two tiles */
+function TitleSm({ children }) {
   return (
-    <p
-      className={`font-display text-[13.5px] leading-[1.5] ${
-        dark ? "text-white/60" : "text-ink-900/55"
-      }`}
-    >
+    <p className="font-display text-[17px] font-medium leading-[1.3] tracking-[-0.01em] text-ink-900 sm:text-[18px] sm:leading-[23.4px] sm:tracking-[-0.18px]">
       {children}
     </p>
   );
 }
 
-/**
- * The three profile marks, in a white card like the reference's icon row.
- * LinkedIn and GitHub use their own brand glyphs and brand colours; the resume
- * has no brand, so it gets a plain document mark on white.
- */
+function Note({ className = "", children }) {
+  return (
+    <p className={`font-display text-[13.5px] leading-[20.25px] text-ink-900/55 ${className}`}>
+      {children}
+    </p>
+  );
+}
+
+/** node 36:3993 — the three profile marks in a white card */
 const MARKS = [
-  {
-    label: "Resume",
-    bg: "#FFFFFF",
-    fg: "#1D6FE0",
-    ring: true,
-    // document with a folded corner and three text lines
-    paths: [
-      "M6.5 2.5h7.1L19 7.9v12.6a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 20.5v-16.5a1.5 1.5 0 0 1 1.5-1.5Zm7 1.6v3.4a.9.9 0 0 0 .9.9h3.3L13.5 4.1Z",
-      "M8.2 12.4h7.6v1.5H8.2zM8.2 15.8h5.4v1.5H8.2z",
-    ],
-    fill2: "#FFFFFF",
-  },
-  {
-    label: "LinkedIn",
-    bg: "#0A66C2",
-    fg: "#FFFFFF",
-    // the "in" wordmark on its own, without the enclosing square
-    paths: [
-      "M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29Z",
-      "M5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14Z",
-      "M7.12 20.45H3.56V9h3.56v11.45Z",
-    ],
-  },
-  {
-    label: "GitHub",
-    bg: "#18181B",
-    fg: "#FFFFFF",
-    // the Octocat mark
-    paths: [
-      "M12 .3a12 12 0 0 0-3.8 23.4c.6.1.83-.26.83-.58l-.02-2.04c-3.34.73-4.04-1.6-4.04-1.6-.55-1.39-1.34-1.76-1.34-1.76-1.08-.75.09-.73.09-.73 1.2.08 1.83 1.23 1.83 1.23 1.08 1.84 2.81 1.31 3.5 1 .1-.78.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.94 0-1.3.47-2.38 1.24-3.22-.13-.3-.54-1.52.1-3.17 0 0 1.01-.33 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.56 3.29-1.23 3.29-1.23.65 1.65.24 2.87.12 3.17.77.84 1.23 1.92 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22l-.01 3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .3Z",
-    ],
-  },
+  { label: "Resume", src: "/icons/mark-resume.svg", bg: "#FFFFFF", ring: true },
+  { label: "LinkedIn", src: "/icons/mark-linkedin.svg", bg: "#0A66C2" },
+  { label: "GitHub", src: "/icons/mark-github.svg", bg: "#18181B" },
 ];
 
 function ProfileMarks() {
   return (
-    <div className="flex w-fit gap-2.5 rounded-[12px] bg-white p-3 shadow-[0_1px_3px_rgba(10,10,11,0.06)]">
+    <div className="flex w-[188px] shrink-0 gap-2.5 rounded-[12px] bg-white p-3 drop-shadow-[0_1px_1.5px_rgba(10,10,11,0.06)]">
       {MARKS.map((m) => (
         <span
           key={m.label}
-          role="img"
-          aria-label={m.label}
           className={`flex size-12 items-center justify-center rounded-[12px] ${
             m.ring ? "border border-ink-900/10" : ""
           }`}
           style={{ backgroundColor: m.bg }}
         >
-          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-            {m.paths.map((d, i) => (
-              <path key={d} d={d} fill={m.fill2 && i > 0 ? m.fill2 : m.fg} />
-            ))}
-          </svg>
+          <img src={m.src} alt={m.label} width="26" height="26" />
         </span>
       ))}
     </div>
   );
 }
 
-/** the three subjects as chips, echoing the reference's tag cluster */
+/** node 36:3920 — the three subjects as chips, the first one filled */
+const CHIPS = [
+  { label: "DSA", filled: true },
+  { label: "Web development", filled: false },
+  { label: "Core CS", filled: false },
+];
+
 function SubjectChips() {
-  const chips = [
-    { label: "DSA", filled: true },
-    { label: "Web development", filled: false },
-    { label: "Core CS", filled: false },
-  ];
   return (
     <ul className="flex flex-wrap gap-2">
-      {chips.map((c) => (
+      {CHIPS.map((c) => (
         <li
           key={c.label}
-          className={`rounded-full px-3.5 py-1.5 font-display text-[13px] font-medium ${
-            c.filled
-              ? "bg-[#7C3AED] text-white"
-              : "border border-ink-900/12 bg-white text-ink-900/70"
+          className={`rounded-full px-3.5 py-1.5 font-display text-[13px] font-medium leading-[19.5px] ${
+            c.filled ? "bg-[#7C3AED] text-white" : "border border-[#E5E7EB] bg-white text-ink-900/70"
           }`}
         >
           {c.label}
@@ -149,20 +110,19 @@ function SubjectChips() {
   );
 }
 
-/** a deployed app, drawn as a browser window with an AI badge */
+/** node 36:3937 — a browser window, 249px wide and clipped by the tile */
 function DeployedApp() {
   return (
-    <div className="overflow-hidden rounded-[10px] border border-ink-900/8 bg-white">
-      <div className="flex items-center gap-1.5 border-b border-ink-900/8 px-3 py-2.5">
+    <div className="h-[120px] w-[249px] overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white">
+      <div className="flex w-[390px] items-center gap-1.5 border-b border-[#E5E7EB] px-3 py-2.5">
         {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => (
           <span key={c} className="size-2 rounded-full" style={{ backgroundColor: c }} />
         ))}
-        <span className="ml-2 h-2 flex-1 rounded-full bg-ink-900/8" />
       </div>
       <div className="flex flex-col gap-2 p-3.5">
-        <span className="h-2 w-3/4 rounded-full bg-ink-900/10" />
-        <span className="h-2 w-1/2 rounded-full bg-ink-900/8" />
-        <span className="mt-1 w-fit rounded-full bg-[#0E9F6E] px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[0.08em] text-white">
+        <span className="block h-2 w-full rounded-full bg-ink-900/10" />
+        <span className="block h-2 w-[181px] rounded-full" />
+        <span className="mt-1 w-fit rounded-full bg-[#0E9F6E] px-2.5 py-1 font-display text-[11px] font-medium uppercase leading-[16.5px] tracking-[0.88px] text-white">
           AI feature
         </span>
       </div>
@@ -170,11 +130,23 @@ function DeployedApp() {
   );
 }
 
-/**
- * Illustrated avatars for the mock-round cluster: a tinted disc, shoulders,
- * a head and a hair shape, all clipped to the disc. `hair` is the path drawn
- * over the head, so each face reads as a different person.
- */
+/** node 36:3954 — the AI toolkit pills */
+function AiTools() {
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {["Coding assistants", "LLM APIs", "Embeddings", "RAG"].map((t) => (
+        <li
+          key={t}
+          className="rounded-full border border-white/15 bg-white px-3 py-1.5 font-display text-[12.5px] font-medium leading-[18.75px] text-ink-900/65"
+        >
+          {t}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** node 36:4008 — the avatar cluster, 48px discs overlapping by 12px */
 const PEOPLE = [
   {
     bg: "#7C5CF0",
@@ -202,108 +174,33 @@ const PEOPLE = [
   },
 ];
 
-function Avatar({ person }) {
-  const id = person.bg.slice(1);
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true" className="block">
-      <defs>
-        <clipPath id={`avatar-${id}`}>
-          <circle cx="24" cy="24" r="24" />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#avatar-${id})`}>
-        <circle cx="24" cy="24" r="24" fill={person.bg} />
-        {/* shoulders */}
-        <ellipse cx="24" cy="50" rx="16" ry="14" fill={person.shirt} />
-        {/* neck + head */}
-        <rect x="21" y="28" width="6" height="7" rx="3" fill={person.skin} />
-        <circle cx="24" cy="23" r="8.6" fill={person.skin} />
-        <path d={person.hair} fill={person.shirt} />
-      </g>
-    </svg>
-  );
-}
-
-/** the mock rounds, as an avatar cluster like the reference's green tile */
 function MockRounds() {
   return (
     <div className="flex items-center">
       {PEOPLE.map((person, i) => (
         <span
-          key={person.bg}
+          key={i}
           aria-hidden="true"
           className="overflow-hidden rounded-full ring-2 ring-white"
           style={{ marginLeft: i ? "-12px" : 0 }}
         >
-          <Avatar person={person} />
+          <svg width="48" height="48" viewBox="0 0 48 48" className="block">
+            <defs>
+              <clipPath id={`avatar-${i}`}>
+                <circle cx="24" cy="24" r="24" />
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#avatar-${i})`}>
+              <circle cx="24" cy="24" r="24" fill={person.bg} />
+              <ellipse cx="24" cy="50" rx="16" ry="14" fill={person.shirt} />
+              <rect x="21" y="28" width="6" height="7" rx="3" fill={person.skin} />
+              <circle cx="24" cy="23" r="8.6" fill={person.skin} />
+              <path d={person.hair} fill={person.shirt} />
+            </g>
+          </svg>
         </span>
       ))}
     </div>
-  );
-}
-
-/**
- * The aptitude round as a countdown dial: a track, an arc showing the time
- * still on the clock, and a marker at the arc's tip. 72% of the ring is drawn,
- * which is what 45:00 of a 60-minute paper looks like.
- */
-function Countdown() {
-  const R = 34;
-  const CIRC = 2 * Math.PI * R;
-  const REMAINING = 0.72;
-  const angle = -90 + REMAINING * 360;
-  const tip = {
-    x: 40 + R * Math.cos((angle * Math.PI) / 180),
-    y: 40 + R * Math.sin((angle * Math.PI) / 180),
-  };
-
-  return (
-    <div className="flex items-center gap-4">
-      <svg width="80" height="80" viewBox="0 0 80 80" aria-hidden="true" className="shrink-0">
-        <circle cx="40" cy="40" r={R} fill="none" stroke="rgba(10,10,11,0.10)" strokeWidth="6" />
-        <circle
-          cx="40"
-          cy="40"
-          r={R}
-          fill="none"
-          stroke="#D97706"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeDasharray={`${CIRC * REMAINING} ${CIRC}`}
-          transform="rotate(-90 40 40)"
-        />
-        <circle cx={tip.x} cy={tip.y} r="5" fill="#D97706" stroke="#fff" strokeWidth="2.5" />
-      </svg>
-
-      <div className="flex flex-col">
-        <span className="font-display text-[34px] font-medium leading-none tracking-[-0.02em] tabular-nums text-ink-900">
-          45:00
-        </span>
-        <span className="mt-1.5 font-display text-[11.5px] font-medium uppercase tracking-[0.12em] text-[#D97706]">
-          Time left
-        </span>
-      </div>
-    </div>
-  );
-}
-
-/** the AI toolkit, as a row of small pills */
-function AiTools({ dark = false }) {
-  return (
-    <ul className="flex flex-wrap gap-2">
-      {["Coding assistants", "LLM APIs", "Embeddings", "RAG"].map((t) => (
-        <li
-          key={t}
-          className={`rounded-full px-3 py-1.5 font-display text-[12.5px] font-medium ${
-            dark
-              ? "border border-white/15 bg-white/10 text-white/85"
-              : "border border-ink-900/10 bg-white text-ink-900/65"
-          }`}
-        >
-          {t}
-        </li>
-      ))}
-    </ul>
   );
 }
 
@@ -318,76 +215,64 @@ export default function Pricing() {
         <div className="flex max-w-[760px] flex-col gap-4">
           <h2
             id="usps-heading"
-            className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]"
+            className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[51.84px] lg:tracking-[-0.96px]"
           >
             What you <span className="text-flame">walk away</span> with.
           </h2>
-          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px]">
+          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px] lg:leading-[27px]">
             Seven things in hand at the end of six months — not a certificate and a hope.
           </p>
         </div>
 
         <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:grid-rows-[repeat(3,236px)]">
-          {/* the hero — dark, tall, with the Internshala app running off its foot */}
-          <li className="relative flex flex-col gap-6 overflow-hidden rounded-[12px] bg-[#141417] p-6 sm:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:p-7">
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-[radial-gradient(70%_70%_at_50%_100%,rgba(231,0,11,0.32),rgba(231,0,11,0))]"
-            />
-
-            <div className="relative flex flex-col gap-4">
-              <span
-                className="relative block h-[42px] w-[138px] brightness-0 invert sm:h-[48.7px] sm:w-[160px]"
-                role="img"
-                aria-label="Internshala"
-              >
-                <span className="pointer-events-none absolute inset-0 block overflow-hidden">
+          {/* node 36:3829 — Internshala, black, spanning rows 1–2 of column 1 */}
+          <li className="relative overflow-hidden rounded-[12px] bg-black pb-6 pt-[17px] sm:col-span-2 lg:col-span-1 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:pb-0">
+            <div className="relative z-10 mx-auto flex max-w-[368px] flex-col items-center gap-2 px-6">
+              <div className="flex items-end gap-1.5">
+                <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
+                  6 months of
+                </p>
+                <span
+                  className="relative block h-[41.7px] w-[137px] overflow-hidden sm:h-[48.695px] sm:w-[160px]"
+                  role="img"
+                  aria-label="Internshala"
+                >
                   <img
-                    src="/images/internshala.webp"
+                    src="/images/internshala-wordmark.png"
                     alt=""
-                    className="absolute max-w-none"
-                    style={{
-                      width: INTERNSHALA_CROP.w,
-                      height: INTERNSHALA_CROP.h,
-                      left: INTERNSHALA_CROP.left,
-                      top: INTERNSHALA_CROP.top,
-                    }}
-                    loading="lazy"
+                    className="absolute max-w-none origin-top-left scale-[0.857] sm:scale-100"
+                    style={WORDMARK_CROP}
                   />
                 </span>
-              </span>
-
-              <div className="flex flex-col gap-2">
-                <p className="font-display text-[24px] font-medium leading-[1.2] tracking-[-0.02em] text-white sm:text-[28px]">
-                  6 months of <span className="text-[#FF4A50]">Internshala Pro</span>, free
+                <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
+                  Free
                 </p>
-                <Note dark>
-                  Thousands of job and internship opportunities at your fingertips, included with
-                  the programme for your whole hunt.
-                </Note>
               </div>
+              <p className="text-center font-display text-[14px] leading-normal text-white/60">
+                Thousands of job and internship opportunities at your fingertips, included with the
+                programme for your whole hunt.
+              </p>
             </div>
 
-            <div className="relative mx-auto -mb-6 mt-auto w-[200px] shrink-0 sm:w-[218px] lg:-mb-7">
-              <div className="rounded-t-[26px] border-[6px] border-b-0 border-[#2A2A2F] bg-[#2A2A2F] shadow-[0_-10px_40px_rgba(0,0,0,0.45)]">
-                <div className="overflow-hidden rounded-t-[20px] bg-white">
-                  <img
-                    src="/images/internshala-app.jpg"
-                    alt="The Internshala app, showing internships, jobs and courses"
-                    width="552"
-                    height="1200"
-                    className="block w-full"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
+            {/* node 36:7452 — the device render fills a 300 x 595.294 frame, and the
+                tile clips whatever runs past its foot. 604x1200 source, so it
+                stays sharp on retina. */}
+            <div className="relative mx-auto mt-6 h-[370px] w-[256px] overflow-hidden sm:h-[450px] sm:w-[300px] lg:mt-[22px] lg:h-[501px]">
+              <img
+                src="/images/internshala-app-device.png"
+                alt="The Internshala app, showing internships, jobs and courses"
+                width="604"
+                height="1200"
+                className="absolute inset-0 size-full max-w-none object-cover object-top"
+                loading="lazy"
+              />
             </div>
           </li>
 
-          {/* wide, light — copy left, the marks right */}
+          {/* node 36:3987 — resume marks, spanning columns 2–3 of the first row */}
           <Tile
             tint="rgba(29,111,224,0.08)"
-            className="lg:col-span-2 lg:col-start-2 lg:row-start-1 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+            className="gap-6 sm:col-span-2 lg:col-start-2 lg:row-start-1 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
           >
             <div className="flex max-w-[320px] flex-col gap-2">
               <Title>Resume, LinkedIn profile and GitHub portfolio</Title>
@@ -396,52 +281,68 @@ export default function Pricing() {
             <ProfileMarks />
           </Tile>
 
-          {/* light — the three subjects */}
-          <Tile tint="rgba(124,58,237,0.08)" className="lg:col-start-2 lg:row-start-2">
+          {/* node 36:3919 */}
+          <Tile tint="rgba(124,58,237,0.08)" className="gap-5 lg:col-start-2 lg:row-start-2">
             <SubjectChips />
-            <div className="mt-auto flex flex-col gap-2">
+            <div className="mt-auto flex flex-col justify-end">
               <Title>Confidence across DSA, web development and core CS</Title>
-              <Note>The three things every coding round tests, practised until they stick.</Note>
             </div>
           </Tile>
 
-          {/* dark — the shipped project */}
-          <Tile dark className="lg:col-start-3 lg:row-start-2">
+          {/* node 36:3930 — the browser mock is positioned, then clipped */}
+          <Tile tint="rgba(14,159,110,0.09)" className="gap-5 lg:col-start-3 lg:row-start-2">
             <div className="flex flex-col gap-2">
-              <Title dark>A deployed full-stack project with an AI feature</Title>
-              <Note dark>Shipped to the cloud and demoed, not left on your laptop.</Note>
+              <Title>A deployed full-stack project with an AI feature</Title>
+              <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
             </div>
-            <div className="-mb-10 -mr-10 mt-auto rotate-[-4deg] sm:-mr-6">
+            <div className="mt-4 self-end lg:absolute lg:left-[175px] lg:top-[118px] lg:mt-0">
               <DeployedApp />
             </div>
           </Tile>
 
-          {/* dark — the AI toolkit */}
-          <Tile dark className="lg:col-start-1 lg:row-start-3">
+          {/* node 36:3950 */}
+          <Tile tint="rgba(8,145,178,0.09)" className="gap-5 lg:col-start-1 lg:row-start-3">
+            <Title>Hands-on with AI coding tools and LLM APIs</Title>
+            <div className="mt-auto flex flex-col justify-end">
+              <AiTools />
+            </div>
+          </Tile>
+
+          {/* node 36:3963 */}
+          <Tile
+            tint="rgba(217,119,6,0.09)"
+            className="gap-8 lg:col-start-2 lg:row-start-3 lg:gap-[42px]"
+          >
+            <div className="flex items-center gap-4">
+              <img src="/icons/timer-dial.svg" alt="" width="80" height="80" className="shrink-0" />
+              <div className="flex flex-col">
+                <p className="font-display text-[34px] font-medium leading-[34px] tracking-[-0.68px] tabular-nums text-ink-900">
+                  45:00
+                </p>
+                <p className="pt-1.5 font-display text-[11.5px] font-medium uppercase leading-[17.25px] tracking-[1.38px] text-[#D97706]">
+                  Time left
+                </p>
+              </div>
+            </div>
             <div className="flex flex-col gap-2">
-              <Title dark>Hands-on with AI coding tools and LLM APIs</Title>
-              <Note dark>Used inside your own build, not demonstrated on a slide.</Note>
-            </div>
-            <div className="mt-auto">
-              <AiTools dark />
-            </div>
-          </Tile>
-
-          {/* light — the timed paper */}
-          <Tile tint="rgba(217,119,6,0.09)" className="lg:col-start-2 lg:row-start-3">
-            <Countdown />
-            <div className="mt-auto flex flex-col gap-2">
-              <Title>A timed, placement-style aptitude test</Title>
-              <Note>Sat under real conditions, so the one that counts holds no surprises.</Note>
+              <TitleSm>A timed, placement-style aptitude test</TitleSm>
+              <Note className="max-w-[260px] text-[13px] leading-[19.5px]">
+                Sat under real conditions, so the one that counts holds no surprises.
+              </Note>
             </div>
           </Tile>
 
-          {/* light — the mock rounds */}
-          <Tile tint="rgba(219,39,119,0.08)" className="lg:col-start-3 lg:row-start-3">
+          {/* node 36:4007 */}
+          <Tile
+            tint="rgba(219,39,119,0.08)"
+            className="justify-between gap-8 lg:col-start-3 lg:row-start-3"
+          >
             <MockRounds />
-            <div className="mt-auto flex flex-col gap-2">
-              <Title>Technical and HR mock interview practice</Title>
-              <Note>Real rounds with real feedback, before an offer is on the line.</Note>
+            <div className="flex flex-col gap-2">
+              <TitleSm>Technical and HR mock interview practice</TitleSm>
+              <Note className="text-[13px] leading-[19.5px]">
+                Real rounds with real feedback, before an offer is on the line.
+              </Note>
             </div>
           </Tile>
         </ul>
