@@ -83,30 +83,38 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:pl-[92px] lg:pr-[240px]">
-        <div className="flex w-full max-w-[1108px] translate-y-[44px] flex-col gap-8 lg:translate-y-[80.5px]">
-          {/* node 48:4107 */}
-          <h1 className="max-w-[800px] text-balance font-display text-[26px] font-medium leading-[1.25] tracking-[-0.03em] text-white sm:text-[34px] lg:text-[44px]">
-            You&rsquo;ve come this far to not come just this far.
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:px-[92px]">
+        <div className="flex w-full translate-y-[44px] flex-col gap-5 lg:translate-y-[60px] lg:gap-6">
+          <h1 className="max-w-[820px] text-balance font-display text-[30px] font-medium leading-[1.2] tracking-[-0.03em] text-white sm:text-[40px] lg:max-w-none lg:text-[clamp(40px,4vw,56px)]">
+            {/* kept on one line once the column is wide enough for it */}
+            <span className="lg:whitespace-nowrap">
+              You&rsquo;ve come this far to not come just this far.
+            </span>
             <br />
             Make the <span className="text-flame">Lastmile</span> count.
           </h1>
 
-          {/* node 48:4108 */}
-          <div className="flex w-full max-w-[800px] flex-col font-montserrat text-[16px] leading-normal text-white lg:text-[18px]">
-            <p>
-              uGSOT Lastmile is a 6-month rapid-learning offline course aimed to make you
-              placement ready. It is open for students in year 3rd and 4th.
-            </p>
-          </div>
+          <p className="max-w-[560px] font-montserrat text-[17px] leading-[1.6] text-white/85 lg:max-w-[760px] lg:text-[20px]">
+            uGSOT Lastmile is a 6-month rapid-learning offline course aimed to make you placement
+            ready. It is open for students in year 3rd and 4th.
+          </p>
 
-          {/* node 48:4121 */}
-          <div className="flex flex-wrap items-center gap-4">
+          {/* fee, inline with the copy — the amount carries the accent */}
+          <p className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+            <span className="font-display text-[30px] font-bold leading-none tracking-[-0.02em] text-flame lg:text-[36px]">
+              ₹50,000
+            </span>
+            <span className="font-display text-[16px] text-white/80 lg:text-[18px]">
+              with <span className="font-medium text-white">No Cost EMI</span>
+            </span>
+          </p>
+
+          <div className="mt-1 flex flex-wrap items-center gap-4">
             <a
               href="#apply"
-              className="group flex h-12 items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
+              className="group flex h-[52px] items-center justify-center gap-2 rounded bg-flame px-6 transition-opacity hover:opacity-90"
             >
-              <span className="font-montserrat text-[15.6px] font-medium leading-6 text-white">
+              <span className="font-montserrat text-[16px] font-medium leading-6 text-white">
                 Apply Now
               </span>
               <span className="flex size-6 items-center justify-center">
@@ -122,16 +130,17 @@ export default function Hero() {
 
             <a
               href="#brochure"
-              className="flex h-12 items-center justify-center gap-2 rounded border border-white/20 px-[21px] py-px transition-colors hover:border-white/50 hover:bg-white/5"
+              className="flex h-[52px] items-center justify-center gap-2 rounded border border-white/25 px-6 transition-colors hover:border-white/50 hover:bg-white/5"
             >
               <img src="/icons/download-round.svg" alt="" width="24" height="24" />
-              <span className="whitespace-nowrap text-center font-montserrat text-[16px] font-medium leading-normal text-white">
+              <span className="whitespace-nowrap font-montserrat text-[16px] font-medium text-white">
                 Download Brochure
               </span>
             </a>
           </div>
         </div>
       </div>
+
     </section>
   );
 }

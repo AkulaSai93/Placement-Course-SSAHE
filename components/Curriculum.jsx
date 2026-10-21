@@ -3,380 +3,333 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Curriculum timeline.
+ * Curriculum — the eight modules of UGSOT LastMile 2026, taken from the
+ * programme deck ("What students will learn", pages 4–7) and its at-a-glance
+ * table on page 1.
  *
- * ⚠️ PLACEHOLDER CONTENT. This section is scoped to Semesters 3 and 4, and the
- * Figma only ever specified copy for Semester 1 — so the themes, descriptions,
- * concepts, projects and skills below are stand-ins carried over from the
- * earlier build. Swap them for the real syllabus. Project stills are unset
- * Project stills are placeholder artwork reused from the Figma Semester-1 export —
- * they do NOT depict these projects. Swap them for real stills.
+ * Every module carries its own session / week / hour counts; the totals in
+ * STATS below are the deck's own footer figures and must stay in step with the
+ * per-module numbers (70 sessions, 17.5 weeks, 210 hours).
+ *
+ * Layout follows the deck: a tinted header band with the module number, title,
+ * one-line promise and the three counts, then the numbered topics in two
+ * columns (one column on mobile). The scroll rail and its travelling arrow are
+ * carried over from the previous build.
  */
-const ICONS = {
-  code: "M8 6L2 12l6 6M16 6l6 6-6 6",
-  cloud: "M7 18a4 4 0 0 1 0-8 5.5 5.5 0 0 1 10.6 1.5A3.5 3.5 0 0 1 17 18H7Z",
-  server: "M4 5h16v5H4zM4 14h16v5H4zM8 7.5h.01M8 16.5h.01",
-  chip: "M7 7h10v10H7zM4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3",
-  graph: "M4 19V5M4 19h16M8 15l3-4 3 3 4-6",
-  people: "M15 20v-2a4 4 0 0 0-8 0v2M11 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20 20v-2a3 3 0 0 0-2.5-3",
-};
-
-const SEMESTERS = [
+const MODULES = [
+  {
+    id: 1,
+    accent: "#1D6FE0",
+    title: "Programming",
+    promise: "Write clean, working Python and break problems down before you code.",
+    sessions: 6,
+    weeks: "1.5 wk",
+    hours: 18,
+    topics: [
+      ["Python Basics", "Setup, variables, data types, operators, input/output"],
+      ["Control Flow", "Conditionals, loops, nested loops, pattern problems"],
+      ["Functions", "Parameters, return values, scope, intro to recursion"],
+      ["Python Data Structures", "Lists, tuples, dictionaries, sets, comprehensions"],
+      ["Strings, Exceptions & Files", "String methods, exception handling, file I/O"],
+      ["Problem-Solving Approach", "Pseudocode, dry runs, edge cases, learning with AI tools"],
+    ],
+  },
+  {
+    id: 2,
+    accent: "#0E9F6E",
+    title: "Data Structures & Algorithms",
+    promise:
+      "Solve coding-round problems with the right data structure and an efficient algorithm.",
+    sessions: 20,
+    weeks: "5 wk",
+    hours: 60,
+    topics: [
+      ["Time & Space Complexity", "Big-O, analysing loops, complexity classes"],
+      ["Arrays I", "Traversal, prefix sums, frequency counting"],
+      ["Arrays II", "Kadane's algorithm, in-place operations, 2D arrays"],
+      ["Strings", "Palindromes, anagrams, substring problems"],
+      ["Hashing", "Hash maps and sets, two-sum style problems"],
+      ["Two Pointers & Sliding Window", "Pair problems, fixed and variable windows"],
+      ["Recursion", "Base cases, recursion trees"],
+      ["Backtracking", "Subsets, permutations, combinations"],
+      ["Sorting", "Merge sort, quick sort, counting sort"],
+      ["Binary Search", "Variations, search on answer"],
+      ["Linked Lists", "Reversal, fast and slow pointers"],
+      ["Stacks", "Parentheses, next greater element"],
+      ["Queues & Deques", "Circular queue, monotonic queue"],
+      ["Binary Trees", "Traversals, height, diameter, path sums"],
+      ["Binary Search Trees", "Insert, delete, validate, LCA"],
+      ["Heaps & Priority Queues", "Top-K problems, merging sorted lists"],
+      ["Graphs I: BFS & DFS", "Representation, traversal, components"],
+      ["Graphs II & Greedy", "Cycles, shortest paths, interval problems"],
+      ["Dynamic Programming I", "Memoisation, tabulation, 1D DP"],
+      ["Dynamic Programming II", "2D DP, knapsack, LCS"],
+    ],
+  },
   {
     id: 3,
-    label: "Semester 3",
-    // accent drives the mobile accordion header; accentSoft tints the panels
-    accent: "#1D6FE0",
-    accentSoft: "rgba(29,111,224,0.08)",
-    theme: "Scale",
-    lead: "By Semester 3,",
-    description:
-      "students design systems that survive real traffic — containerised services, cloud deployment and the operational discipline that production demands.",
-    bold: "move from writing code to running it",
-    skills: [
-      "System Design",
-      "Cloud Computing (AWS)",
-      "Docker & Kubernetes",
-      "CI/CD",
-      "Operating Systems",
-      "Computer Networks",
-      "Competitive Programming",
-    ],
-    concepts: [
-      {
-        icon: "server",
-        title: "System Design",
-        body: "Learn how large systems are structured, and why they fail when they do.",
-      },
-      {
-        icon: "cloud",
-        title: "Cloud Computing",
-        body: "Deploy and operate real services on AWS, not a local sandbox.",
-      },
-      {
-        icon: "chip",
-        title: "Operating Systems",
-        body: "Understand processes, memory and the machine under your code.",
-      },
-      {
-        icon: "code",
-        title: "DSA II",
-        body: "Advanced data structures and the problem-solving depth interviews probe.",
-      },
-    ],
-    projects: [
-      { name: "Scalable Microservices Backend", image: "/projects/enterprise-integration.webp" },
-      { name: "CI/CD Pipeline & Observability Stack", image: "/projects/linux-security.webp" },
-      { name: "Distributed Caching Layer", image: "/projects/food-delivery.webp" },
+    accent: "#7C3AED",
+    title: "Web Essentials",
+    promise: "Build responsive, interactive web pages with HTML, CSS and JavaScript.",
+    sessions: 6,
+    weeks: "1.5 wk",
+    hours: 18,
+    topics: [
+      ["HTML Fundamentals", "Semantic HTML, forms, tables, accessibility"],
+      ["CSS Fundamentals", "Selectors, box model, colours, typography"],
+      ["CSS Layouts & Responsive Design", "Flexbox, Grid, media queries"],
+      ["JavaScript Fundamentals", "ES6+, functions, arrays, objects"],
+      ["DOM & Events", "Updating the page, event listeners, forms"],
+      ["Asynchronous JavaScript & Fetch", "Promises, async/await, APIs, JSON"],
     ],
   },
   {
     id: 4,
-    label: "Semester 4",
-    accent: "#0E9F6E",
-    accentSoft: "rgba(14,159,110,0.09)",
-    theme: "Ship",
-    lead: "By Semester 4,",
-    description:
-      "students build with LLMs, retrieval and agents — then defend a capstone they shipped and can explain line by line.",
-    bold: "become AI-native engineers",
-    skills: [
-      "Machine Learning",
-      "Generative AI & LLMs",
-      "Retrieval-Augmented Generation",
-      "AI Agents & Tooling",
-      "Open Source Contribution",
-      "Interview Preparation",
+    accent: "#D97706",
+    title: "Full Stack Development",
+    promise: "Build, secure and deploy a complete web application as a team.",
+    sessions: 16,
+    weeks: "4 wk",
+    hours: 48,
+    topics: [
+      ["Git, GitHub & Team Workflow", "Branches, pull requests, code reviews"],
+      ["React Fundamentals", "Components, JSX, props"],
+      ["React State & Hooks", "useState, useEffect, lists"],
+      ["React Routing & Forms", "React Router, controlled forms"],
+      ["React with APIs", "Data fetching, loading and error states"],
+      ["Project Lab: React Frontend", "Build a multi-page React app"],
+      ["Node.js & Express", "Servers, routing, middleware"],
+      ["REST API Design", "CRUD endpoints, status codes, Postman"],
+      ["MongoDB & Mongoose", "Schemas, documents, CRUD"],
+      ["Connecting Frontend & Backend", "CORS, integration, environment config"],
+      ["Authentication & Authorisation", "Hashing, JWT, protected routes"],
+      ["Validation, Errors & Security", "Input validation, common vulnerabilities"],
+      ["Testing & Code Quality", "Unit and API tests, clean code"],
+      ["Deployment", "Shipping frontend and backend to the cloud"],
+      ["Full-Stack Project Lab I", "Build a complete app in teams"],
+      ["Full-Stack Project Lab II & Demo", "Finish, deploy and present"],
     ],
-    concepts: [
-      {
-        icon: "graph",
-        title: "Machine Learning",
-        body: "The foundations behind models, training and evaluation.",
-      },
-      {
-        icon: "chip",
-        title: "Generative AI & LLMs",
-        body: "Build with language models: prompting, retrieval and guardrails.",
-      },
-      {
-        icon: "code",
-        title: "AI Agents & Tooling",
-        body: "Agents that plan, call tools and recover from their own failures.",
-      },
-      {
-        icon: "people",
-        title: "Career Readiness",
-        body: "Interviews, aptitude and the communication the job actually needs.",
-      },
+  },
+  {
+    id: 5,
+    accent: "#0891B2",
+    title: "Generative AI & AI-Assisted Development",
+    promise: "Use AI to build faster and responsibly, and ship an LLM-powered feature.",
+    sessions: 4,
+    weeks: "1 wk",
+    hours: 12,
+    topics: [
+      ["Generative AI & LLM Fundamentals", "How LLMs work, tokens, context, hallucination"],
+      [
+        "Prompt Engineering & AI Coding Assistants",
+        "Structured prompts, pair programming with AI",
+      ],
+      ["LLM APIs, Embeddings & RAG", "Calling models, vector search, retrieval"],
+      ["Building an AI Feature", "Add an AI feature to your full-stack project"],
     ],
-    projects: [
-      { name: "Production GenAI Application", image: "/projects/portfolio.webp" },
-      { name: "Autonomous AI Agent", image: "/projects/enterprise-integration.webp" },
-      { name: "Capstone Product Build", image: "/projects/linux-security.webp" },
+  },
+  {
+    id: 6,
+    accent: "#4F46E5",
+    title: "Core CS Fundamentals",
+    promise:
+      "Answer interview questions on OOP, databases, operating systems and networks with confidence.",
+    sessions: 10,
+    weeks: "2.5 wk",
+    hours: 30,
+    topics: [
+      ["Object-Oriented Programming I", "Classes, objects, encapsulation, inheritance"],
+      ["Object-Oriented Programming II", "Polymorphism, abstraction, SOLID basics"],
+      ["DBMS Fundamentals", "Relational model, keys, ER, normalisation"],
+      ["SQL I", "SELECT, filtering, aggregates, constraints"],
+      ["SQL II", "JOINs, GROUP BY, HAVING, subqueries"],
+      ["Transactions & Indexing", "ACID properties, concurrency, indexes"],
+      ["Operating Systems I", "Processes, threads, scheduling, sync"],
+      ["Operating Systems II", "Memory, paging, virtual memory, deadlocks"],
+      ["Computer Networks", "OSI, TCP/IP, HTTP, DNS, TCP vs UDP"],
+      ["System Design Basics & Revision", "Scaling, caching; interview revision"],
+    ],
+  },
+  {
+    id: 7,
+    accent: "#DB2777",
+    title: "Aptitude & Reasoning",
+    promise: "Clear the aptitude and reasoning rounds that open most placement drives.",
+    sessions: 4,
+    weeks: "1 wk",
+    hours: 12,
+    topics: [
+      ["Quantitative Aptitude I", "Percentages, ratios, averages, profit and loss"],
+      ["Quantitative Aptitude II", "Time and work, speed-distance, interest, DI"],
+      ["Logical Reasoning", "Series, coding-decoding, relations, syllogisms"],
+      ["Verbal Ability & Mock Aptitude Test", "Grammar, comprehension, timed mock test"],
+    ],
+  },
+  {
+    id: 8,
+    accent: "#E7000B",
+    title: "Soft Skills & Career Readiness",
+    promise: "Present yourself well, from your resume to the final interview round.",
+    sessions: 4,
+    weeks: "1 wk",
+    hours: 12,
+    topics: [
+      ["Communication & Self-Introduction", "Elevator pitch, spoken clarity, email writing"],
+      ["Resume, LinkedIn & GitHub Portfolio", "ATS-friendly resume, profiles, project write-ups"],
+      ["Group Discussion & HR Interviews", "GD practice, STAR method, HR questions"],
+      ["Mock Interviews & Placement Strategy", "Technical and HR mock rounds, offers"],
     ],
   },
 ];
 
-function Icon({ name }) {
+/** Deck footer, page 7 — the sum of the per-module counts above. */
+const STATS = [
+  ["8", "modules, taught in sequence"],
+  ["70", "three-hour teaching sessions"],
+  ["210", "hours of classroom teaching"],
+  ["17.5", "weeks of teaching, plus practice days"],
+];
+
+const pad = (n) => String(n).padStart(2, "0");
+
+/** sessions / weeks / hours, as soft outlined pills */
+function Meta({ mod, className = "" }) {
   return (
-    <span className="flex size-8 items-center justify-center rounded-[7px] bg-flame/10">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d={ICONS[name]}
-          stroke="#E7000B"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </span>
-  );
-}
-
-/**
- * Panel whose items scroll horizontally on mobile (with prev/next arrows, as in
- * the reference) and fall back to the plain grid from `lg` up.
- */
-function CarouselPanel({ title, className, style, children, count }) {
-  const scrollerRef = useRef(null);
-
-  // Native `behavior: "smooth"` is unreliable inside a scroll-snap container,
-  // so the arrows animate scrollLeft directly.
-  const animRef = useRef(0);
-  const nudge = (dir) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const card = el.firstElementChild;
-    const step = card ? card.getBoundingClientRect().width + 16 : el.clientWidth * 0.8;
-    const max = el.scrollWidth - el.clientWidth;
-    const from = el.scrollLeft;
-    const to = Math.max(0, Math.min(max, from + dir * step));
-    if (to === from) return;
-
-    cancelAnimationFrame(animRef.current);
-    const start = performance.now();
-    const DURATION = 320;
-    const tick = (now) => {
-      const t = Math.min(1, (now - start) / DURATION);
-      const eased = 1 - Math.pow(1 - t, 3);
-      el.scrollLeft = from + (to - from) * eased;
-      if (t < 1) animRef.current = requestAnimationFrame(tick);
-    };
-    animRef.current = requestAnimationFrame(tick);
-  };
-
-  useEffect(() => () => cancelAnimationFrame(animRef.current), []);
-
-  return (
-    <div className={`rounded-[16px] p-4 sm:p-6 ${className}`} style={style}>
-      <div className="flex items-center justify-between gap-4">
-        <p className="whitespace-nowrap font-display text-[11px] font-medium uppercase tracking-[0.1em] text-ink-900/45 sm:text-[11.5px] sm:tracking-[0.14em]">
-          {title}
-        </p>
-        <div className="flex shrink-0 gap-2 lg:hidden">
-          {[-1, 1].map((dir) => (
-            <button
-              key={dir}
-              type="button"
-              onClick={() => nudge(dir)}
-              aria-label={dir < 0 ? `Previous ${title}` : `Next ${title}`}
-              className="flex size-8 items-center justify-center rounded-[9px] border border-ink-900/10 bg-white text-ink-900/70 transition-colors active:bg-ink-900/5"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d={dir < 0 ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"}
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          ))}
-        </div>
-      </div>
-      <ul
-        ref={scrollerRef}
-        className={`mt-5 flex gap-4 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:overflow-visible lg:pb-0 ${
-          count >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
-        }`}
-      >
-        {children}
-      </ul>
-    </div>
-  );
-}
-
-const Semester = ({ sem, reached, innerRef, open, onToggle }) => {
-  return (
-    <div
-      ref={innerRef}
-      className={`relative grid grid-cols-1 gap-x-10 gap-y-6 lg:grid-cols-[132px_1fr] lg:pb-0 ${
-        open ? "" : "pb-3"
-      }`}
-    >
-      {/* rail / accordion header */}
-      <div className="relative lg:pt-1.5">
-        {/* mobile: tinted, tappable header */}
-        <button
-          type="button"
-          onClick={onToggle}
-          aria-expanded={open}
-          aria-controls={`sem-${sem.id}-body`}
-          className="flex w-full items-center justify-between gap-4 rounded-[12px] px-4 py-3.5 text-left lg:hidden"
-          style={{ backgroundColor: sem.accentSoft }}
+    <ul className={`flex flex-wrap items-center gap-2 ${className}`}>
+      {[`${mod.sessions} sessions`, mod.weeks, `${mod.hours} hrs`].map((item) => (
+        <li
+          key={item}
+          className="whitespace-nowrap rounded-full border border-ink-900/12 bg-white px-4 py-2 font-display text-[13.5px] font-medium text-ink-900/65"
         >
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const Module = ({ mod, reached, innerRef, open, onToggle }) => (
+  <div ref={innerRef} className="relative grid grid-cols-1 gap-x-10 lg:grid-cols-[132px_1fr]">
+    {/* rail / accordion header */}
+    <div className="relative lg:pt-1.5">
+      {/* mobile: tappable header */}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={`module-${mod.id}-body`}
+        className="flex w-full items-center justify-between gap-4 border-t border-ink-900/15 py-4 text-left lg:hidden"
+      >
+        <span className="flex items-start gap-3.5">
+          <span
+            className="font-display text-[12px] font-medium leading-6 tabular-nums"
+            style={{ color: mod.accent }}
+          >
+            {pad(mod.id)}
+          </span>
           <span className="flex flex-col gap-0.5">
             <span
-              className="font-display text-[11.5px] font-medium uppercase tracking-[0.14em]"
-              style={{ color: sem.accent }}
+              className="font-display text-[17px] font-medium leading-tight tracking-[-0.01em]"
+              style={{ color: mod.accent }}
             >
-              {sem.label}
+              {mod.title}
             </span>
-            <span className="font-display text-[22px] font-medium leading-tight tracking-[-0.02em] text-ink-900">
-              {sem.theme}
+            <span className="font-display text-[12.5px] text-ink-900/55">
+              {mod.sessions} sessions · {mod.hours} hrs
             </span>
           </span>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-            className={`shrink-0 text-ink-900 transition-transform duration-300 ${
-              open ? "" : "rotate-180"
-            }`}
-          >
-            <path
-              d="M6 14.5l6-6 6 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-
-        {/* desktop: rail label + dot */}
-        <div className="hidden items-center justify-between gap-3 lg:flex">
-          <span
-            className={`font-display text-[12px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
-              reached ? "text-flame" : "text-ink-900/45"
-            }`}
-          >
-            {sem.label}
-          </span>
-          <span
-            aria-hidden="true"
-            className={`size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 ${
-              reached ? "border-flame" : "border-ink-900/20"
-            }`}
+        </span>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+          className={`shrink-0 text-ink-900 transition-transform duration-300 ${
+            open ? "" : "rotate-180"
+          }`}
+        >
+          <path
+            d="M6 14.5l6-6 6 6"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-        </div>
-      </div>
+        </svg>
+      </button>
 
-      {/* content */}
-      <div
-        id={`sem-${sem.id}-body`}
-        className={`flex-col gap-6 pb-14 ${open ? "flex" : "hidden"} lg:flex`}
-      >
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
-          <div className="flex flex-col gap-3">
-            <h3 className="hidden font-display text-[30px] font-medium leading-tight tracking-[-0.02em] text-flame lg:block lg:text-[34px]">
-              {sem.theme}
-            </h3>
-            <p className="max-w-[460px] font-display text-[15px] leading-[1.6] text-ink-900/70">
-              <span className="font-medium text-ink-900">{sem.lead}</span>{" "}
-              <span className="font-medium text-ink-900">{sem.bold}</span> — {sem.description}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <p className="font-display text-[14px] font-medium text-ink-900">
-              What you&apos;ll learn
-            </p>
-            <ul className="flex flex-wrap gap-2">
-              {sem.skills.map((skill) => (
-                <li
-                  key={skill}
-                  className="rounded-full border border-ink-900/10 bg-white px-3 py-1.5 font-display text-[12.5px] text-ink-900/75"
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* classroom concepts */}
-        <CarouselPanel
-          title="In classroom concepts"
-          className="bg-ink-900/[0.035]"
-          count={sem.concepts.length}
+      {/* desktop: rail label + dot */}
+      <div className="hidden items-center justify-between gap-3 lg:flex">
+        <span
+          className={`font-display text-[12px] font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
+            reached ? "text-flame" : "text-ink-900/45"
+          }`}
         >
-            {sem.concepts.map((c) => (
-              <li
-                key={c.title}
-                className="flex w-[78%] shrink-0 flex-col gap-3 rounded-[12px] border border-ink-900/8 bg-white p-4 sm:w-[48%] lg:w-auto"
-              >
-                <Icon name={c.icon} />
-                <p className="font-display text-[14px] font-medium leading-snug text-ink-900">
-                  {c.title}
-                </p>
-                <p className="font-display text-[12.5px] leading-[1.5] text-ink-900/55">
-                  {c.body}
-                </p>
-              </li>
-            ))}
-        </CarouselPanel>
-
-        {/* projects */}
-        <CarouselPanel
-          title="Projects you'll work on"
-          style={{ backgroundColor: sem.accentSoft }}
-          count={sem.projects.length}
-        >
-            {sem.projects.map((p) => (
-              <li
-                key={p.name}
-                className="flex w-[78%] shrink-0 flex-col gap-3 sm:w-[48%] lg:w-auto"
-              >
-                <div className="aspect-[4/3] w-full overflow-hidden rounded-[12px] bg-white">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt=""
-                      className="size-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div
-                      aria-hidden="true"
-                      className="flex size-full items-center justify-center bg-[linear-gradient(135deg,#fff_0%,#f1f2f4_100%)] text-[10px] font-medium uppercase tracking-[0.14em] text-ink-900/25"
-                    >
-                      Project still
-                    </div>
-                  )}
-                </div>
-                <p className="font-display text-[13px] font-medium leading-snug text-ink-900">
-                  {p.name}
-                </p>
-              </li>
-            ))}
-        </CarouselPanel>
+          Module {pad(mod.id)}
+        </span>
+        <span
+          aria-hidden="true"
+          className={`size-[11px] shrink-0 rounded-full border-2 bg-white transition-colors duration-300 ${
+            reached ? "border-flame" : "border-ink-900/20"
+          }`}
+        />
       </div>
     </div>
-  );
-};
+
+    {/* module body — no card: a rule, a heading row, then the topics */}
+    <div
+      id={`module-${mod.id}-body`}
+      className={`mb-10 lg:mb-16 ${open ? "" : "hidden"} lg:block`}
+    >
+      {/* heading row */}
+      <div className="hidden flex-col gap-3 lg:flex lg:flex-row lg:items-baseline lg:justify-between lg:gap-10">
+        <div className="flex flex-col gap-1.5">
+          <h3
+            className="font-display text-[22px] font-medium leading-tight tracking-[-0.02em] sm:text-[28px]"
+            style={{ color: mod.accent }}
+          >
+            {mod.title}
+          </h3>
+          <p className="max-w-[560px] font-display text-[14px] leading-[1.55] text-ink-900/60 sm:text-[15px]">
+            {mod.promise}
+          </p>
+        </div>
+        <Meta mod={mod} className="shrink-0 lg:justify-end" />
+      </div>
+
+      {/* topics */}
+      <ol className="mt-2 grid grid-cols-1 gap-x-14 lg:mt-3 lg:grid-cols-2">
+        {mod.topics.map(([name, detail], i) => (
+          <li key={name} className="flex gap-3.5 py-3">
+            <span
+              className="w-[18px] shrink-0 font-display text-[12px] font-medium leading-6 tabular-nums"
+              style={{ color: mod.accent }}
+            >
+              {pad(i + 1)}
+            </span>
+            <span className="flex flex-col gap-0.5">
+              <span className="font-display text-[15px] font-medium leading-6 text-ink-900">
+                {name}
+              </span>
+              <span className="font-display text-[13px] leading-[1.5] text-ink-900/55">
+                {detail}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+);
 
 export default function Curriculum() {
   const trackRef = useRef(null);
   const blockRefs = useRef([]);
   const [progress, setProgress] = useState(0);
-  const [reached, setReached] = useState(() => SEMESTERS.map((_, i) => i === 0));
-  // mobile accordion: first semester open, the rest collapsed
-  const [openId, setOpenId] = useState(SEMESTERS[0].id);
+  const [reached, setReached] = useState(() => MODULES.map((_, i) => i === 0));
+  // mobile accordion: first module open, the rest collapsed
+  const [openId, setOpenId] = useState(MODULES[0].id);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -410,7 +363,7 @@ export default function Curriculum() {
   }, []);
 
   return (
-    <section id="curriculum" className="bg-mist px-6 py-10 lg:px-20 lg:py-20">
+    <section id="curriculum" className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20">
       <div className="mx-auto max-w-[1280px]">
         <div className="flex max-w-[760px] flex-col gap-4">
           <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
@@ -418,11 +371,26 @@ export default function Curriculum() {
             How Engineers Actually Learn.
           </h2>
           <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px]">
-            Hands-on learning, curated semester by semester.
+            Eight modules, taught in sequence — each one a focused block of three-hour sessions
+            with hands-on practice.
           </p>
         </div>
 
-        <div ref={trackRef} className="relative mt-14 pl-6 lg:pl-0">
+        {/* the deck's own totals */}
+        <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-ink-900/10 py-6 lg:mt-10 lg:grid-cols-4">
+          {STATS.map(([value, label]) => (
+            <div key={label} className="flex flex-col gap-1">
+              <dt className="font-display text-[28px] font-medium leading-none tracking-[-0.02em] text-flame lg:text-[34px]">
+                {value}
+              </dt>
+              <dd className="font-display text-[13px] leading-[1.4] text-ink-900/60 lg:text-[14px]">
+                {label}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div ref={trackRef} className="relative mt-12 pl-6 lg:pl-0">
           {/* rail track — sits under the dots at the right edge of the rail column */}
           <span
             aria-hidden="true"
@@ -451,13 +419,14 @@ export default function Curriculum() {
               />
             </svg>
           </span>
-          {SEMESTERS.map((sem, i) => (
-            <Semester
-              key={sem.id}
-              sem={sem}
+
+          {MODULES.map((mod, i) => (
+            <Module
+              key={mod.id}
+              mod={mod}
               reached={reached[i]}
-              open={openId === sem.id}
-              onToggle={() => setOpenId((cur) => (cur === sem.id ? null : sem.id))}
+              open={openId === mod.id}
+              onToggle={() => setOpenId((cur) => (cur === mod.id ? null : mod.id))}
               innerRef={(el) => {
                 blockRefs.current[i] = el;
               }}
