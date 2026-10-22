@@ -41,9 +41,9 @@ export default function Fee() {
 
         <a
           href="#apply"
-          className="group mt-2 flex h-12 items-center justify-center gap-2 rounded bg-flame px-6 transition-opacity hover:opacity-90"
+          className="group mt-2 flex h-11 items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
         >
-          <span className="whitespace-nowrap font-montserrat text-[15.6px] font-medium leading-6 text-white">
+          <span className="whitespace-nowrap font-montserrat text-[14.5px] font-medium leading-5 text-white">
             Apply Now
           </span>
           <span className="flex size-6 items-center justify-center">
@@ -53,6 +53,8 @@ export default function Fee() {
               width="8"
               height="14"
               className="transition-transform duration-300 group-hover:translate-x-[2px]"
+            decoding="async"
+            loading="lazy"
             />
           </span>
         </a>

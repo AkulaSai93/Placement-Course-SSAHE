@@ -6,9 +6,9 @@
  * 416px columns and 16px gutters the offsets are
  *
  *   column 1 : Internshala (h 556) → AI tools      (y 0, 572)
- *   column 2 : resume spans columns 2–3 (h 236), then mock (h 236) and
- *              aptitude (h 236)                     (y 0, 252, 504)
- *   column 3 : project (h 303) → subjects           (y 252, 571)
+ *   column 2 : the shipped project spans columns 2–3 (h 236), then mock
+ *              (h 236) and aptitude (h 236)          (y 0, 252, 504)
+ *   column 3 : profile marks (h 303) → subjects      (y 252, 571)
  *
  * which is what the nested flex columns below reproduce — the inner stacks
  * advance independently, so column 3 breaks at 555 while column 2 breaks at
@@ -24,12 +24,20 @@
  * them.
  */
 
-/** node 40:8935 — a 200.875 x 113.031 image inside a 160 x 48.695 window */
+/**
+ * node 40:8935 — a 200.875 x 113.031 image inside a 160 x 48.695 window.
+ *
+ * The node's own top offset is -33.85px, which leaves the wordmark floating
+ * about 4px above the baseline of the words either side of it: the letters
+ * sit at y 128-156 of the 420x237 source, so at this scale their foot lands
+ * 7.9px above the window's bottom while the text baseline is only ~3.5px
+ * above it. Dropped by 4px so the three read as one line.
+ */
 const WORDMARK_CROP = {
   width: "200.875px",
   height: "113.031px",
   left: "-20.48px",
-  top: "-33.85px",
+  top: "-29.85px",
 };
 
 function Tile({ className = "", tint, children }) {
@@ -69,7 +77,7 @@ function Note({ className = "", children }) {
   );
 }
 
-/** node 40:8945 — the three profile marks in a white card */
+/** node 45:11497 — the three profile marks in a white card, now 57.6px each */
 const MARKS = [
   { label: "Resume", src: "/icons/mark-resume.svg", bg: "#FFFFFF", ring: true },
   { label: "LinkedIn", src: "/icons/mark-linkedin.svg", bg: "#0A66C2" },
@@ -78,16 +86,24 @@ const MARKS = [
 
 function ProfileMarks() {
   return (
-    <div className="flex w-[188px] shrink-0 gap-2.5 rounded-[12px] bg-white p-3 drop-shadow-[0_1px_1.5px_rgba(10,10,11,0.06)]">
+    <div className="flex w-fit shrink-0 gap-3 rounded-[14.4px] bg-white p-[14.4px] drop-shadow-[0_1.2px_1.8px_rgba(10,10,11,0.06)] sm:w-[225.6px]">
       {MARKS.map((m) => (
         <span
           key={m.label}
-          className={`flex size-12 items-center justify-center rounded-[12px] ${
-            m.ring ? "border border-ink-900/10" : ""
+          className={`flex size-[48px] items-center justify-center rounded-[14.4px] sm:size-[57.6px] ${
+            m.ring ? "border-[1.2px] border-ink-900/10" : ""
           }`}
           style={{ backgroundColor: m.bg }}
         >
-          <img src={m.src} alt={m.label} width="26" height="26" />
+          <img
+            src={m.src}
+            alt={m.label}
+            width="31"
+            height="31"
+            className="size-[26px] sm:size-[31.2px]"
+            decoding="async"
+            loading="lazy"
+          />
         </span>
       ))}
     </div>
@@ -280,7 +296,7 @@ export default function Pricing() {
           {/* column 1 */}
           <div className="flex flex-col gap-4 lg:w-[calc((100%-32px)/3)] lg:shrink-0">
             {/* node 40:8929 — Internshala, 556 tall */}
-            <div className="relative overflow-hidden rounded-[12px] bg-black pb-6 pt-[27px] lg:min-h-[556px] lg:pb-0">
+            <div className="relative overflow-hidden rounded-[12px] bg-black pb-0 pt-[27px] lg:h-[556px]">
               <div className="relative z-10 mx-auto flex max-w-[368px] flex-col items-center gap-2 px-6">
                 <div className="flex items-end gap-1.5">
                   <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
@@ -292,10 +308,12 @@ export default function Pricing() {
                     aria-label="Internshala"
                   >
                     <img
-                      src="/images/internshala-wordmark.png"
+                      src="/images/internshala-wordmark.webp"
                       alt=""
                       className="absolute max-w-none origin-top-left scale-[0.857] sm:scale-100"
                       style={WORDMARK_CROP}
+                    decoding="async"
+                    loading="lazy"
                     />
                   </span>
                   <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
@@ -309,14 +327,15 @@ export default function Pricing() {
               </div>
 
               {/* node 40:8930 — the device sits at y=138 and the tile clips its foot */}
-              <div className="relative mx-auto mt-6 aspect-[300/418] w-full max-w-[256px] overflow-hidden sm:max-w-[300px] lg:mt-[18px]">
+              <div className="relative mx-auto mt-6 aspect-[300/400] w-full max-w-[256px] overflow-hidden sm:max-w-[300px] lg:mt-[18px] lg:aspect-[300/418]">
                 <img
-                  src="/images/internshala-app-device.png"
+                  src="/images/internshala-app-device.webp"
                   alt="The Internshala app, showing internships, jobs and courses"
                   width="604"
                   height="1200"
                   className="absolute inset-0 size-full max-w-none object-cover object-top"
                   loading="lazy"
+                decoding="async"
                 />
               </div>
             </div>
@@ -330,22 +349,25 @@ export default function Pricing() {
 
           {/* columns 2–3 */}
           <div className="flex flex-col gap-4 lg:min-w-0 lg:flex-1">
-            {/* node 40:8939 — spans both columns */}
+            {/* node 45:11422 — the shipped project now spans both columns, with
+                the browser mock pinned at x=460 inside the 848-wide tile */}
             <Tile
-              tint="rgba(29,111,224,0.08)"
+              tint="rgba(14,159,110,0.09)"
               className="gap-6 lg:min-h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
             >
               <div className="flex max-w-[320px] flex-col gap-2">
-                <Title>Resume, LinkedIn profile and GitHub portfolio</Title>
-                <Note>An ATS-friendly resume and work you can point a recruiter at.</Note>
+                <Title>A deployed full-stack project with an AI feature</Title>
+                <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
               </div>
-              <ProfileMarks />
+              <div className="-mr-6 origin-bottom-left scale-[0.82] self-start sm:scale-100 lg:absolute lg:left-[460px] lg:top-[34px] lg:mr-0 lg:self-auto">
+                <DeployedApp />
+              </div>
             </Tile>
 
             <div className="flex flex-col gap-4 md:flex-row md:items-start">
               {/* column 2 */}
               <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
-                {/* node 40:8958 */}
+                {/* node 45:11441 */}
                 <Tile
                   tint="rgba(219,39,119,0.08)"
                   className="justify-between gap-8 sm:min-h-[236px]"
@@ -359,10 +381,10 @@ export default function Pricing() {
                   </div>
                 </Tile>
 
-                {/* node 40:9043 */}
+                {/* node 45:11527 */}
                 <Tile
                   tint="rgba(217,119,6,0.09)"
-                  className="gap-8 sm:min-h-[236px] lg:gap-[42px]"
+                  className="gap-8 sm:min-h-[236px] lg:gap-[34px]"
                 >
                   <div className="flex items-center gap-4">
                     <CountdownDial />
@@ -386,21 +408,20 @@ export default function Pricing() {
 
               {/* column 3 */}
               <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
-                {/* node 40:9012 — 303 tall, the browser mock clipped at the foot */}
-                <Tile tint="rgba(14,159,110,0.09)" className="gap-5 sm:min-h-[303px]">
+                {/* node 45:11495 — the profile marks, 303 tall, marks above the
+                    headline with a 70px gap between them */}
+                <Tile
+                  tint="rgba(29,111,224,0.09)"
+                  className="justify-between gap-10 sm:min-h-[303px] lg:gap-[70px]"
+                >
+                  <ProfileMarks />
                   <div className="flex flex-col gap-2">
-                    <Title>A deployed full-stack project with an AI feature</Title>
-                    <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
-                  </div>
-                  {/* below lg the mock is wider than the column, so it is
-                      left-anchored and runs off the right edge — the same way
-                      the tile clips it in the design */}
-                  <div className="-mr-6 mt-4 origin-bottom-left scale-[0.82] self-start sm:scale-100 lg:absolute lg:left-[calc(50%+51px)] lg:top-[146px] lg:mt-0 lg:mr-0 lg:-translate-x-1/2 lg:self-auto">
-                    <DeployedApp />
+                    <Title>A Resume, LinkedIn profile and GitHub portfolio</Title>
+                    <Note>An ATS-friendly resume and work you can point a recruiter at.</Note>
                   </div>
                 </Tile>
 
-                {/* node 40:9060 — chips above, headline below */}
+                {/* node 45:11544 — chips above, headline below */}
                 <Tile tint="rgba(124,58,237,0.08)" className="gap-[34px]">
                   <SubjectChips />
                   <Title>Confidence across DSA, web development and core CS</Title>

@@ -54,7 +54,7 @@ export default function Hero() {
           prefers-reduced-motion users get the poster alone. */}
       <video
         src="/videos/hero.mp4"
-        poster="/videos/hero-poster.jpg"
+        poster="/videos/hero-poster.webp"
         autoPlay
         muted
         loop
@@ -66,10 +66,12 @@ export default function Hero() {
       />
       {/* shown instead of the film when reduced motion is requested */}
       <img
-        src="/videos/hero-poster.jpg"
+        src="/videos/hero-poster.webp"
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 hidden size-full object-cover motion-reduce:block"
+      decoding="async"
+      fetchPriority="high"
       />
 
       {/* node 48:4087 — transparent to 80% black by 60.096%, then deepening to
@@ -112,9 +114,9 @@ export default function Hero() {
           <div className="mt-1 flex flex-wrap items-center gap-4">
             <a
               href="#apply"
-              className="group flex h-[52px] items-center justify-center gap-2 rounded bg-flame px-6 transition-opacity hover:opacity-90"
+              className="group flex h-[44px] items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
             >
-              <span className="font-montserrat text-[16px] font-medium leading-6 text-white">
+              <span className="font-montserrat text-[15px] font-medium leading-5 text-white">
                 Apply Now
               </span>
               <span className="flex size-6 items-center justify-center">
@@ -124,16 +126,21 @@ export default function Hero() {
                   width="8"
                   height="14"
                   className="transition-transform duration-300 group-hover:translate-x-[2px]"
+                decoding="async"
+                loading="lazy"
                 />
               </span>
             </a>
 
             <a
               href="#brochure"
-              className="flex h-[52px] items-center justify-center gap-2 rounded border border-white/25 px-6 transition-colors hover:border-white/50 hover:bg-white/5"
+              className="flex h-[44px] items-center justify-center gap-2 rounded border border-white/25 px-5 transition-colors hover:border-white/50 hover:bg-white/5"
             >
-              <img src="/icons/download-round.svg" alt="" width="24" height="24" />
-              <span className="whitespace-nowrap font-montserrat text-[16px] font-medium text-white">
+              <img src="/icons/download-round.svg" alt="" width="24" height="24"
+ decoding="async"
+ loading="lazy"
+ />
+              <span className="whitespace-nowrap font-montserrat text-[15px] font-medium text-white">
                 Download Brochure
               </span>
             </a>

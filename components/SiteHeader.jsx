@@ -23,6 +23,8 @@ function Arrow({ className = "" }) {
         width="8"
         height="14"
         className={className}
+      decoding="async"
+      loading="lazy"
       />
     </span>
   );
@@ -82,8 +84,8 @@ export default function SiteHeader() {
       <header
         className={`fixed inset-x-0 top-0 z-50 px-6 transition-all duration-300 lg:px-20 ${
           solid
-            ? "border-b border-white/10 bg-black py-3"
-            : "border-b border-transparent bg-transparent py-[22px]"
+            ? "border-b border-white/10 bg-black py-2"
+            : "border-b border-transparent bg-transparent py-[14px]"
         }`}
       >
         {/* keeps the links legible over a bright hero image */}
@@ -98,11 +100,13 @@ export default function SiteHeader() {
         />
 
         <div className="relative mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
-          <a href="#home" className="relative h-[40px] w-[210px] shrink-0 sm:h-[44px] sm:w-[231px]">
+          <a href="#home" className="relative h-[34px] w-[179px] shrink-0 sm:h-[38px] sm:w-[200px]">
             <img
               src="/images/ugsot-lastmile-logo.png"
               alt="upGrad School of Technology — Lastmile"
               className="absolute inset-0 size-full object-contain object-left"
+            decoding="async"
+            fetchPriority="high"
             />
           </a>
 
@@ -120,9 +124,9 @@ export default function SiteHeader() {
 
           <a
             href="#apply"
-            className="group hidden h-12 items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90 lg:flex"
+            className="group hidden h-10 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90 lg:flex"
           >
-            <span className="font-montserrat text-[15.6px] font-medium leading-6 text-white">
+            <span className="font-montserrat text-[14.5px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />
@@ -135,7 +139,7 @@ export default function SiteHeader() {
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className={`relative flex size-11 shrink-0 items-center justify-center rounded transition-colors lg:hidden ${
+            className={`relative flex size-10 shrink-0 items-center justify-center rounded transition-colors lg:hidden ${
               menuOpen ? "border border-white/30" : "border border-transparent"
             }`}
           >
@@ -169,7 +173,7 @@ export default function SiteHeader() {
       {/* mobile nav panel */}
       <div
         id="mobile-nav"
-        className={`fixed inset-x-0 bottom-0 top-[68px] z-40 overflow-y-auto bg-white transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 top-[58px] z-40 overflow-y-auto bg-white transition-opacity duration-300 lg:hidden ${
           menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         aria-hidden={!menuOpen}
@@ -191,9 +195,9 @@ export default function SiteHeader() {
           <a
             href="#apply"
             onClick={() => setMenuOpen(false)}
-            className="group flex h-14 w-full items-center justify-center gap-2 rounded bg-flame transition-opacity hover:opacity-90"
+            className="group flex h-11 w-full items-center justify-center gap-2 rounded bg-flame transition-opacity hover:opacity-90"
           >
-            <span className="font-montserrat text-[16px] font-medium leading-6 text-white">
+            <span className="font-montserrat text-[15px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />
@@ -203,7 +207,7 @@ export default function SiteHeader() {
 
       {/* sticky bar — mobile only: supporting copy left, CTA right */}
       <div
-        className={`fixed inset-x-0 bottom-0 z-50 border-t border-ink-900/10 bg-white px-4 py-3 shadow-[0_-8px_24px_-12px_rgba(10,10,11,0.18)] transition-opacity duration-200 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-50 border-t border-ink-900/10 bg-white px-4 py-2.5 shadow-[0_-8px_24px_-12px_rgba(10,10,11,0.18)] transition-opacity duration-200 lg:hidden ${
           menuOpen ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
@@ -220,9 +224,9 @@ export default function SiteHeader() {
           <a
             href="#apply"
             onClick={() => setMenuOpen(false)}
-            className="group flex h-11 shrink-0 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90"
+            className="group flex h-10 shrink-0 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90"
           >
-            <span className="whitespace-nowrap font-montserrat text-[14.5px] font-medium leading-6 text-white">
+            <span className="whitespace-nowrap font-montserrat text-[14px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />

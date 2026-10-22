@@ -55,6 +55,7 @@ function LogoGroup({ ariaHidden }) {
                     top: logo.crop.top,
                   }}
                   loading="lazy"
+                decoding="async"
                 />
               </span>
             ) : (
@@ -63,6 +64,7 @@ function LogoGroup({ ariaHidden }) {
                 alt={logo.name}
                 className="absolute inset-0 size-full object-contain"
                 loading="lazy"
+              decoding="async"
               />
             )}
           </span>

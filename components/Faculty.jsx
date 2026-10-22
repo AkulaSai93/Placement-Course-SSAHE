@@ -239,6 +239,7 @@ function Logo({ logo }) {
               top: logo.crop.top,
             }}
             loading="lazy"
+          decoding="async"
           />
         </span>
       ) : (
@@ -247,6 +248,7 @@ function Logo({ logo }) {
           alt={logo.name}
           className="pointer-events-none absolute inset-0 size-full max-w-none object-contain object-left"
           loading="lazy"
+        decoding="async"
         />
       )}
     </li>
@@ -277,6 +279,7 @@ function FacultyCard({ person }) {
             alt={person.name}
             className="pointer-events-none absolute inset-0 size-full object-cover"
             loading="lazy"
+          decoding="async"
           />
         </div>
       ) : person.layers ? (
@@ -299,6 +302,8 @@ function FacultyCard({ person }) {
               width: `${person.shape.width}px`,
               height: `${person.shape.height}px`,
             }}
+          decoding="async"
+          loading="lazy"
           />
           {person.layers.map((layer, i) => (
             <span
@@ -329,6 +334,7 @@ function FacultyCard({ person }) {
                   alt={i === 0 ? person.name : ""}
                   className="absolute inset-0 size-full max-w-none object-cover"
                   loading="lazy"
+                decoding="async"
                 />
               ) : (
                 <img
@@ -342,6 +348,7 @@ function FacultyCard({ person }) {
                     top: layer.img.top,
                   }}
                   loading="lazy"
+                decoding="async"
                 />
               )}
             </span>
@@ -360,6 +367,7 @@ function FacultyCard({ person }) {
             height: `${photo.height}px`,
           }}
           loading="lazy"
+        decoding="async"
         />
       )}
 

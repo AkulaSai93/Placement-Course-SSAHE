@@ -12,11 +12,11 @@ html { scroll-behavior: smooth; }
 
 /* clearance for the sticky mobile CTA bar so it never covers page content */
 @media (max-width: 1023px) {
-  body { padding-bottom: 76px; }
+  body { padding-bottom: 64px; }
 }
 
 /* clears the fixed header when jumping to an anchor */
-section[id] { scroll-margin-top: 88px; }
+section[id] { scroll-margin-top: 72px; }
 
 body {
   /* Light, because every section is now light. It used to be near-black for the
