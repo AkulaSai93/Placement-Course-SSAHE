@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * "Companies hiring from us" — a light band of hiring-partner logos that
+ * "upGrad learners work at" — a light band of employer logos that
  * scrolls on its own, sitting directly under the hero.
  *
  * The logos previously ran as a red band inside the Outcomes card, forced white
@@ -91,7 +91,7 @@ export default function HiringCompanies() {
         id="hiring-companies-heading"
         className="relative text-center font-display text-[22px] font-semibold tracking-[-0.01em] text-ink-900 sm:text-[28px] lg:text-[32px]"
       >
-        Companies hiring from us
+        <span className="text-flame">upGrad</span> learners work at
       </h2>
 
       <div className="relative mt-8 overflow-hidden lg:mt-10">
