@@ -559,63 +559,69 @@ export default function Faculty() {
       </div>
 
       <div className="relative mt-14">
-        <div
-          ref={railRef}
-          // A cursor resting over the cards pauses briefly; a press, a swipe or
-          // a wheel buys a much longer pause, long enough to read a card.
-          // Deliberately not pointermove: on a touch screen a plain vertical
-          // page scroll fires pointermove across the rail, which would stop the
-          // row before anyone had touched it.
-          onPointerEnter={() => hold(400)}
-          onPointerMove={(e) => {
-            if (e.pointerType === "mouse") hold(400);
-          }}
-          onPointerDown={takeOver}
-          onTouchStart={takeOver}
-          onWheel={takeOver}
-          onFocusCapture={() => hold(4000)}
-          className="no-scrollbar flex overflow-x-auto overscroll-x-contain"
-        >
-          <CardGroup />
-          <CardGroup ariaHidden />
+        <div className="relative">
+          <div
+            ref={railRef}
+            // A cursor resting over the cards pauses briefly; a press, a swipe or
+            // a wheel buys a much longer pause, long enough to read a card.
+            // Deliberately not pointermove: on a touch screen a plain vertical
+            // page scroll fires pointermove across the rail, which would stop the
+            // row before anyone had touched it.
+            onPointerEnter={() => hold(400)}
+            onPointerMove={(e) => {
+              if (e.pointerType === "mouse") hold(400);
+            }}
+            onPointerDown={takeOver}
+            onTouchStart={takeOver}
+            onWheel={takeOver}
+            onFocusCapture={() => hold(4000)}
+            className="no-scrollbar flex overflow-x-auto overscroll-x-contain"
+          >
+            <CardGroup />
+            <CardGroup ariaHidden />
+          </div>
+
+          {/* node 95:6388/95:6389 — 40px washes over each edge */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-mist to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-mist to-transparent"
+          />
         </div>
 
-        {/* node 95:6388/95:6389 — 40px washes over each edge */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-mist to-transparent"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-mist to-transparent"
-        />
-
-        {/* sitting on the cards themselves, one at each edge and centred on the
-            card's height, so they are in reach at every width */}
-        <RailButton
-          label="Previous mentors"
-          onClick={() => nudge(-1)}
-          className="left-2 sm:left-4"
-        />
-        <RailButton
-          label="Next mentors"
-          onClick={() => nudge(1)}
-          flip
-          className="right-2 sm:right-4"
-        />
+        {/* phones: a pair centred under the cards, clear of the thumb that is
+            swiping them. From sm up the wrapper dissolves (`contents`) and the
+            buttons sit on the cards, one at each edge, centred on their height */}
+        <div className="mt-6 flex justify-center gap-3 sm:mt-0 sm:contents">
+          <RailButton
+            label="Previous mentors"
+            onClick={() => nudge(-1)}
+            className="sm:left-4"
+          />
+          <RailButton
+            label="Next mentors"
+            onClick={() => nudge(1)}
+            flip
+            className="sm:right-4"
+          />
+        </div>
       </div>
     </section>
   );
 }
 
-/** 44px white circle, as the curriculum rail uses, floated over the cards */
+/** 44px white circle, as the curriculum rail uses — in the row on phones,
+ *  floated over the cards from sm up */
 function RailButton({ label, onClick, flip, className = "" }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-ink-900 shadow-[0_2px_10px_rgba(10,10,11,0.12)] transition-colors hover:border-ink-900/40 hover:bg-ink-900/5 ${className}`}
+      className={`z-10 flex size-11 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-ink-900 shadow-[0_2px_10px_rgba(10,10,11,0.12)] transition-colors hover:border-ink-900/40 hover:bg-ink-900/5 sm:absolute sm:top-1/2 sm:-translate-y-1/2 ${className}`}
     >
       <svg
         width="16"
