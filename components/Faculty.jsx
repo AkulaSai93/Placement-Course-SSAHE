@@ -450,6 +450,7 @@ export default function Faculty() {
   const railRef = useRef(null);
   const holdRef = useRef(0);
   const targetRef = useRef(null);
+  const takenOverRef = useRef(false);
 
   // The row drifts by moving scrollLeft rather than by a CSS transform, so the
   // arrows and a finger can move the same rail the animation does. The track
@@ -484,7 +485,7 @@ export default function Faculty() {
         const eased = 1 - (1 - t) ** 3;
         rail.scrollLeft = jump.from + (jump.to - jump.from) * eased;
         if (t >= 1) targetRef.current = null;
-      } else if (!still && now >= holdRef.current && half > 0) {
+      } else if (!still && !takenOverRef.current && now >= holdRef.current && half > 0) {
         rail.scrollLeft += PX_PER_MS * dt;
       }
 
@@ -511,16 +512,28 @@ export default function Faculty() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  /** hold the drift while someone is reading or driving the rail themselves */
+  /** pause the drift briefly — a cursor resting over the cards, say */
   const hold = useCallback((ms = 1200) => {
     holdRef.current = Math.max(holdRef.current, performance.now() + ms);
+  }, []);
+
+  /**
+   * Stop the drift for good.
+   *
+   * A timed hold is wrong once somebody has actually moved the rail: they
+   * swipe to a mentor, start reading, and a couple of seconds later the row
+   * slides out from under them. After a swipe, a drag or an arrow the rail
+   * stays where it was put, and the arrows remain the way to keep going.
+   */
+  const takeOver = useCallback(() => {
+    takenOverRef.current = true;
   }, []);
 
   const nudge = useCallback(
     (direction) => {
       const rail = railRef.current;
       if (!rail) return;
-      hold(1600);
+      takeOver();
       const from = targetRef.current ? targetRef.current.to : rail.scrollLeft;
       targetRef.current = {
         from: rail.scrollLeft,
@@ -528,7 +541,7 @@ export default function Faculty() {
         start: performance.now(),
       };
     },
-    [hold],
+    [takeOver],
   );
 
   return (
@@ -548,11 +561,19 @@ export default function Faculty() {
       <div className="relative mt-14">
         <div
           ref={railRef}
+          // A cursor resting over the cards only pauses; a press, a swipe or a
+          // wheel is someone taking the rail over, and it then stays put.
+          // Deliberately not pointermove: on a touch screen a plain vertical
+          // page scroll fires pointermove across the rail, which would stop the
+          // row before anyone had touched it.
           onPointerEnter={() => hold(400)}
-          onPointerMove={() => hold(400)}
-          onPointerDown={() => hold(2400)}
+          onPointerMove={(e) => {
+            if (e.pointerType === "mouse") hold(400);
+          }}
+          onPointerDown={takeOver}
+          onTouchStart={takeOver}
+          onWheel={takeOver}
           onFocusCapture={() => hold(4000)}
-          onTouchStart={() => hold(2400)}
           className="no-scrollbar flex overflow-x-auto overscroll-x-contain"
         >
           <CardGroup />

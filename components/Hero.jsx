@@ -110,7 +110,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 lg:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.70) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.56) 45%, rgba(0,0,0,0.80) 100%)",
         }}
       />
       <div
@@ -118,7 +118,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 hidden lg:block"
         style={{
           background:
-            "linear-gradient(90deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.10) 100%)",
+            "linear-gradient(90deg, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.58) 50%, rgba(0,0,0,0.24) 100%)",
         }}
       />
       </div>
