@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useApply } from "@/components/ApplyDialog";
+
 /** One entry per section that actually exists on the page. */
 // Order mirrors the page. Every href must point at a section that is actually
 // mounted in app/page.js — "#certificate" was left behind when that section
@@ -31,6 +33,7 @@ function Arrow({ className = "" }) {
 }
 
 export default function SiteHeader() {
+  const { open } = useApply();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -101,10 +104,14 @@ export default function SiteHeader() {
 
         <div className="relative mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
           <a href="#home" className="relative h-[34px] w-[179px] shrink-0 sm:h-[38px] sm:w-[200px]">
+            {/* UI guide P2.1 — the logo's red disappears against the video, so
+                it is knocked out to white until the bar turns solid */}
             <img
               src="/images/ugsot-lastmile-logo.png"
               alt="upGrad School of Technology — Lastmile"
-              className="absolute inset-0 size-full object-contain object-left"
+              className={`absolute inset-0 size-full object-contain object-left transition-[filter] duration-300 ${
+                solid ? "" : "brightness-0 invert"
+              }`}
             decoding="async"
             fetchPriority="high"
             />
@@ -122,15 +129,16 @@ export default function SiteHeader() {
             ))}
           </nav>
 
-          <a
-            href="#apply"
+          <button
+            type="button"
+            onClick={() => open("apply")}
             className="group hidden h-10 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90 lg:flex"
           >
-            <span className="font-montserrat text-[14.5px] font-medium leading-5 text-white">
+            <span className="font-display text-[14.5px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />
-          </a>
+          </button>
 
           {/* hamburger — the full nav only exists from lg up */}
           <button
@@ -192,16 +200,17 @@ export default function SiteHeader() {
         </nav>
 
         <div className="px-6 pb-10 pt-9">
-          <a
-            href="#apply"
+          <button
+            type="button"
+            onClick={() => open("apply")}
             onClick={() => setMenuOpen(false)}
             className="group flex h-11 w-full items-center justify-center gap-2 rounded bg-flame transition-opacity hover:opacity-90"
           >
-            <span className="font-montserrat text-[15px] font-medium leading-5 text-white">
+            <span className="font-display text-[15px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />
-          </a>
+          </button>
         </div>
       </div>
 
@@ -221,16 +230,17 @@ export default function SiteHeader() {
             </p>
           </div>
 
-          <a
-            href="#apply"
+          <button
+            type="button"
+            onClick={() => open("apply")}
             onClick={() => setMenuOpen(false)}
             className="group flex h-10 shrink-0 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90"
           >
-            <span className="whitespace-nowrap font-montserrat text-[14px] font-medium leading-5 text-white">
+            <span className="whitespace-nowrap font-display text-[14px] font-medium leading-5 text-white">
               Apply Now
             </span>
             <Arrow className="transition-transform duration-300 group-hover:translate-x-[2px]" />
-          </a>
+          </button>
         </div>
       </div>
 

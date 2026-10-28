@@ -500,10 +500,10 @@ export default function Curriculum() {
 
   return (
     <section id="curriculum" className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20">
-      <div className="mx-auto max-w-[1232px]">
+      <div className="mx-auto max-w-[1280px]">
         <div className="flex max-w-[760px] flex-col gap-2">
           <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
-            A <span className="font-accent font-medium text-flame">Curriculum</span> Built Around
+            A <span className="font-display font-medium text-flame">Curriculum</span> Built Around
             How Engineers Actually Learn.
           </h2>
           <p className="font-display text-[15px] font-medium leading-[1.6] text-[#5B6271] lg:text-[18px]">

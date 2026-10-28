@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
+import { useApply } from "@/components/ApplyDialog";
+
 /** Polaris lags its hero at 30% of scroll while the next section slides over
  *  it at full speed — measured as translateY = scrollY * 0.3. */
 const PARALLAX = 0.3;
@@ -16,6 +18,7 @@ const PARALLAX = 0.3;
  */
 export default function Hero() {
   const ref = useRef(null);
+  const { open } = useApply();
 
   useEffect(() => {
     const el = ref.current;
@@ -74,18 +77,27 @@ export default function Hero() {
       fetchPriority="high"
       />
 
-      {/* node 48:4087 — transparent to 80% black by 60.096%, then deepening to
-          black at the foot, matching how the node renders */}
+      {/* UI guide P2.1 — the video runs bright on some frames, so two layers
+          sit between it and the text: a vertical wash for the phone layout and
+          a left-to-right one from lg up, where the copy is on the left. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 lg:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 62%, rgba(0,0,0,0.74) 82%, rgba(0,0,0,0.84) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.70) 100%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.10) 100%)",
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:px-[92px]">
+      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:px-20">
         <div className="flex w-full translate-y-[44px] flex-col gap-5 lg:translate-y-[60px] lg:gap-6">
           <h1 className="max-w-[820px] text-balance font-display text-[30px] font-medium leading-[1.2] tracking-[-0.03em] text-white sm:text-[40px] lg:max-w-none lg:text-[clamp(40px,4vw,56px)]">
             {/* kept on one line once the column is wide enough for it */}
@@ -96,7 +108,7 @@ export default function Hero() {
             Make the <span className="text-flame">Lastmile</span> count.
           </h1>
 
-          <p className="max-w-[560px] font-montserrat text-[17px] leading-[1.6] text-white/85 lg:max-w-[760px] lg:text-[20px]">
+          <p className="max-w-[560px] font-display text-[17px] leading-[1.6] text-white/85 lg:max-w-[760px] lg:text-[20px]">
             uGSOT Lastmile is a 6-month rapid-learning offline course aimed to make you placement
             ready. It is open for students in year 3rd and 4th.
           </p>
@@ -112,11 +124,12 @@ export default function Hero() {
           </p>
 
           <div className="mt-1 flex flex-wrap items-center gap-4">
-            <a
-              href="#apply"
+            <button
+              type="button"
+              onClick={() => open("apply")}
               className="group flex h-[44px] items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
             >
-              <span className="font-montserrat text-[15px] font-medium leading-5 text-white">
+              <span className="font-display text-[15px] font-medium leading-5 text-white">
                 Apply Now
               </span>
               <span className="flex size-6 items-center justify-center">
@@ -130,20 +143,21 @@ export default function Hero() {
                 loading="lazy"
                 />
               </span>
-            </a>
+            </button>
 
-            <a
-              href="#brochure"
+            <button
+              type="button"
+              onClick={() => open("brochure")}
               className="flex h-[44px] items-center justify-center gap-2 rounded border border-white/25 px-5 transition-colors hover:border-white/50 hover:bg-white/5"
             >
               <img src="/icons/download-round.svg" alt="" width="24" height="24"
  decoding="async"
  loading="lazy"
  />
-              <span className="whitespace-nowrap font-montserrat text-[15px] font-medium text-white">
+              <span className="whitespace-nowrap font-display text-[15px] font-medium text-white">
                 Download Brochure
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </div>

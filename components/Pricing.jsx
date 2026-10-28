@@ -134,23 +134,29 @@ function SubjectChips() {
   );
 }
 
-/** node 40:9018 — a browser window, 364 x 167.3, clipped by the tile */
+/**
+ * node 40:9018 — a browser window, 364 x 167.3, clipped by the tile.
+ *
+ * On a phone it is drawn smaller rather than scaled: a transform would leave
+ * the full-size box behind in the layout, which made this tile stand taller
+ * than the five beside it, and clipping the overflow cut the badge in half.
+ */
 function DeployedApp() {
   return (
-    <div className="h-[167.3px] w-[364px] overflow-hidden rounded-[14px] border-[1.4px] border-[#E5E7EB] bg-white">
-      <div className="flex w-[361.2px] items-center gap-[8.4px] border-b-[1.4px] border-[#E5E7EB] px-[16.8px] py-[14px]">
+    <div className="w-[254px] overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white sm:h-[167.3px] sm:w-[364px] sm:rounded-[14px] sm:border-[1.4px]">
+      <div className="flex items-center gap-1.5 border-b border-[#E5E7EB] px-3 py-2 sm:w-[361.2px] sm:gap-[8.4px] sm:border-b-[1.4px] sm:px-[16.8px] sm:py-[14px]">
         {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => (
           <span
             key={c}
-            className="size-[11.2px] rounded-full"
+            className="size-2 rounded-full sm:size-[11.2px]"
             style={{ backgroundColor: c }}
           />
         ))}
       </div>
-      <div className="flex flex-col gap-[11.2px] p-[19.6px]">
-        <span className="block h-[11.2px] w-[241.5px] rounded-full bg-ink-900/10" />
-        <span className="block h-[11.2px] w-[161px] rounded-full" />
-        <span className="mt-[5.6px] w-fit rounded-full bg-[#0E9F6E] px-[14px] py-[5.6px] font-display text-[15.4px] font-medium uppercase leading-[23.1px] tracking-[1.232px] text-white">
+      <div className="flex flex-col gap-1.5 p-2.5 sm:gap-[11.2px] sm:p-[19.6px]">
+        <span className="block h-2 w-[168px] rounded-full bg-ink-900/10 sm:h-[11.2px] sm:w-[241.5px]" />
+        <span className="block h-2 w-[112px] rounded-full sm:h-[11.2px] sm:w-[161px]" />
+        <span className="mt-0.5 w-fit rounded-full bg-[#047857] px-2.5 py-1 font-display text-[12px] font-medium uppercase leading-none tracking-[0.86px] text-white sm:mt-[5.6px] sm:px-[14px] sm:py-[5.6px] sm:text-[15.4px] sm:leading-[23.1px] sm:tracking-[1.232px]">
           AI feature
         </span>
       </div>
@@ -298,8 +304,11 @@ export default function Pricing() {
             {/* node 40:8929 — Internshala, 556 tall */}
             <div className="relative overflow-hidden rounded-[12px] bg-black pb-0 pt-[27px] lg:h-[556px]">
               <div className="relative z-10 mx-auto flex max-w-[368px] flex-col items-center gap-2 px-6">
-                <div className="flex items-end gap-1.5">
-                  <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
+                <div className="flex flex-wrap items-end justify-center gap-x-1.5 gap-y-1 sm:flex-nowrap">
+                  {/* on a phone the three parts are 319px wide in a 294px column,
+                      so "6 months of" takes its own line and the lockup and
+                      "Free" sit together on the next */}
+                  <p className="w-full whitespace-nowrap text-center font-display text-[22px] font-medium leading-none text-white min-[400px]:text-[24px] sm:w-auto sm:text-left sm:text-[28px]">
                     6 months of
                   </p>
                   <span
@@ -316,7 +325,7 @@ export default function Pricing() {
                     loading="lazy"
                     />
                   </span>
-                  <p className="whitespace-nowrap font-display text-[24px] font-medium leading-none text-white sm:text-[28px]">
+                  <p className="whitespace-nowrap font-display text-[22px] font-medium leading-none text-white min-[400px]:text-[24px] sm:text-[28px]">
                     Free
                   </p>
                 </div>
@@ -327,7 +336,7 @@ export default function Pricing() {
               </div>
 
               {/* node 40:8930 — the device sits at y=138 and the tile clips its foot */}
-              <div className="relative mx-auto mt-6 aspect-[300/400] w-full max-w-[256px] overflow-hidden sm:max-w-[300px] lg:mt-[18px] lg:aspect-[300/418]">
+              <div className="relative mx-auto mt-5 aspect-[300/360] w-full max-w-[232px] overflow-hidden sm:mt-6 sm:aspect-[300/400] sm:max-w-[300px] lg:mt-[18px] lg:aspect-[300/418]">
                 <img
                   src="/images/internshala-app-device.webp"
                   alt="The Internshala app, showing internships, jobs and courses"
@@ -341,7 +350,7 @@ export default function Pricing() {
             </div>
 
             {/* node 40:9031 — pills above, headline below */}
-            <Tile tint="rgba(8,145,178,0.09)" className="gap-[34px]">
+            <Tile tint="rgba(8,145,178,0.09)" className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start">
               <AiTools />
               <Title>Hands-on with AI coding tools and LLM APIs</Title>
             </Tile>
@@ -353,13 +362,13 @@ export default function Pricing() {
                 the browser mock pinned at x=460 inside the 848-wide tile */}
             <Tile
               tint="rgba(14,159,110,0.09)"
-              className="gap-6 lg:min-h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+              className="min-h-[260px] gap-4 sm:gap-6 lg:min-h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
             >
               <div className="flex max-w-[320px] flex-col gap-2">
                 <Title>A deployed full-stack project with an AI feature</Title>
                 <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
               </div>
-              <div className="-mr-6 origin-bottom-left scale-[0.82] self-start sm:scale-100 lg:absolute lg:left-[460px] lg:top-[34px] lg:mr-0 lg:self-auto">
+              <div className="self-start lg:absolute lg:left-[460px] lg:top-[34px] lg:self-auto">
                 <DeployedApp />
               </div>
             </Tile>
@@ -370,7 +379,7 @@ export default function Pricing() {
                 {/* node 45:11441 */}
                 <Tile
                   tint="rgba(219,39,119,0.08)"
-                  className="justify-between gap-8 sm:min-h-[236px]"
+                  className="min-h-[260px] justify-between gap-8 sm:min-h-[236px]"
                 >
                   <MockRounds />
                   <div className="flex flex-col gap-2">
@@ -384,7 +393,7 @@ export default function Pricing() {
                 {/* node 45:11527 */}
                 <Tile
                   tint="rgba(217,119,6,0.09)"
-                  className="gap-8 sm:min-h-[236px] lg:gap-[34px]"
+                  className="min-h-[260px] gap-8 sm:min-h-[236px] lg:gap-[34px]"
                 >
                   <div className="flex items-center gap-4">
                     <CountdownDial />
@@ -392,7 +401,7 @@ export default function Pricing() {
                       <p className="font-display text-[34px] font-medium leading-[34px] tracking-[-0.68px] tabular-nums text-ink-900">
                         45:00
                       </p>
-                      <p className="pt-1.5 font-display text-[11.5px] font-medium uppercase leading-[17.25px] tracking-[1.38px] text-[#D97706]">
+                      <p className="pt-1.5 font-display text-[12px] font-medium uppercase leading-[17.25px] tracking-[1.38px] text-[#92400E]">
                         Time left
                       </p>
                     </div>
@@ -412,7 +421,7 @@ export default function Pricing() {
                     headline with a 70px gap between them */}
                 <Tile
                   tint="rgba(29,111,224,0.09)"
-                  className="justify-between gap-10 sm:min-h-[303px] lg:gap-[70px]"
+                  className="min-h-[260px] justify-between gap-10 sm:min-h-[303px] lg:gap-[70px]"
                 >
                   <ProfileMarks />
                   <div className="flex flex-col gap-2">
@@ -422,7 +431,7 @@ export default function Pricing() {
                 </Tile>
 
                 {/* node 45:11544 — chips above, headline below */}
-                <Tile tint="rgba(124,58,237,0.08)" className="gap-[34px]">
+                <Tile tint="rgba(124,58,237,0.08)" className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start">
                   <SubjectChips />
                   <Title>Confidence across DSA, web development and core CS</Title>
                 </Tile>

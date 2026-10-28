@@ -224,7 +224,7 @@ export default function Legacy() {
           <div className="flex max-w-[1023px] flex-col items-center gap-5 text-center text-white">
             <h2 className="max-w-[851px] font-display text-[30px] font-medium leading-[1.1] tracking-[-0.009em] sm:text-[38px] lg:text-[48px]">
               Built by{" "}
-              <span className="font-accent font-medium text-flame">
+              <span className="font-display font-medium text-flame">
                 upGrad School of Technology.
               </span>{" "}
               Designed To Reach Beyond The Campus.
@@ -291,7 +291,7 @@ export default function Legacy() {
           </div>
         </div>
 
-        <p className="w-full text-center font-accent text-[22px] font-medium leading-normal text-white lg:text-[32px]">
+        <p className="w-full text-center font-display text-[22px] font-medium leading-normal text-white lg:text-[32px]">
           The <span className="text-flame">uGSOT technology</span> ecosystem now accessible from
           wherever you study.
         </p>

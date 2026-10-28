@@ -15,18 +15,20 @@ const CONTACT = {
   address: "",
 };
 
+/** the same five links as the header, in the same order (UI guide P2.6) */
 const NAV = [
   { label: "Home", href: "#home" },
+  { label: "Pricing", href: "#pricing" },
   { label: "Curriculum", href: "#curriculum" },
-  { label: "Student Journey", href: "#outcomes" },
+  { label: "Mentors", href: "#mentors" },
   { label: "FAQs", href: "#faqs" },
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: "#instagram" },
-  { label: "LinkedIn", href: "#linkedin" },
-  { label: "X", href: "#x" },
-  { label: "YouTube", href: "#youtube" },
+  { label: "Instagram", href: "#instagram", icon: "/icons/instagram.svg" },
+  { label: "LinkedIn", href: "#linkedin", icon: "/icons/mark-linkedin.svg" },
+  { label: "X", href: "#x", icon: "/icons/x.svg" },
+  { label: "YouTube", href: "#youtube", icon: "/icons/youtube.svg" },
 ];
 
 const DISCLAIMER =
@@ -66,12 +68,14 @@ export default function SiteFooter() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="group relative inline-block pl-5 font-display text-[16px] text-white/55 transition-colors hover:text-white"
+                    className="group relative inline-block font-display text-[16px] text-white/55 transition-colors hover:text-white"
                   >
                     {/* dot marks the hovered link without shifting the text */}
+                    {/* dot sits outside the text box, so the links still align
+                        with the rest of the footer (UI guide P2.5) */}
                     <span
                       aria-hidden="true"
-                      className="absolute left-0 top-1/2 size-[5px] -translate-y-1/2 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-100"
+                      className="absolute -left-5 top-1/2 size-[5px] -translate-y-1/2 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-100"
                     />
                     {link.label}
                   </a>
@@ -85,7 +89,7 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <p className="mt-12 max-w-[760px] px-6 font-display text-[11.5px] leading-[1.6] text-white/30 sm:px-10 lg:mt-16 lg:px-14">
+        <p className="mt-12 max-w-[760px] px-6 font-display text-[12px] leading-[1.6] text-white/60 sm:px-10 lg:mt-16 lg:px-14">
           {DISCLAIMER}
         </p>
 
@@ -95,14 +99,23 @@ export default function SiteFooter() {
             © {new Date().getFullYear()} upGrad School of Technology
           </p>
 
-          <ul className="flex flex-wrap items-center gap-x-8 gap-y-3 md:justify-center">
+          <ul className="flex flex-wrap items-center gap-3 md:justify-center">
             {SOCIALS.map((social) => (
               <li key={social.label}>
                 <a
                   href={social.href}
-                  className="font-display text-[14px] text-white/55 transition-colors hover:text-white"
+                  aria-label={social.label}
+                  className="flex size-10 items-center justify-center rounded-full border border-white/35 transition-colors hover:border-white hover:bg-white/10"
                 >
-                  {social.label}
+                  <img
+                    src={social.icon}
+                    alt=""
+                    width="19"
+                    height="19"
+                    className="size-[19px] brightness-0 invert"
+                    decoding="async"
+                    loading="lazy"
+                  />
                 </a>
               </li>
             ))}

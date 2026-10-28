@@ -8,7 +8,7 @@ export default function Certificate() {
           <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px]">
             Earn a Completion{" "}
             <span className="whitespace-nowrap text-flame">
-              C<span className="font-accent font-medium">ertificate</span>
+              C<span className="font-display font-medium">ertificate</span>
             </span>
           </h2>
 

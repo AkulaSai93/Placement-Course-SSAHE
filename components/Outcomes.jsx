@@ -21,6 +21,17 @@ export default function Outcomes() {
 
   return (
     <section id="outcomes" className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20">
+      {/* UI guide P2.6 — the footer linked here as "Student Journey" but the
+          block had no title of its own, so it did not read as a section */}
+      <div className="mx-auto mb-10 flex max-w-[760px] flex-col items-center gap-4 text-center">
+        <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[52px]">
+          One <span className="text-flame">student journey</span>, start to finish.
+        </h2>
+        <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px] lg:leading-[27px]">
+          What the six months look like, in the words of the people who teach them.
+        </p>
+      </div>
+
       <div className="group relative mx-auto aspect-[16/9] w-full max-w-[1280px] overflow-hidden rounded-[20px] bg-ink">
         {playing ? (
           <iframe

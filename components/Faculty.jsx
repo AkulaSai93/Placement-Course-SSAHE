@@ -392,11 +392,11 @@ function FacultyCard({ person }) {
           }`}
           style={{ width: t.nameWidth ? `${t.nameWidth}px` : "100%" }}
         >
-          <p className="font-montserrat text-[18px] font-semibold leading-normal text-[#272727]">
+          <p className="font-display text-[18px] font-semibold leading-normal text-[#272727]">
             {person.name}
           </p>
           <p
-            className="font-montserrat font-medium italic leading-normal text-flame"
+            className="font-display text-[13px] font-normal leading-normal text-[#4B5563]"
             style={{ fontSize: `${person.roleSize}px` }}
           >
             {person.role}
@@ -437,10 +437,10 @@ export default function Faculty() {
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 text-center text-ink-900">
         <h2 className="font-display text-[30px] font-medium leading-normal tracking-[-0.0206em] sm:text-[38px] lg:text-[44px] min-[1240px]:whitespace-nowrap min-[1240px]:text-[48px]">
           Taught by{" "}
-          <span className="font-accent font-medium text-flame">World&apos;s Top Tech</span> and
+          <span className="font-display font-medium text-flame">World&apos;s Top Tech</span> and
           Academic Minds
         </h2>
-        <p className="font-display text-base leading-normal lg:text-[22.857px]">
+        <p className="font-display text-[18px] leading-[27px] text-ink-900/60">
           Industry experts and innovators who turn real-world experience into transformative
           learning.
         </p>

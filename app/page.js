@@ -1,3 +1,4 @@
+import { ApplyProvider } from "@/components/ApplyDialog";
 import SiteHeader from "@/components/SiteHeader";
 import Hero from "@/components/Hero";
 import HiringCompanies from "@/components/HiringCompanies";
@@ -11,7 +12,7 @@ import SiteFooter from "@/components/SiteFooter";
 
 export default function Page() {
   return (
-    <>
+    <ApplyProvider>
       <SiteHeader />
       <main>
         <Hero />
@@ -24,6 +25,6 @@ export default function Page() {
         <Faq />
         <SiteFooter />
       </main>
-    </>
+    </ApplyProvider>
   );
 }

@@ -1,3 +1,7 @@
+"use client";
+
+import { useApply } from "@/components/ApplyDialog";
+
 /**
  * The programme fee.
  *
@@ -18,6 +22,8 @@
  * it, and any section without it gets covered.
  */
 export default function Fee() {
+  const { open } = useApply();
+
   return (
     <section
       id="pricing"
@@ -30,7 +36,7 @@ export default function Fee() {
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-5 border-t border-ink-900/10 pt-10 text-center lg:pt-12">
         <h2
           id="fee-heading"
-          className="font-display text-[32px] font-medium leading-[1.1] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[52px]"
+          className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[52px]"
         >
           ₹50,000 with <span className="text-flame">No Cost EMI</span>
         </h2>
@@ -39,11 +45,12 @@ export default function Fee() {
           Flexible payment options to help you get started right away.
         </p>
 
-        <a
-          href="#apply"
+        <button
+          type="button"
+          onClick={() => open("apply")}
           className="group mt-2 flex h-11 items-center justify-center gap-2 rounded bg-flame px-5 transition-opacity hover:opacity-90"
         >
-          <span className="whitespace-nowrap font-montserrat text-[14.5px] font-medium leading-5 text-white">
+          <span className="whitespace-nowrap font-display text-[14.5px] font-medium leading-5 text-white">
             Apply Now
           </span>
           <span className="flex size-6 items-center justify-center">
@@ -57,7 +64,7 @@ export default function Fee() {
             loading="lazy"
             />
           </span>
-        </a>
+        </button>
       </div>
     </section>
   );

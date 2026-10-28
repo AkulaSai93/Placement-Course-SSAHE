@@ -75,10 +75,10 @@ export default function Faq() {
         {/* left column */}
         <div className="flex flex-col gap-10 min-[1380px]:sticky min-[1380px]:top-[112px] min-[1380px]:w-[496px] min-[1380px]:shrink-0 min-[1380px]:self-start">
           <div className="flex flex-col">
-            <h2 className="font-display text-[40px] font-medium leading-[1.15] tracking-[-0.013em] text-black sm:text-[54px] min-[1380px]:text-[68px] min-[1380px]:leading-[78px]">
+            <h2 className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[52px]">
               Got Questions?
             </h2>
-            <p className="font-accent text-[40px] font-light leading-[1.15] tracking-[-0.013em] text-flame sm:text-[54px] min-[1380px]:text-[68px] min-[1380px]:leading-[78px]">
+            <p className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-flame sm:text-[42px] lg:text-[48px] lg:leading-[52px]">
               We&apos;ve Got Answers
             </p>
           </div>
