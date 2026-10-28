@@ -1,9 +1,26 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { useRouter } from "next/navigation";
+
+import SignupFlow from "@/components/signup/SignupFlow";
+import { readSession } from "@/lib/session";
 
 /**
- * The form behind every "Apply Now" and "Download Brochure" (UI guide P1.1).
+ * The dialog behind every "Apply Now" and "Download Brochure" (UI guide P1.1).
+ *
+ * "Apply" is the signup — email and mobile, each confirmed with a code, then
+ * name, year and branch — and it ends on the student's dashboard (see
+ * SignupFlow). Someone who already has an account skips all of that and goes
+ * straight to the dashboard. "Brochure" is the short form below.
  *
  * Until now those buttons pointed at `#apply` and `#brochure`, which are not
  * sections on the page, so nothing happened on click. The dialog opens from
@@ -14,7 +31,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
  * with a 4px radius and 16px text (anything smaller makes iOS zoom the page),
  * a full-width 48px button, and a full-screen sheet below sm.
  *
- * NOTE: submitting only simulates a request. There is no endpoint yet — wire
+ * NOTE: the brochure form only simulates a request. There is no endpoint yet — wire
  * `submit()` to the real one and keep the error and success states.
  */
 const ApplyContext = createContext(null);
@@ -25,47 +42,111 @@ export function useApply() {
   return ctx;
 }
 
-const YEARS = ["1st year", "2nd year", "3rd year", "4th year", "Graduated"];
-
+/** the brochure only needs a name and a way to send it */
 const FIELDS = [
   { name: "name", label: "Full name", type: "text", placeholder: "Your name", autoComplete: "name" },
   { name: "phone", label: "Phone number", type: "tel", placeholder: "98765 43210", autoComplete: "tel", prefix: "+91" },
   { name: "email", label: "Email", type: "email", placeholder: "you@college.edu", autoComplete: "email" },
-  { name: "college", label: "College", type: "text", placeholder: "Your college", autoComplete: "organization" },
-  { name: "year", label: "Year of study", type: "select" },
 ];
 
-const EMPTY = { name: "", phone: "", email: "", college: "", year: "" };
+const EMPTY = { name: "", phone: "", email: "" };
 
-function validate(values, mode) {
+function validate(values) {
   const errors = {};
   if (!values.name.trim()) errors.name = "Enter your full name.";
   if (!/^\d{10}$/.test(values.phone.replace(/\s+/g, "")))
     errors.phone = "Enter a 10-digit phone number.";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
     errors.email = "Enter a valid email address.";
-  // the brochure only needs a way to send it
-  if (mode === "apply") {
-    if (!values.college.trim()) errors.college = "Enter your college.";
-    if (!values.year) errors.year = "Choose your year of study.";
-  }
   return errors;
 }
 
+/** the signup card's width, and its gap from the button it hangs under */
+const PANEL_W = 480;
+const PANEL_GAP = 12;
+const EDGE = 16;
+
 export function ApplyProvider({ children }) {
+  const router = useRouter();
   const [mode, setMode] = useState(null); // "apply" | "brochure" | null
-  const open = useCallback((next = "apply") => setMode(next), []);
+  const [anchor, setAnchor] = useState(null);
+  const lastTrigger = useRef(null);
+
+  // Every caller just says open("apply"), so the button that was pressed is
+  // picked up here instead: the panel opens under whichever one it was.
+  // (Safari never focuses a clicked button, so activeElement can't be used.)
+  useEffect(() => {
+    const onClick = (e) => {
+      lastTrigger.current = e.target.closest?.("button, a") || null;
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+
+  const open = useCallback(
+    (next = "apply") => {
+      // already signed up: Apply Now means "take me to my dashboard"
+      if (next === "apply" && readSession()) {
+        router.push("/dashboard/payment");
+        return;
+      }
+      setAnchor(next === "apply" ? lastTrigger.current : null);
+      setMode(next);
+    },
+    [router]
+  );
   const close = useCallback(() => setMode(null), []);
 
   return (
     <ApplyContext.Provider value={{ open, close, mode }}>
       {children}
-      <ApplyDialog mode={mode} onClose={close} />
+      <ApplyDialog mode={mode} anchor={anchor} onClose={close} />
     </ApplyContext.Provider>
   );
 }
 
-function ApplyDialog({ mode, onClose }) {
+/** room the card wants beneath its button, and the fixed header to keep clear of */
+const ROOM_BELOW = 560;
+const HEADER_CLEAR = 96;
+
+/**
+ * Where the signup card goes: directly under the button that opened it, lined
+ * up with one of its edges and kept 16px inside the viewport (on a phone,
+ * full width less the gutters).
+ *
+ * A button low on the screen — the hero's copy is bottom-aligned — leaves no
+ * room beneath it, so the page is first scrolled up just enough to make that
+ * room, never so far that the button slides under the fixed header. Whatever
+ * is still short scrolls inside the card.
+ */
+function placePanel(el) {
+  if (!el?.isConnected) return null;
+  const vh = window.innerHeight;
+  let r = el.getBoundingClientRect();
+  const short = ROOM_BELOW - (vh - r.bottom - PANEL_GAP - EDGE);
+  if (short > 0) {
+    const lift = Math.min(short, Math.max(0, r.top - HEADER_CLEAR));
+    if (lift > 0) {
+      // instant, not the page's smooth scrolling, so the measurement below
+      // reads where the button has actually landed
+      window.scrollTo({ top: window.scrollY + lift, behavior: "instant" });
+      r = el.getBoundingClientRect();
+    }
+  }
+  const vw = window.innerWidth;
+  const width = Math.min(PANEL_W, vw - EDGE * 2);
+  // right edges line up when the card fits that way (the header button);
+  // otherwise left edges do (the hero button, at the left of the page)
+  const ideal = r.right - width >= EDGE ? r.right - width : r.left;
+  const left = Math.min(Math.max(ideal, EDGE), vw - width - EDGE);
+  const top = r.bottom + PANEL_GAP;
+  // a button pinned to the bottom of the screen (the phone price bar) can't
+  // be scrolled up, so there is nowhere under it: use the centred card
+  if (vh - top - EDGE < 300) return null;
+  return { left, width, top, maxHeight: vh - top - EDGE };
+}
+
+function ApplyDialog({ mode, anchor, onClose }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
@@ -76,7 +157,18 @@ function ApplyDialog({ mode, onClose }) {
 
   const isOpen = mode !== null;
   const brochure = mode === "brochure";
-  const fields = brochure ? FIELDS.filter((f) => f.name !== "college" && f.name !== "year") : FIELDS;
+  const fields = FIELDS;
+  const [place, setPlace] = useState(null);
+
+  // measured before paint so the panel never flashes in the wrong spot, and
+  // again on resize (rotating a tablet, dragging a window)
+  useLayoutEffect(() => {
+    if (!isOpen || brochure) return;
+    const update = () => setPlace(placePanel(anchor));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [isOpen, brochure, anchor]);
 
   // hold the page still, close on Escape, and hand focus to the first field
   useEffect(() => {
@@ -116,7 +208,7 @@ function ApplyDialog({ mode, onClose }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    const found = validate(values, brochure ? "brochure" : "apply");
+    const found = validate(values);
     setErrors(found);
     if (Object.keys(found).length) {
       const first = fields.find((f) => found[f.name]);
@@ -130,10 +222,13 @@ function ApplyDialog({ mode, onClose }) {
     setSent(true);
   };
 
-  const title = brochure ? "Download the brochure" : "Apply to uGSOT Lastmile";
-  const blurb = brochure
-    ? "Tell us where to send it and the brochure is on its way."
-    : "Six months, offline, ₹50,000 with No Cost EMI. Open to 3rd and 4th year students.";
+  const title = "Download the brochure";
+  const blurb = "Tell us where to send it and the brochure is on its way.";
+
+  // signup: the same card as before, hanging off the button that opened it.
+  // The brochure, or a signup opened with no button to anchor to, stays the
+  // centred dialog.
+  const anchored = !brochure && place;
 
   return (
     <div
@@ -150,7 +245,12 @@ function ApplyDialog({ mode, onClose }) {
 
       <div
         ref={cardRef}
-        className="relative flex max-h-full w-full flex-col overflow-y-auto bg-white px-6 pb-10 pt-16 sm:max-w-[480px] sm:rounded-[12px] sm:p-8"
+        style={anchored ? place : undefined}
+        className={
+          anchored
+            ? "fixed flex animate-fadeUp flex-col overflow-y-auto rounded-[12px] bg-white px-6 pb-8 pt-6 sm:p-8"
+            : "relative flex max-h-full w-full flex-col overflow-y-auto bg-white px-6 pb-10 pt-16 sm:max-w-[480px] sm:rounded-[12px] sm:p-8"
+        }
       >
         <button
           type="button"
@@ -168,7 +268,9 @@ function ApplyDialog({ mode, onClose }) {
           </svg>
         </button>
 
-        {sent ? (
+        {!brochure ? (
+          <SignupFlow onClose={onClose} />
+        ) : sent ? (
           <div className="flex flex-col items-center gap-3 py-8 text-center">
             <span className="flex size-14 items-center justify-center rounded-full bg-flame/10">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -182,12 +284,10 @@ function ApplyDialog({ mode, onClose }) {
               </svg>
             </span>
             <h2 id="apply-title" className="font-display text-[24px] font-medium text-ink-900">
-              {brochure ? "Brochure sent" : "Application received"}
+              Brochure sent
             </h2>
             <p className="max-w-[320px] font-display text-[15px] leading-[1.55] text-ink-900/60">
-              {brochure
-                ? `We have emailed the brochure to ${values.email}.`
-                : "Our team will call you on the number you gave us within two working days."}
+              {`We have emailed the brochure to ${values.email}.`}
             </p>
             <button
               type="button"
@@ -220,48 +320,7 @@ function ApplyDialog({ mode, onClose }) {
                       {field.label}
                     </label>
 
-                    {field.type === "select" ? (
-                      // verification N2: the native arrow is suppressed, so the
-                      // field needs its own chevron and placeholder-grey text
-                      // until a year is picked — otherwise it reads as a filled
-                      // text box and gets skipped.
-                      <div className="relative">
-                        <select
-                          id={id}
-                          ref={i === 0 ? firstFieldRef : undefined}
-                          value={values[field.name]}
-                          onChange={(e) => set(field.name, e.target.value)}
-                          aria-invalid={!!error}
-                          aria-describedby={error ? `${id}-error` : undefined}
-                          className={`${base} ${border} appearance-none pr-11 ${
-                            values[field.name] ? "text-ink-900" : "text-ink-900/35"
-                          }`}
-                        >
-                          <option value="">Select your year</option>
-                          {YEARS.map((y) => (
-                            <option key={y} value={y} className="text-ink-900">
-                              {y}
-                            </option>
-                          ))}
-                        </select>
-                        <svg
-                          aria-hidden="true"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          className="pointer-events-none absolute right-[14px] top-1/2 -translate-y-1/2"
-                        >
-                          <path
-                            d="m5 7.5 5 5 5-5"
-                            stroke="#667085"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    ) : field.prefix ? (
+                    {field.prefix ? (
                       <div
                         className={`flex h-12 items-center rounded border ${border} bg-white transition-colors focus-within:border-ink-900`}
                       >
@@ -315,7 +374,7 @@ function ApplyDialog({ mode, onClose }) {
               disabled={sending}
               className="mt-6 flex h-12 w-full items-center justify-center rounded bg-flame font-display text-[15px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {sending ? "Sending…" : brochure ? "Send me the brochure" : "Submit application"}
+              {sending ? "Sending…" : "Send me the brochure"}
             </button>
           </form>
         )}

@@ -33,7 +33,7 @@
  * 7.9px above the window's bottom while the text baseline is only ~3.5px
  * above it. Dropped by 4px so the three read as one line.
  */
-const WORDMARK_CROP = {
+export const WORDMARK_CROP = {
   width: "200.875px",
   height: "113.031px",
   left: "-20.48px",
@@ -84,7 +84,7 @@ const MARKS = [
   { label: "GitHub", src: "/icons/mark-github.svg", bg: "#18181B" },
 ];
 
-function ProfileMarks() {
+export function ProfileMarks() {
   return (
     <div className="flex w-fit shrink-0 gap-3 rounded-[14.4px] bg-white p-[14.4px] drop-shadow-[0_1.2px_1.8px_rgba(10,10,11,0.06)] sm:w-[225.6px]">
       {MARKS.map((m) => (
@@ -117,7 +117,7 @@ const CHIPS = [
   { label: "Core CS", filled: false },
 ];
 
-function SubjectChips() {
+export function SubjectChips() {
   return (
     <ul className="flex flex-wrap gap-2">
       {CHIPS.map((c) => (
@@ -141,7 +141,7 @@ function SubjectChips() {
  * the full-size box behind in the layout, which made this tile stand taller
  * than the five beside it, and clipping the overflow cut the badge in half.
  */
-function DeployedApp() {
+export function DeployedApp() {
   return (
     <div className="w-[254px] overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white sm:h-[167.3px] sm:w-[364px] sm:rounded-[14px] sm:border-[1.4px]">
       <div className="flex items-center gap-1.5 border-b border-[#E5E7EB] px-3 py-2 sm:w-[361.2px] sm:gap-[8.4px] sm:border-b-[1.4px] sm:px-[16.8px] sm:py-[14px]">
@@ -165,7 +165,7 @@ function DeployedApp() {
 }
 
 /** node 40:9032 — the AI toolkit pills, one row */
-function AiTools() {
+export function AiTools() {
   return (
     // the four pills come to 369px in a 368px tile, so the gap is 7px rather
     // than 8px — otherwise RAG drops to a second line
@@ -189,7 +189,7 @@ function AiTools() {
  */
 const DIAL_COLOUR = "#D97706";
 
-function CountdownDial() {
+export function CountdownDial() {
   const R = 34;
   const CIRC = 2 * Math.PI * R;
   const REMAINING = 0.75;
@@ -246,7 +246,7 @@ const PEOPLE = [
   },
 ];
 
-function MockRounds() {
+export function MockRounds() {
   return (
     <div className="flex items-center">
       {PEOPLE.map((person, i) => (

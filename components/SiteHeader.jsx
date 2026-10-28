@@ -202,8 +202,10 @@ export default function SiteHeader() {
         <div className="px-6 pb-10 pt-9">
           <button
             type="button"
-            onClick={() => open("apply")}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              open("apply");
+            }}
             className="group flex h-11 w-full items-center justify-center gap-2 rounded bg-flame transition-opacity hover:opacity-90"
           >
             <span className="font-display text-[15px] font-medium leading-5 text-white">
@@ -232,8 +234,10 @@ export default function SiteHeader() {
 
           <button
             type="button"
-            onClick={() => open("apply")}
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              open("apply");
+            }}
             className="group flex h-10 shrink-0 items-center justify-center gap-2 rounded bg-flame px-4 transition-opacity hover:opacity-90"
           >
             <span className="whitespace-nowrap font-display text-[14px] font-medium leading-5 text-white">

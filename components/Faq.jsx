@@ -9,8 +9,8 @@ import { useState } from "react";
  */
 const FAQS = [
   {
-    q: "Is uGSOT Lastmile the online version of upGrad School of Technology?",
-    a: "No. uGSOT Lastmile is a separate 2-year technology accelerator for students who are already enrolled in a college or university. uGSOT Campus is a full time higher education experience combining the university degree, physical campus, academic environment, faculty, student life and the broader uGSOT ecosystem. Lastmile complements your existing college education — it does not replace it.",
+    q: "Is uGSOT Lastmile an online programme?",
+    a: "No. uGSOT Lastmile is a separate 6-month offline programme, taught in person, for 3rd and 4th year students who are already enrolled in a college or university. There is no online version. uGSOT Campus is a full time higher education experience combining the university degree, physical campus, academic environment, faculty, student life and the broader uGSOT ecosystem. Lastmile complements your existing college education — it does not replace it.",
   },
   {
     q: "Do I leave my current college?",
@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "Is Lastmile a degree?",
-    a: "No. Lastmile is a 2-year technology accelerator, not a degree programme. Your degree comes from your college; Lastmile builds the technical profile that sits alongside it.",
+    a: "No. Lastmile is a 6-month offline placement-readiness programme, not a degree programme. Your degree comes from your college; Lastmile builds the technical profile that sits alongside it.",
   },
   {
     q: "Will uGSOT issue my B.Tech / BCA?",
@@ -29,8 +29,8 @@ const FAQS = [
     a: "Plan for roughly 8 to 10 hours a week. Lastmile is built to run on top of a full college timetable, so the work is spread across the week rather than concentrated into fixed daily hours.",
   },
   {
-    q: "Is it live or recorded?",
-    a: "Both. Live sessions and mentor time are scheduled through the week, and the learning material and project work in ProjectBuilder Pro stay available on demand so you can fit them around your college schedule.",
+    q: "Is it online or offline?",
+    a: "Offline. Every class, lab, mentor session and event happens in person on campus. Practice material and project work in ProjectBuilder Pro stay available between classes.",
   },
   {
     q: "Is ICPC selection guaranteed?",
@@ -50,10 +50,10 @@ const FAQS = [
   },
   {
     q: "Can 3rd or 4th year students join?",
-    a: "Yes, but Lastmile is designed primarily for Year 1 and Year 2 students, because the two-year arc is what lets skills, projects and a public profile compound before you graduate. Joining later leaves less runway for that to build.",
+    a: "Yes — Lastmile is built for them. It is open to students in their 3rd and 4th year, and the six months are timed to make you placement ready before your campus drives.",
   },
   {
-    q: "What happens after two years?",
+    q: "What happens after the six months?",
     a: "You finish with a technology profile built in public — shipped projects, an open-source contribution record, competitive programming ratings and internship experience — and you carry all of it with you. Your college degree continues on its own timeline.",
   },
   {
@@ -62,7 +62,7 @@ const FAQS = [
   },
   {
     q: "What's included in the ₹50,000 fee?",
-    a: "The whole programme, not a module of it: programming and maths, DSA, competitive programming and ICPC preparation, full stack development, systems and cloud, AI and GenAI, open source and GSoC guidance, real projects, free access to ProjectBuilder Pro, the AI Mentor, industry mentorship, competitions, Career OS and the internship ecosystem. ₹50,000 is the total fee for the full two years, not a yearly charge.",
+    a: "The whole programme, not a module of it: programming and maths, DSA, competitive programming and ICPC preparation, full stack development, systems and cloud, AI and GenAI, open source and GSoC guidance, real projects, free access to ProjectBuilder Pro, the AI Mentor, industry mentorship, competitions, Career OS and the internship ecosystem. ₹50,000 is the total fee for the full six months, offered on No Cost EMI.",
   },
 ];
 
