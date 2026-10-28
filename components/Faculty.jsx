@@ -446,11 +446,13 @@ const STEP = 344;
 /** how long an arrow press takes to settle on the next card */
 const JUMP_MS = 420;
 
+/** how long the row waits after a swipe, drag or arrow before drifting again */
+const IDLE_MS = 8000;
+
 export default function Faculty() {
   const railRef = useRef(null);
   const holdRef = useRef(0);
   const targetRef = useRef(null);
-  const takenOverRef = useRef(false);
 
   // The row drifts by moving scrollLeft rather than by a CSS transform, so the
   // arrows and a finger can move the same rail the animation does. The track
@@ -485,7 +487,7 @@ export default function Faculty() {
         const eased = 1 - (1 - t) ** 3;
         rail.scrollLeft = jump.from + (jump.to - jump.from) * eased;
         if (t >= 1) targetRef.current = null;
-      } else if (!still && !takenOverRef.current && now >= holdRef.current && half > 0) {
+      } else if (!still && now >= holdRef.current && half > 0) {
         rail.scrollLeft += PX_PER_MS * dt;
       }
 
@@ -518,16 +520,14 @@ export default function Faculty() {
   }, []);
 
   /**
-   * Stop the drift for good.
+   * The pause after someone has actually moved the rail.
    *
-   * A timed hold is wrong once somebody has actually moved the rail: they
-   * swipe to a mentor, start reading, and a couple of seconds later the row
-   * slides out from under them. After a swipe, a drag or an arrow the rail
-   * stays where it was put, and the arrows remain the way to keep going.
+   * Two-and-a-bit seconds was too short — the row slid out from under whoever
+   * had just swiped to a mentor to read about them. Stopping for good was
+   * worse: the section looked broken. Long enough to read a card, then the
+   * drift picks up again on its own.
    */
-  const takeOver = useCallback(() => {
-    takenOverRef.current = true;
-  }, []);
+  const takeOver = useCallback(() => hold(IDLE_MS), [hold]);
 
   const nudge = useCallback(
     (direction) => {
@@ -561,8 +561,8 @@ export default function Faculty() {
       <div className="relative mt-14">
         <div
           ref={railRef}
-          // A cursor resting over the cards only pauses; a press, a swipe or a
-          // wheel is someone taking the rail over, and it then stays put.
+          // A cursor resting over the cards pauses briefly; a press, a swipe or
+          // a wheel buys a much longer pause, long enough to read a card.
           // Deliberately not pointermove: on a touch screen a plain vertical
           // page scroll fires pointermove across the rail, which would stop the
           // row before anyone had touched it.

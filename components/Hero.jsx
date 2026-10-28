@@ -54,11 +54,17 @@ export default function Hero() {
     };
   }, []);
 
-  // One screen tall on every device: 100svh is a *minimum*, not a fixed
+  // One screen tall on every device: 100dvh is a *minimum*, not a fixed
   // height, so the section fills the viewport but still grows when the content
   // needs more room — which is what stops the brochure button being clipped on
   // a short phone (verification N1). The old `lg:h-[900px]` ignored the
   // viewport entirely and ran past the bottom of any laptop shorter than that.
+  //
+  // dvh, not svh: svh is the height with the mobile browser's toolbars showing,
+  // so once they slide away the section stays short and a band of film opens up
+  // under the buttons — about 100px of dead space on iOS Safari. dvh tracks the
+  // viewport as the toolbars come and go, which keeps the buttons the same
+  // distance from the bottom of the screen throughout.
   //
   // 104px of top padding clears the header; 88px at the bottom clears the
   // fixed price bar on phones, and 48px does the same job on desktop. The copy
@@ -69,7 +75,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative z-0 flex min-h-[100svh] items-end overflow-hidden bg-white pb-[88px] pt-[104px] lg:pb-12"
+      className="relative z-0 flex min-h-[100dvh] items-end overflow-hidden bg-white pb-[88px] pt-[104px] lg:pb-12"
     >
       {/* everything that parallaxes lives in here; the content below does not */}
       <div
