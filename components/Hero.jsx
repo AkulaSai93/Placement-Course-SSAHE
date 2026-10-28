@@ -4,8 +4,14 @@ import { useEffect, useRef } from "react";
 
 import { useApply } from "@/components/ApplyDialog";
 
-/** Polaris lags its hero at 30% of scroll while the next section slides over
- *  it at full speed — measured as translateY = scrollY * 0.3. */
+/** Polaris lags its hero *background* at 30% of scroll — measured as
+ *  translateY = scrollY * 0.3 — while the copy and the buttons scroll with the
+ *  page at full speed.
+ *
+ *  This used to move the whole <section>, which meant the headline, the fee and
+ *  the two CTAs drifted down into the section that slides over the hero, so the
+ *  buttons were clipped mid-scroll. Only the media layer moves now, so nothing
+ *  in front of it can be cut. */
 const PARALLAX = 0.3;
 
 /**
@@ -17,18 +23,20 @@ const PARALLAX = 0.3;
  * supplied earlier is used instead. Everything else follows the node.
  */
 export default function Hero() {
-  const ref = useRef(null);
+  const bgRef = useRef(null);
   const { open } = useApply();
 
   useEffect(() => {
-    const el = ref.current;
+    const el = bgRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let frame = 0;
     const update = () => {
       frame = 0;
-      const limit = el.offsetHeight;
+      // the layer is 130% tall and starts 30% above the section, so it can
+      // travel exactly that 30% before a gap would open at the top
+      const limit = (el.parentElement?.offsetHeight || 0) * PARALLAX;
       const offset = Math.min(window.scrollY * PARALLAX, limit);
       el.style.transform = `translate3d(0, ${offset}px, 0)`;
     };
@@ -46,12 +54,29 @@ export default function Hero() {
     };
   }, []);
 
+  // One screen tall on every device: 100svh is a *minimum*, not a fixed
+  // height, so the section fills the viewport but still grows when the content
+  // needs more room — which is what stops the brochure button being clipped on
+  // a short phone (verification N1). The old `lg:h-[900px]` ignored the
+  // viewport entirely and ran past the bottom of any laptop shorter than that.
+  //
+  // 104px of top padding clears the header; 88px at the bottom clears the
+  // fixed price bar on phones, and 48px does the same job on desktop. The copy
+  // is bottom-aligned at every width, as Polaris keeps it: it sits low in the
+  // frame, leaving the upper two thirds of the film clear, and it stays on
+  // screen for the hero's whole height rather than leaving after half a
+  // swipe.
   return (
     <section
       id="home"
-      ref={ref}
-      className="relative z-0 flex h-[76svh] min-h-[520px] items-center overflow-hidden bg-white will-change-transform lg:h-[900px] lg:min-h-0"
+      className="relative z-0 flex min-h-[100svh] items-end overflow-hidden bg-white pb-[88px] pt-[104px] lg:pb-12"
     >
+      {/* everything that parallaxes lives in here; the content below does not */}
+      <div
+        ref={bgRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-[30%] left-0 h-[130%] w-full will-change-transform"
+      >
       {/* Background film. Muted + playsInline so iOS plays it inline rather than
           going fullscreen; the poster covers the gap before it buffers, and
           prefers-reduced-motion users get the poster alone. */}
@@ -96,9 +121,10 @@ export default function Hero() {
             "linear-gradient(90deg, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.10) 100%)",
         }}
       />
+      </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 lg:px-20">
-        <div className="flex w-full translate-y-[44px] flex-col gap-5 lg:translate-y-[60px] lg:gap-6">
+        <div className="flex w-full flex-col gap-5 lg:gap-6">
           <h1 className="max-w-[820px] text-balance font-display text-[30px] font-medium leading-[1.2] tracking-[-0.03em] text-white sm:text-[40px] lg:max-w-none lg:text-[clamp(40px,4vw,56px)]">
             {/* kept on one line once the column is wide enough for it */}
             <span className="lg:whitespace-nowrap">

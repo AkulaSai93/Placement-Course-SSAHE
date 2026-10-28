@@ -221,22 +221,46 @@ function ApplyDialog({ mode, onClose }) {
                     </label>
 
                     {field.type === "select" ? (
-                      <select
-                        id={id}
-                        ref={i === 0 ? firstFieldRef : undefined}
-                        value={values[field.name]}
-                        onChange={(e) => set(field.name, e.target.value)}
-                        aria-invalid={!!error}
-                        aria-describedby={error ? `${id}-error` : undefined}
-                        className={`${base} ${border} appearance-none`}
-                      >
-                        <option value="">Select</option>
-                        {YEARS.map((y) => (
-                          <option key={y} value={y}>
-                            {y}
-                          </option>
-                        ))}
-                      </select>
+                      // verification N2: the native arrow is suppressed, so the
+                      // field needs its own chevron and placeholder-grey text
+                      // until a year is picked — otherwise it reads as a filled
+                      // text box and gets skipped.
+                      <div className="relative">
+                        <select
+                          id={id}
+                          ref={i === 0 ? firstFieldRef : undefined}
+                          value={values[field.name]}
+                          onChange={(e) => set(field.name, e.target.value)}
+                          aria-invalid={!!error}
+                          aria-describedby={error ? `${id}-error` : undefined}
+                          className={`${base} ${border} appearance-none pr-11 ${
+                            values[field.name] ? "text-ink-900" : "text-ink-900/35"
+                          }`}
+                        >
+                          <option value="">Select your year</option>
+                          {YEARS.map((y) => (
+                            <option key={y} value={y} className="text-ink-900">
+                              {y}
+                            </option>
+                          ))}
+                        </select>
+                        <svg
+                          aria-hidden="true"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          className="pointer-events-none absolute right-[14px] top-1/2 -translate-y-1/2"
+                        >
+                          <path
+                            d="m5 7.5 5 5 5-5"
+                            stroke="#667085"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
                     ) : field.prefix ? (
                       <div
                         className={`flex h-12 items-center rounded border ${border} bg-white transition-colors focus-within:border-ink-900`}

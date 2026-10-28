@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback, useEffect, useRef } from "react";
+
 /**
  * Mentor rail — Figma node 1193:4280 (Catalyst file).
  *
@@ -53,13 +57,15 @@ const LOGO_SCALE = 0.85;
 const COPY_LIFT = 0;
 const CARD_H = 426;
 
+/** every card's logo row ends this far above the card's bottom edge */
+const LOGO_BOTTOM = 24;
+
 const FACULTY = [
   {
     name: "Vishwa Mohan",
     role: "CEO of upGrad SOT",
     photo: { src: "/faculty/vishwa-mohan.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 223.813, gap: 20, align: "center", nameWidth: 136 },
-    roleSize: 12,
     logoRows: [
       [s(L.linkedin, 78.227, 22.5), s(L.walmart, 86.834, 22.5), s(L.upgradSot, 78.049, 25)],
       [s(L.paypal, 81.295, 22.5), s(L.oracle, 131.719, 22.5), s(L.physicsWallah, 24.802, 25)],
@@ -70,7 +76,6 @@ const FACULTY = [
     role: "Cofounder & CEO DevDynamics",
     photo: { src: "/faculty/rishi-saraf.webp", size: 273, top: 0, offset: 0.5 },
     text: { left: 20, top: 285, width: 277, gap: 20 },
-    roleSize: 12,
     wrap: true,
     logoRows: [
       [
@@ -109,7 +114,6 @@ const FACULTY = [
       },
     ],
     text: { top: 282, width: 279, gap: 16, centered: true },
-    roleSize: 10,
     wrap: true,
     logoRows: [
       [
@@ -126,7 +130,6 @@ const FACULTY = [
     role: "Gen AI @ Google",
     photo: { src: "/faculty/divyansh-dubey.webp", size: 273, top: 0, offset: -0.5 },
     text: { top: 281.66, width: 279, height: 118, centered: true, spread: true },
-    roleSize: 10,
     logoRows: [[s(L.google, 68.846, 25), s(L.tiger, 50, 25), s(L.maybank, 114.286, 25)]],
     logoGap: 12,
   },
@@ -135,7 +138,6 @@ const FACULTY = [
     role: "Senior Staff Software Engineer & Problem Solving Track Lead",
     photo: { src: "/faculty/gaurav-kaushik.webp", size: 273, top: 0, offset: 0.5 },
     text: { left: 20, top: 285, width: 277, gap: 20 },
-    roleSize: 12,
     logoRows: [[s(L.salesforce, 32.143, 22.5), s(L.microsoft, 104, 25), s(L.paypal, 81.295, 22.5)]],
   },
   {
@@ -162,7 +164,6 @@ const FACULTY = [
       },
     ],
     text: { top: 281.66, width: 279, height: 118, centered: true, spread: true },
-    roleSize: 10,
     wrap: true,
     logoRows: [[s(L.microsoft, 104, 25), s(L.ailinc, 44.628, 30)]],
   },
@@ -171,7 +172,6 @@ const FACULTY = [
     role: "Staff Software AI Engineer",
     photo: { src: "/faculty/gladden-rumao.webp", size: 273, top: 3, offset: -0.5 },
     text: { left: 20, top: 289, width: 224, height: 118, gap: 40 },
-    roleSize: 12,
     logoRows: [[s(L.upgradSot, 78.049, 25), s(L.barclays, 128.026, 25)]],
     logoGap: 12,
   },
@@ -180,7 +180,6 @@ const FACULTY = [
     role: "SDE II at Cisco",
     photo: { src: "/faculty/mithun-s.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 284.66, width: 224, height: 118, spread: true, align: "center", nameWidth: 136 },
-    roleSize: 12,
     logoRows: [
       [s(L.cisco, 43.892, 25), s(L.physicsWallah, 24.802, 25), s(L.ineuron, 107.693, 29.399)],
     ],
@@ -191,7 +190,6 @@ const FACULTY = [
     role: "Senior AI Engineer & Lead Instructor",
     photo: { src: "/faculty/rishab-bafna.webp", size: 273, top: 15, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, gap: 32, justifyEnd: true },
-    roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
   },
   {
@@ -199,7 +197,6 @@ const FACULTY = [
     role: "Senior Mathematician and Lead Instructor",
     photo: { src: "/faculty/piyush-jain.webp", size: 273, top: 7, offset: -0.5 },
     text: { left: 20, top: 292, width: 224, height: 118, spread: true },
-    roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
   },
   {
@@ -207,7 +204,6 @@ const FACULTY = [
     role: "SDE 2 + Lead Instructor",
     photo: { src: "/faculty/rahul-yadav.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, spread: true },
-    roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
   },
   {
@@ -215,7 +211,6 @@ const FACULTY = [
     role: "Data Scientist at upGrad SOT",
     photo: { src: "/faculty/jyoti-nigam.webp", size: 273, top: 0, offset: -0.5 },
     text: { left: 20, top: 285, width: 224, height: 118, spread: true },
-    roleSize: 12,
     logoRows: [[s(L.upgradSot, 99.902, 32)]],
   },
 ];
@@ -371,16 +366,13 @@ function FacultyCard({ person }) {
         />
       )}
 
-      {/* copy */}
+      {/* Name and role. The Figma frame positions each of these per card, and
+          those tops are kept. */}
       <div
-        className={`absolute flex flex-col ${t.spread ? "justify-between" : ""} ${
-          t.justifyEnd ? "justify-end" : ""
-        }`}
+        className="absolute flex flex-col"
         style={{
           top: `${t.top - COPY_LIFT}px`,
           width: `${t.width}px`,
-          height: t.height ? `${t.height}px` : undefined,
-          gap: t.gap ? `${t.gap}px` : undefined,
           ...(t.centered
             ? { left: "50%", transform: "translateX(calc(-50% + 0.5px))" }
             : { left: `${t.left}px` }),
@@ -395,27 +387,44 @@ function FacultyCard({ person }) {
           <p className="font-display text-[18px] font-semibold leading-normal text-[#272727]">
             {person.name}
           </p>
-          <p
-            className="font-display text-[13px] font-normal leading-normal text-[#4B5563]"
-            style={{ fontSize: `${person.roleSize}px` }}
-          >
+          {/* verification P2.3c: one size for every title. The longer ones used
+              to shrink to 10px via `roleSize`; they wrap onto a second line
+              instead. No reserved second line here — the logos are pinned to
+              the card's bottom edge, so alignment no longer depends on this
+              block being a fixed height, and reserving a line pushed the two
+              cards with tall logo stacks into them. */}
+          <p className="font-display text-[13px] font-normal leading-normal text-[#4B5563]">
             {person.role}
           </p>
         </div>
+      </div>
 
-        <div className="flex flex-col gap-[10.8px]">
-          {person.logoRows.map((row, i) => (
-            <ul
-              key={i}
-              className={`flex items-center ${person.wrap ? "flex-wrap" : ""}`}
-              style={{ gap: `${person.logoGap ?? 10.8}px` }}
-            >
-              {row.map((logo, j) => (
-                <Logo key={`${logo.name}-${j}`} logo={logo} />
-              ))}
-            </ul>
-          ))}
-        </div>
+      {/* Logos, pinned to the card's bottom edge rather than stacked under the
+          role. The Figma frame gives each card its own absolute offset for this
+          block, which left the logo rows ending anywhere between 393px and
+          425px down a 426px card — visibly ragged along a row of cards. One
+          shared bottom lines every card up. */}
+      <div
+        className="absolute flex flex-col gap-[10.8px]"
+        style={{
+          bottom: `${LOGO_BOTTOM}px`,
+          width: `${t.width}px`,
+          ...(t.centered
+            ? { left: "50%", transform: "translateX(calc(-50% + 0.5px))" }
+            : { left: `${t.left}px` }),
+        }}
+      >
+        {person.logoRows.map((row, i) => (
+          <ul
+            key={i}
+            className={`flex items-center ${person.wrap ? "flex-wrap" : ""}`}
+            style={{ gap: `${person.logoGap ?? 10.8}px` }}
+          >
+            {row.map((logo, j) => (
+              <Logo key={`${logo.name}-${j}`} logo={logo} />
+            ))}
+          </ul>
+        ))}
       </div>
     </article>
   );
@@ -431,7 +440,97 @@ function CardGroup({ ariaHidden }) {
   );
 }
 
+/** node 95:6104/95:6246 — one 320px card plus the 24px gap after it */
+const STEP = 344;
+
+/** how long an arrow press takes to settle on the next card */
+const JUMP_MS = 420;
+
 export default function Faculty() {
+  const railRef = useRef(null);
+  const holdRef = useRef(0);
+  const targetRef = useRef(null);
+
+  // The row drifts by moving scrollLeft rather than by a CSS transform, so the
+  // arrows and a finger can move the same rail the animation does. The track
+  // holds two identical groups (node 95:6102 — 8256px for twelve 320px cards
+  // twice over); wrapping at the halfway mark keeps the loop seamless in both
+  // directions.
+  //
+  // An arrow press is eased inside this same loop rather than handed to
+  // `scrollBy({behavior:"smooth"})`: the drift writes scrollLeft every frame,
+  // which cancels a native smooth scroll mid-flight and leaves the rail
+  // somewhere between the two.
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let frame = 0;
+    let last = performance.now();
+    const PX_PER_MS = 0.042; // ~60s for one group, as the marquee ran
+
+    const tick = (now) => {
+      const dt = Math.min(now - last, 64);
+      last = now;
+      const half = rail.scrollWidth / 2;
+
+      const jump = targetRef.current;
+      if (jump) {
+        // Time-based, not a per-frame lerp: a hidden or busy tab throttles rAF
+        // to a frame or two a second, and a per-frame step would then land the
+        // rail short of the card it was sent to.
+        const t = Math.min(1, (now - jump.start) / JUMP_MS);
+        const eased = 1 - (1 - t) ** 3;
+        rail.scrollLeft = jump.from + (jump.to - jump.from) * eased;
+        if (t >= 1) targetRef.current = null;
+      } else if (!still && now >= holdRef.current && half > 0) {
+        rail.scrollLeft += PX_PER_MS * dt;
+      }
+
+      if (half > 0) {
+        // wrap in both directions, carrying any in-flight jump with it
+        if (rail.scrollLeft >= half) {
+          rail.scrollLeft -= half;
+          if (jump) {
+            jump.from -= half;
+            jump.to -= half;
+          }
+        } else if (rail.scrollLeft < 0) {
+          rail.scrollLeft += half;
+          if (jump) {
+            jump.from += half;
+            jump.to += half;
+          }
+        }
+      }
+      frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  /** hold the drift while someone is reading or driving the rail themselves */
+  const hold = useCallback((ms = 1200) => {
+    holdRef.current = Math.max(holdRef.current, performance.now() + ms);
+  }, []);
+
+  const nudge = useCallback(
+    (direction) => {
+      const rail = railRef.current;
+      if (!rail) return;
+      hold(1600);
+      const from = targetRef.current ? targetRef.current.to : rail.scrollLeft;
+      targetRef.current = {
+        from: rail.scrollLeft,
+        to: from + direction * STEP,
+        start: performance.now(),
+      };
+    },
+    [hold],
+  );
+
   return (
     <section id="mentors" className="bg-mist px-6 py-10 lg:px-20 lg:py-20">
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 text-center text-ink-900">
@@ -446,12 +545,21 @@ export default function Faculty() {
         </p>
       </div>
 
-      <div className="relative mt-14 overflow-hidden">
-        <div className="marquee-track flex w-max animate-marquee-slow motion-reduce:animate-none">
+      <div className="relative mt-14">
+        <div
+          ref={railRef}
+          onPointerEnter={() => hold(400)}
+          onPointerMove={() => hold(400)}
+          onPointerDown={() => hold(2400)}
+          onFocusCapture={() => hold(4000)}
+          onTouchStart={() => hold(2400)}
+          className="no-scrollbar flex overflow-x-auto overscroll-x-contain"
+        >
           <CardGroup />
           <CardGroup ariaHidden />
         </div>
 
+        {/* node 95:6388/95:6389 — 40px washes over each edge */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-mist to-transparent"
@@ -460,7 +568,50 @@ export default function Faculty() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-mist to-transparent"
         />
+
+        {/* sitting on the cards themselves, one at each edge and centred on the
+            card's height, so they are in reach at every width */}
+        <RailButton
+          label="Previous mentors"
+          onClick={() => nudge(-1)}
+          className="left-2 sm:left-4"
+        />
+        <RailButton
+          label="Next mentors"
+          onClick={() => nudge(1)}
+          flip
+          className="right-2 sm:right-4"
+        />
       </div>
     </section>
+  );
+}
+
+/** 44px white circle, as the curriculum rail uses, floated over the cards */
+function RailButton({ label, onClick, flip, className = "" }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`absolute top-1/2 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-ink-900 shadow-[0_2px_10px_rgba(10,10,11,0.12)] transition-colors hover:border-ink-900/40 hover:bg-ink-900/5 ${className}`}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+        className={flip ? "" : "rotate-180"}
+      >
+        <path
+          d="m6 3 5 5-5 5"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
   );
 }

@@ -9,6 +9,8 @@
  * before this goes live. `phone` and `address` are intentionally empty: fill
  * them in and they render automatically, so nothing invented ships by default.
  */
+import FooterWordmark from "@/components/FooterWordmark";
+
 const CONTACT = {
   email: "hello@ugsot.com",
   phone: "",
@@ -89,6 +91,8 @@ export default function SiteFooter() {
           </div>
         </div>
 
+        {/* node 95:6509 — 760px wide, which leaves a 648px text column once
+            the panel's 56px side padding is taken off */}
         <p className="mt-12 max-w-[760px] px-6 font-display text-[12px] leading-[1.6] text-white/60 sm:px-10 lg:mt-16 lg:px-14">
           {DISCLAIMER}
         </p>
@@ -133,26 +137,16 @@ export default function SiteFooter() {
           <div className="h-px w-full bg-white/15" />
         </div>
 
-        {/* oversized wordmark, clipped by the panel edge */}
-        {/* The wordmark always spans the full panel width: the outer div is a
-            query container, so sizing the type in `cqw` scales it to whatever
-            width is available rather than to the viewport. */}
-        <div
-          aria-hidden="true"
-          className="mt-8 px-6 [container-type:inline-size] sm:px-10 lg:px-14"
-        >
-          {/* 0.79em clears the glyph ink exactly (baseline sits at 0.773em and the
-              round letters overshoot it by ~0.015em), so the wordmark sits flush
-              to the panel edge without slicing through the letterforms. */}
-          <div className="overflow-hidden" style={{ fontSize: "29.85cqw", height: "0.79em" }}>
-            {/* The negative tracking also applies after the final letter, so the
-                text's advance width ends ~0.045em short of where the "e" actually
-                draws — clipping it. Zeroing the last letter's spacing makes the
-                advance match the ink. */}
-            <p className="select-none whitespace-nowrap text-center font-display font-medium leading-[0.8] tracking-[-0.045em] text-white">
-              Lastmil<span className="tracking-normal">e</span>
-            </p>
-          </div>
+        {/* oversized wordmark, clipped by the panel's bottom edge. The sizing
+            is measured at runtime — see FooterWordmark for why a fixed value
+            kept clipping the final letter. */}
+        <div aria-hidden="true" className="mt-8 px-6 sm:px-10 lg:px-14">
+          <FooterWordmark>
+            {/* the negative tracking also applies after the last letter, so the
+                advance ends short of where the "e" draws; zeroing its spacing
+                makes the advance match the ink */}
+            Lastmil<span className="tracking-normal">e</span>
+          </FooterWordmark>
         </div>
       </div>
     </footer>

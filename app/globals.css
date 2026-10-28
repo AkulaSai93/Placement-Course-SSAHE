@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --font-display: "Neue Montreal", var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* Neue Montreal is not loaded, so anyone with it installed locally saw a
+     different page from everyone else (verification N4). */
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-accent: var(--font-bricolage), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }

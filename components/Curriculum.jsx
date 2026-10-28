@@ -204,21 +204,12 @@ const MODULES = [
 /** the one accent this section uses */
 const FLAME = "#E7000B";
 /**
- * The mobile accordion bars each carry their own tone, as on the reference —
- * a pale tint with the label and title in the matching ink, so the stack reads
- * as a run of colours. Kept deliberately light; the desktop layout stays on
- * the single flame accent.
+ * The phone rows match the desktop list rather than running their own palette:
+ * white cards inset to the page margin, a red "MODULE 0X" label and a near
+ * black title. The pale per-module tints that used to colour each bar are gone
+ * — three of those title colours sat under 4.5:1, and phone and desktop read
+ * as two different products.
  */
-const TONES = [
-  { fg: "#0E7A55", bg: "#ECFCF4" },
-  { fg: "#6D3FD6", bg: "#F7EEFF" },
-  { fg: "#1A73F2", bg: "#EEF5FF" },
-  { fg: "#B4690E", bg: "#FFF6E8" },
-  { fg: "#117E96", bg: "#EAF8FC" },
-  { fg: "#514BE0", bg: "#EFEEFE" },
-  { fg: "#C02466", bg: "#FDEEF5" },
-  { fg: "#C8232C", bg: "#FFEFEF" },
-];
 
 
 /** deck footer, page 7 — the sum of the per-module counts above */
@@ -356,34 +347,24 @@ function ConceptRail({ mod }) {
 }
 
 function Module({ mod, open, reached, onToggle, innerRef }) {
-  const tone = TONES[(mod.id - 1) % TONES.length];
-
   return (
-    <div ref={innerRef} className="flex flex-col sm:flex-row sm:gap-10">
-      {/* mobile: a tinted header that opens the module */}
+    <div
+      ref={innerRef}
+      className="flex flex-col overflow-hidden rounded-lg border border-[#E4E7EC] bg-white sm:flex-row sm:gap-10 sm:overflow-visible sm:rounded-none sm:border-0 sm:bg-transparent"
+    >
+      {/* mobile: the row header that opens the module */}
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={`module-${mod.id}`}
-        className="flex w-full items-center justify-between p-4 text-left sm:hidden"
-        style={
-          open
-            ? { backgroundImage: `linear-gradient(${tone.bg}, #ffffff)` }
-            : { backgroundColor: tone.bg }
-        }
+        className="flex w-full items-center justify-between gap-3 px-4 py-[14px] text-left sm:hidden"
       >
         <span className="flex flex-col gap-1">
-          <span
-            className="font-display text-[10.5px] font-semibold uppercase leading-[1.12] tracking-[2px]"
-            style={{ color: tone.fg }}
-          >
+          <span className="font-display text-[12px] font-semibold uppercase leading-[1.12] tracking-[1.6px] text-flame">
             Module {pad(mod.id)}
           </span>
-          <span
-            className="font-display text-[17.2px] font-semibold leading-[1.12]"
-            style={{ color: tone.fg }}
-          >
+          <span className="font-display text-[17px] font-semibold leading-[1.2] text-ink-900">
             {mod.title}
           </span>
         </span>
@@ -526,7 +507,7 @@ export default function Curriculum() {
           ))}
         </dl>
 
-        <div ref={trackRef} className="relative -mx-6 mt-6 flex flex-col sm:mx-0 sm:mt-10">
+        <div ref={trackRef} className="relative mt-6 flex flex-col gap-2 sm:mt-10 sm:gap-0">
           {/* the rail the dots sit on — one line for the whole list, with the
               flame fill and its arrow driven by scroll */}
           <span

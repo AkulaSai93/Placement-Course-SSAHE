@@ -284,15 +284,17 @@ export default function Pricing() {
       className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20"
     >
       <div className="mx-auto flex max-w-[1280px] flex-col items-center">
-        {/* node 40:9078 — the heading block is centred and 554px wide */}
-        <div className="flex w-full max-w-[554px] flex-col gap-4 text-center">
+        {/* node 95:5009 — centred, title on one line with the subtitle on a
+            single line under it. The 554px cap is kept on narrow screens; from
+            lg the block takes the full width so the subtitle does not wrap. */}
+        <div className="flex w-full max-w-[554px] flex-col items-center gap-4 text-center lg:max-w-none">
           <h2
             id="usps-heading"
-            className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[51.84px] lg:tracking-[-0.96px]"
+            className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:whitespace-nowrap lg:text-[48px] lg:leading-[51.84px] lg:tracking-[-0.96px]"
           >
             What you <span className="text-flame">walk away</span> with.
           </h2>
-          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:text-[18px] lg:leading-[27px]">
+          <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:whitespace-nowrap lg:text-[18px] lg:leading-[27px]">
             Seven things in hand at the end of six months — not a certificate and a hope.
           </p>
         </div>
@@ -373,7 +375,10 @@ export default function Pricing() {
               </div>
             </Tile>
 
-            <div className="flex flex-col gap-4 md:flex-row md:items-start">
+            {/* lg:flex-1 + stretch: the row fills whatever height is left under
+                the project tile, so both sub-columns end flush with the
+                Internshala column instead of ~38px short of it */}
+            <div className="flex flex-col gap-4 md:flex-row md:items-start lg:flex-1 lg:items-stretch">
               {/* column 2 */}
               <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
                 {/* node 45:11441 */}
@@ -393,7 +398,7 @@ export default function Pricing() {
                 {/* node 45:11527 */}
                 <Tile
                   tint="rgba(217,119,6,0.09)"
-                  className="min-h-[260px] gap-8 sm:min-h-[236px] lg:gap-[34px]"
+                  className="min-h-[260px] justify-between gap-8 sm:min-h-[236px] lg:flex-1 lg:gap-[34px]"
                 >
                   <div className="flex items-center gap-4">
                     <CountdownDial />
@@ -431,7 +436,10 @@ export default function Pricing() {
                 </Tile>
 
                 {/* node 45:11544 — chips above, headline below */}
-                <Tile tint="rgba(124,58,237,0.08)" className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start">
+                <Tile
+                  tint="rgba(124,58,237,0.08)"
+                  className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start lg:flex-1 lg:justify-between"
+                >
                   <SubjectChips />
                   <Title>Confidence across DSA, web development and core CS</Title>
                 </Tile>
