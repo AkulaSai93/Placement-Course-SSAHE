@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Curriculum — the eight modules of UGSOT LastMile 2026, from the programme
+ * Curriculum — the eight modules of uGSOT LaunchReady 2026, from the programme
  * deck ("What students will learn", pages 4–7) and the at-a-glance table on
  * page 1.
  *
@@ -11,14 +11,14 @@ import { useEffect, useRef, useState } from "react";
  * left carrying the module label, a dot and a connecting line; beside it the
  * module's headline and description, a "What you'll learn" pill cloud, a
  * tinted panel of "In classroom concepts" cards that scroll sideways, and a
- * closing "By the end of module N" banner. Their projects row is deliberately
- * left out.
+ * closing "By the end of module N" banner. The projects are not a row inside
+ * each module, as theirs are — they have their own section (Projects.jsx)
+ * straight after this one.
  *
  * On mobile each module collapses behind a tinted header, as theirs does.
  *
- * Every module carries its own session / week / hour counts; the totals in
- * STATS are the deck's own footer figures and must stay in step with them
- * (70 sessions, 17.5 weeks, 210 hours).
+ * Every module carries its own session / week / hour counts. The totals strip
+ * that used to sit under the heading has been dropped, as on the live page.
  */
 const MODULES = [
   {
@@ -149,7 +149,7 @@ const MODULES = [
     skills: ["OOP", "SOLID", "DBMS", "SQL", "Transactions & Indexing", "Operating Systems", "Computer Networks", "System Design"],
     title: "Core CS Fundamentals",
     promise:
-      "Answer interview questions on OOP, databases, operating systems and networks with confidence.",
+      "Answer interview questions on OOP, databases, operating systems and networks.",
     sessions: 10,
     weeks: "2.5 wk",
     hours: 30,
@@ -172,7 +172,7 @@ const MODULES = [
     bold: "aptitude and reasoning",
     skills: ["Quantitative Aptitude", "Data Interpretation", "Logical Reasoning", "Verbal Ability", "Mock Tests"],
     title: "Aptitude & Reasoning",
-    promise: "Clear the aptitude and reasoning rounds that open most placement drives.",
+    promise: "Prepare for aptitude and reasoning rounds that open most placement drives.",
     sessions: 4,
     weeks: "1 wk",
     hours: 12,
@@ -211,14 +211,6 @@ const FLAME = "#E7000B";
  * as two different products.
  */
 
-
-/** deck footer, page 7 — the sum of the per-module counts above */
-const STATS = [
-  ["8", "modules, in sequence"],
-  ["70", "three-hour sessions"],
-  ["210", "hours of teaching"],
-  ["17.5", "weeks, plus practice days"],
-];
 
 /** cycled across the concept cards so each one carries a mark, and each mark
  *  its own tint — the only place this section departs from the single accent */
@@ -492,20 +484,6 @@ export default function Curriculum() {
             hands-on practice.
           </p>
         </div>
-
-        {/* the deck's own totals */}
-        <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-ink-900/10 py-6 lg:mt-10 lg:grid-cols-4">
-          {STATS.map(([value, label]) => (
-            <div key={label} className="flex flex-col gap-1">
-              <dt className="font-display text-[28px] font-medium leading-none tracking-[-0.02em] text-flame lg:text-[34px]">
-                {value}
-              </dt>
-              <dd className="font-display text-[13px] leading-[1.4] text-ink-900/60 lg:text-[14px]">
-                {label}
-              </dd>
-            </div>
-          ))}
-        </dl>
 
         <div ref={trackRef} className="relative mt-6 flex flex-col gap-2 sm:mt-10 sm:gap-0">
           {/* the rail the dots sit on — one line for the whole list, with the

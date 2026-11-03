@@ -103,15 +103,13 @@ export default function SiteHeader() {
         />
 
         <div className="relative mx-auto flex w-full max-w-[1336px] items-center justify-between gap-6">
-          <a href="#home" className="relative h-[34px] w-[179px] shrink-0 sm:h-[38px] sm:w-[200px]">
-            {/* UI guide P2.1 — the logo's red disappears against the video, so
-                it is knocked out to white until the bar turns solid */}
+          <a href="#home" className="relative h-[34px] w-[268px] shrink-0 sm:h-[40px] sm:w-[315px]">
+            {/* the on-dark lockup: white "LaunchReady" with the red marks, made
+                for the video and the black bar alike, so no filter is needed */}
             <img
-              src="/images/ugsot-lastmile-logo.png"
-              alt="upGrad School of Technology — Lastmile"
-              className={`absolute inset-0 size-full object-contain object-left transition-[filter] duration-300 ${
-                solid ? "" : "brightness-0 invert"
-              }`}
+              src="/images/ugsot-launchready-logo-ondark.png"
+              alt="upGrad School of Technology — LaunchReady"
+              className="absolute inset-0 size-full object-contain object-left"
             decoding="async"
             fetchPriority="high"
             />

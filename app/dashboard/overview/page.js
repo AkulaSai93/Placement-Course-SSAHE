@@ -178,7 +178,7 @@ export default function OverviewPage() {
         <section className="order-6 rounded-[8px] border border-ink-900/[0.08] bg-white p-5">
           <h2 className="font-display text-[15px] font-semibold text-ink-900">Programme at a glance</h2>
           <dl className="mt-4 grid grid-cols-2 gap-2">
-            <Glance label="Starts" value={`${day(next.start)} ${month(next.start)} 2027`} />
+            <Glance label="Starts" value={PROGRAMME.startShort} />
             <Glance label="Duration" value={PROGRAMME.duration} />
             <Glance label="Mode" value={PROGRAMME.mode} />
             <Glance label="Fee" value={inr(PROGRAMME.fee)} />

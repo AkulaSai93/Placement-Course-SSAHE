@@ -5,14 +5,14 @@
  * (copyright · socials · terms) above a rule, and an oversized wordmark clipped
  * by the panel's bottom edge.
  *
- * ⚠️ CONTACT.email is a placeholder — swap it for the real admissions address
- * before this goes live. `phone` and `address` are intentionally empty: fill
- * them in and they render automatically, so nothing invented ships by default.
+ * The contact column is empty for now, as on the live page — the programme's
+ * address is given in the FAQ instead. Fill any of CONTACT in and it renders
+ * automatically, so nothing invented ships by default.
  */
 import FooterWordmark from "@/components/FooterWordmark";
 
 const CONTACT = {
-  email: "hello@ugsot.com",
+  email: "",
   phone: "",
   address: "",
 };
@@ -27,14 +27,14 @@ const NAV = [
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: "#instagram", icon: "/icons/instagram.svg" },
-  { label: "LinkedIn", href: "#linkedin", icon: "/icons/mark-linkedin.svg" },
-  { label: "X", href: "#x", icon: "/icons/x.svg" },
-  { label: "YouTube", href: "#youtube", icon: "/icons/youtube.svg" },
+  { label: "Instagram", href: "https://www.instagram.com/upgrad_schooloftech/", icon: "/icons/instagram.svg" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/upgrad-school-of-technology", icon: "/icons/mark-linkedin.svg" },
+  { label: "X", href: "https://x.com/uGSOT", icon: "/icons/x.svg" },
+  { label: "YouTube", href: "https://www.youtube.com/@upGradSchoolofTechnology", icon: "/icons/youtube.svg" },
 ];
 
 const DISCLAIMER =
-  "uGSOT Lastmile is a technology accelerator by upGrad School of Technology. It runs alongside your existing college degree and does not replace uGSOT Campus, the full-time higher-education experience offered by upGrad School of Technology.";
+  "Disclaimer: upGrad School of Technology is not a college or university and does not award degrees. uGSOT LaunchReady is a preparatory skill-development programme designed to enhance technical and placement readiness; it does not guarantee internships, interviews, employment or any particular salary outcome. Individual results may vary, and hiring decisions rest solely with prospective employers. Finance, No Cost EMI and Credit Card EMI options are provided by third-party financial institutions, subject to their eligibility criteria and terms, which may change without notice. Financing may be a personal loan and not an education loan; please verify all terms, interest, fees and charges with the provider before proceeding. Terms and conditions apply.";
 
 export default function SiteFooter() {
   const contactLines = [
@@ -91,9 +91,9 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        {/* node 95:6509 — 760px wide, which leaves a 648px text column once
-            the panel's 56px side padding is taken off */}
-        <p className="mt-12 max-w-[760px] px-6 font-display text-[12px] leading-[1.6] text-white/60 sm:px-10 lg:mt-16 lg:px-14">
+        {/* the full width of the panel, inside its side padding — the longer
+            LaunchReady disclaimer read as a narrow column at 760px */}
+        <p className="mt-12 px-6 font-display text-[12px] leading-[1.6] text-white/60 sm:px-10 lg:mt-16 lg:px-14">
           {DISCLAIMER}
         </p>
 
@@ -109,6 +109,8 @@ export default function SiteFooter() {
                 <a
                   href={social.href}
                   aria-label={social.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex size-10 items-center justify-center rounded-full border border-white/35 transition-colors hover:border-white hover:bg-white/10"
                 >
                   <img
@@ -145,7 +147,7 @@ export default function SiteFooter() {
             {/* the negative tracking also applies after the last letter, so the
                 advance ends short of where the "e" draws; zeroing its spacing
                 makes the advance match the ink */}
-            Lastmil<span className="tracking-normal">e</span>
+            LaunchRead<span className="tracking-normal">y</span>
           </FooterWordmark>
         </div>
       </div>

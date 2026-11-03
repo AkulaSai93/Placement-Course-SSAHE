@@ -303,51 +303,61 @@ export default function Pricing() {
         <div className="mt-10 flex w-full flex-col gap-4 lg:mt-14 lg:flex-row">
           {/* column 1 */}
           <div className="flex flex-col gap-4 lg:w-[calc((100%-32px)/3)] lg:shrink-0">
-            {/* node 40:8929 — Internshala, 556 tall */}
-            <div className="relative overflow-hidden rounded-[12px] bg-black pb-0 pt-[27px] lg:h-[556px]">
-              <div className="relative z-10 mx-auto flex max-w-[368px] flex-col items-center gap-2 px-6">
-                <div className="flex flex-wrap items-end justify-center gap-x-1.5 gap-y-1 sm:flex-nowrap">
-                  {/* on a phone the three parts are 319px wide in a 294px column,
-                      so "6 months of" takes its own line and the lockup and
-                      "Free" sit together on the next */}
-                  <p className="w-full whitespace-nowrap text-center font-display text-[22px] font-medium leading-none text-white min-[400px]:text-[24px] sm:w-auto sm:text-left sm:text-[28px]">
-                    6 months of
-                  </p>
-                  <span
-                    className="relative block h-[41.7px] w-[137px] overflow-hidden sm:h-[48.695px] sm:w-[160px]"
-                    role="img"
-                    aria-label="Internshala"
-                  >
-                    <img
-                      src="/images/internshala-wordmark.webp"
-                      alt=""
-                      className="absolute max-w-none origin-top-left scale-[0.857] sm:scale-100"
-                      style={WORDMARK_CROP}
-                    decoding="async"
+            {/* node 40:8929 — Internshala, as the live page now draws it: the
+                whole 416 x 556 tile is laid out once at full size and scaled
+                down to its column as a unit, so "1 year of [Internshala] Pro
+                free" never wraps or overflows, and the phone keeps its place */}
+            <div className="mx-auto w-full max-w-[416px] [container-type:inline-size]">
+              <div
+                className="relative overflow-hidden rounded-[12px] bg-black"
+                style={{ height: "calc(556px * min(1, 100cqw / 416px))" }}
+              >
+                <div
+                  className="absolute left-1/2 top-0 h-[556px] w-[416px]"
+                  style={{
+                    transform: "translateX(-50%) scale(min(1, 100cqw / 416px))",
+                    transformOrigin: "top center",
+                  }}
+                >
+                  <img
+                    src="/images/internshala-app-device.jpg"
+                    alt="The Internshala app, showing internships, jobs and courses"
+                    width="773"
+                    height="1024"
+                    // pinned to the tile's bottom edge so the phone runs off it,
+                    // with no black strip underneath: at 316px wide the image
+                    // is 418.6px tall, which puts its top at the same 138px
+                    className="absolute bottom-0 left-[calc(50%-0.5px)] w-[316px] max-w-none -translate-x-1/2"
                     loading="lazy"
-                    />
-                  </span>
-                  <p className="whitespace-nowrap font-display text-[22px] font-medium leading-none text-white min-[400px]:text-[24px] sm:text-[28px]">
-                    Free
-                  </p>
+                    decoding="async"
+                  />
+                  <div className="absolute left-1/2 top-[27px] flex w-[400px] -translate-x-1/2 flex-col items-center gap-2">
+                    <div className="flex origin-bottom scale-[0.9] items-end gap-[6px]">
+                      <p className="whitespace-nowrap font-display text-[28px] font-medium leading-normal text-white">
+                        1 year of
+                      </p>
+                      <span className="relative block h-[48.695px] w-[160px] shrink-0 overflow-hidden">
+                        <img
+                          src="/images/internshala-wordmark.webp"
+                          alt="Internshala"
+                          width="420"
+                          height="237"
+                          className="absolute max-w-none"
+                          style={{ ...WORDMARK_CROP, top: "-33.85px" }}
+                          decoding="async"
+                          loading="lazy"
+                        />
+                      </span>
+                      <p className="whitespace-nowrap font-display text-[28px] font-medium leading-normal text-white">
+                        Pro free
+                      </p>
+                    </div>
+                    <p className="w-full text-center font-display text-[14px] leading-normal text-white/60">
+                      Thousands of job and internship opportunities at your fingertips, included
+                      with the programme for your whole hunt.
+                    </p>
+                  </div>
                 </div>
-                <p className="text-center font-display text-[14px] leading-normal text-white/60">
-                  Thousands of job and internship opportunities at your fingertips, included with
-                  the programme for your whole hunt.
-                </p>
-              </div>
-
-              {/* node 40:8930 — the device sits at y=138 and the tile clips its foot */}
-              <div className="relative mx-auto mt-5 aspect-[300/360] w-full max-w-[232px] overflow-hidden sm:mt-6 sm:aspect-[300/400] sm:max-w-[300px] lg:mt-[18px] lg:aspect-[300/418]">
-                <img
-                  src="/images/internshala-app-device.webp"
-                  alt="The Internshala app, showing internships, jobs and courses"
-                  width="604"
-                  height="1200"
-                  className="absolute inset-0 size-full max-w-none object-cover object-top"
-                  loading="lazy"
-                decoding="async"
-                />
               </div>
             </div>
 
@@ -441,7 +451,7 @@ export default function Pricing() {
                   className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start lg:flex-1 lg:justify-between"
                 >
                   <SubjectChips />
-                  <Title>Confidence across DSA, web development and core CS</Title>
+                  <Title>Develop skills across DSA, web development and core CS</Title>
                 </Tile>
               </div>
             </div>

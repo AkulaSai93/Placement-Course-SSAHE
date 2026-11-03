@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /**
- * The oversized "Lastmile" at the foot of the page — node 95:6540.
+ * The oversized "LaunchReady" at the foot of the page — node 95:6540.
  *
  * Both of its dimensions are measured at runtime rather than written down.
  * Every earlier attempt hard-coded a ratio (`29.85cqw` wide, `0.79em` tall),
  * and each one encoded the metrics of one typeface at one tracking: the width
- * clipped the final "e", and the height cut the word in half, because the
+ * clipped the final letter, and the height cut the word in half, because the
  * baseline of our font does not sit where the design's font puts it.
  *
  * So two things are read off the real rendered text:

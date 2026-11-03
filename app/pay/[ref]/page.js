@@ -10,24 +10,18 @@ import { PROGRAMME, inr } from "@/lib/programme";
  * TODO: look the reference up on the server, show the student's first name,
  * and start the gateway payment from the button.
  */
-export const metadata = { title: "Seat booking — uGSOT Lastmile" };
+export const metadata = { title: "Seat booking — uGSOT LaunchReady" };
 
 export default function ParentPayPage({ params }) {
   return (
     <div className="flex min-h-screen flex-col bg-mist">
       <header>
-        {/* same white-to-ink logo filter as the dashboard header */}
-        <svg aria-hidden="true" width="0" height="0" className="absolute">
-          <filter id="logo-ink" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="matrix" values="1 -0.96 0 0 0  0 0 0 0 0  0 -0.96 1 0 0  0 0 0 1 0" />
-          </filter>
-        </svg>
         <div className="mx-auto flex h-16 max-w-[1280px] items-center px-4 sm:px-6">
-          <Link href="/" className="relative h-[30px] w-[158px]">
+          <Link href="/" className="relative h-[28px] w-[222px]">
             <img
-              src="/images/ugsot-lastmile-logo.png"
-              alt="upGrad School of Technology — Lastmile"
-              className="absolute inset-0 size-full object-contain object-left [filter:url(#logo-ink)]"
+              src="/images/ugsot-launchready-logo.png"
+              alt="upGrad School of Technology — LaunchReady"
+              className="absolute inset-0 size-full object-contain object-left"
             />
           </Link>
         </div>

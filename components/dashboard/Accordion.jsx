@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { Answer } from "@/components/Faq";
+
 /** One-open-at-a-time FAQ list, the same motion as the homepage FAQ. */
 export default function Accordion({ items, defaultOpen = 0 }) {
   const [openIndex, setOpenIndex] = useState(defaultOpen);
@@ -39,7 +41,10 @@ export default function Accordion({ items, defaultOpen = 0 }) {
               }`}
             >
               <div className="overflow-hidden">
-                <p className="pb-4 font-display text-[14px] leading-[1.6] text-ink-900/60">{item.a}</p>
+                <div className="pb-4 font-display text-[14px] leading-[1.6] text-ink-900/60">
+                  {/* a string, or the homepage FAQ's paragraphs-and-lists blocks */}
+                  <Answer blocks={Array.isArray(item.a) ? item.a : [item.a]} />
+                </div>
               </div>
             </div>
           </div>

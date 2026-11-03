@@ -5,8 +5,8 @@ import { useApply } from "@/components/ApplyDialog";
 /**
  * The programme fee.
  *
- * ₹50,000 is the total fee for the whole six months, offered on No Cost EMI —
- * not a yearly charge. The matching FAQ answer has to agree with this; if the
+ * ₹50,000 + GST (₹59,000 in all) is the total fee for the whole six months,
+ * offered on No Cost EMI — not a yearly charge. The matching FAQ answer has to agree with this; if the
  * price or the EMI offer changes, both have to move together.
  *
  * Deliberately plain: no card, no border, no box. The figure is the only thing
@@ -38,7 +38,7 @@ export default function Fee() {
           id="fee-heading"
           className="font-display text-[32px] font-medium leading-[1.08] tracking-[-0.02em] text-ink-900 sm:text-[42px] lg:text-[48px] lg:leading-[52px]"
         >
-          ₹50,000 with <span className="text-flame">No Cost EMI</span>
+          ₹50,000 + GST <span className="text-flame">(No Cost EMI)</span>
         </h2>
 
         <p className="max-w-[520px] font-display text-[15px] leading-[1.55] text-ink-900/55 lg:text-[18px]">

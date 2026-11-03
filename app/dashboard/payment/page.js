@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Accordion from "@/components/dashboard/Accordion";
+import { FAQ_ITEMS } from "@/components/Faq";
 import { Field, PrimaryButton, SelectInput } from "@/components/FormControls";
 import {
   AiTools,
@@ -36,30 +37,28 @@ import { useSession } from "@/lib/session";
  * marks the seat as blocked in the browser session. TODO: hand off to the real
  * gateway and set `paid` from its confirmation, never from the client.
  */
+/** the seat terms, in the live FAQ's own figures */
 const TERMS = [
   `Paying ${inr(PROGRAMME.seatAmount)} blocks your seat in the ${PROGRAMME.cohort} cohort, subject to payment confirmation and verification of eligibility.`,
-  "The seat booking amount is non-refundable.",
-  `It is adjusted against the ${inr(PROGRAMME.fee)} programme fee — it is not an extra charge on top of it.`,
-  "After payment you receive an offer letter with the full fee, the No Cost EMI schedule and the admission terms. The balance is due within the timeline stated there.",
-  `All classes are offline, in person at ${PROGRAMME.campus}. Attendance is part of the programme requirements.`,
+  "The seat blocking amount is non-refundable.",
+  `It is not extra: it is deducted from the total fee of ${inr(PROGRAMME.fee)} + 18% GST (${inr(PROGRAMME.feeWithGst)} in all), so the balance payable is ${inr(PROGRAMME.balance)}.`,
+  `Your offer letter is provisional. Admission is confirmed once the admission formalities are complete, eligibility is verified and the balance is paid — within ${PROGRAMME.balanceDueDays} days of the offer letter's issue date.`,
+  `The cohort starts on ${PROGRAMME.startDate}. All sessions are offline.`,
 ];
 
+/** fee and refund answers, word for word from the homepage FAQ (by number) */
 const FAQS = [
-  {
-    q: `What does the ${inr(PROGRAMME.seatAmount)} confirm?`,
-    a: `It holds your place in the ${PROGRAMME.cohort} cohort while admission is completed. The rest of the ${inr(PROGRAMME.fee)} fee is raised separately in your offer letter.`,
-  },
-  {
-    q: "Is Lastmile online or offline?",
-    a: `Offline. Every class, lab and event runs in person at ${PROGRAMME.campus} across the ${PROGRAMME.duration}. There is no online version.`,
-  },
+  ...[11, 10, 12, 15, 16, 14].map((n) => {
+    const item = FAQ_ITEMS.find((i) => i.n === n);
+    // "see Q18" links point into the homepage list, which isn't on this page
+    const a = item.a.map((b) =>
+      typeof b === "string" ? b.replace(/\[([^\]]+)\]\(#faq-q-\d+\)/g, "$1 in the homepage FAQ") : b
+    );
+    return { q: item.q, a };
+  }),
   {
     q: "Can a parent or guardian pay?",
     a: "Yes. Share the payment link on this page with them — they can pay from their own phone, and the seat is blocked in your name.",
-  },
-  {
-    q: "Is No Cost EMI available on the full fee?",
-    a: `Yes. The ${inr(PROGRAMME.fee)} programme fee can be paid on No Cost EMI. The options are listed in your offer letter.`,
   },
   {
     q: "Why do you need my state?",
@@ -138,6 +137,7 @@ export default function PaymentPage() {
           <h2 className="mt-9 font-display text-[16px] font-semibold text-ink-900">Program Information</h2>
           <div className="mt-5 flex flex-col gap-5">
             <ReadOnly id="pay-programme" label="Program Name" value={`${PROGRAMME.name} — 6-Month Offline Programme`} />
+            <ReadOnly id="pay-fee" label="Programme Fee" value={`${inr(PROGRAMME.fee)} + 18% GST (${inr(PROGRAMME.feeWithGst)})`} />
             <ReadOnly id="pay-cohort" label="Cohort" value={PROGRAMME.cohort} />
           </div>
         </section>
@@ -183,7 +183,7 @@ export default function PaymentPage() {
               </span>
             ) : (
               <span className="rounded-md bg-[#FEF6E7] px-2 py-1 font-display text-[12px] font-semibold text-[#B54708]">
-                Closes {PROGRAMME.seatDeadline}
+                Starts {PROGRAMME.startShort}
               </span>
             )}
           </div>
@@ -316,7 +316,7 @@ const PERKS = [
     zoom: 0.5,
   },
   {
-    title: "Confidence across DSA, web development and core CS",
+    title: "Develop skills across DSA, web development and core CS",
     tint: "rgba(124,58,237,0.08)",
     art: <SubjectChips />,
     zoom: 0.65,
@@ -331,7 +331,7 @@ function Benefits() {
         <div className="relative z-10 flex max-w-[60%] flex-col gap-2">
           <div className="flex flex-wrap items-end gap-x-1 gap-y-0.5">
             <p className="whitespace-nowrap font-display text-[17px] font-medium leading-none text-white">
-              6 months of
+              1 year of
             </p>
             {/* the homepage's 160 x 48.7 window and crop, zoomed as one */}
             <span
@@ -350,7 +350,7 @@ function Benefits() {
               />
             </span>
             <p className="whitespace-nowrap font-display text-[17px] font-medium leading-none text-white">
-              Free
+              Pro free
             </p>
           </div>
           <p className="font-display text-[12.5px] leading-[1.5] text-white/60">
@@ -400,7 +400,7 @@ function ShareLink({ payRef }) {
 
   const share = async () => {
     const data = {
-      title: "uGSOT Lastmile seat booking",
+      title: "uGSOT LaunchReady seat booking",
       text: `Please help me block my seat in ${PROGRAMME.name} (${inr(PROGRAMME.seatAmount)}).`,
       url: link,
     };

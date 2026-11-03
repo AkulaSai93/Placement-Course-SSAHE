@@ -24,7 +24,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "uGSOT Lastmile — Components",
+  title: "uGSOT LaunchReady — Components",
   description: "Hero, Curriculum, Certificate, Faculty and Legacy sections.",
 };
 

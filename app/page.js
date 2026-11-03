@@ -2,8 +2,8 @@ import { ApplyProvider } from "@/components/ApplyDialog";
 import SiteHeader from "@/components/SiteHeader";
 import Hero from "@/components/Hero";
 import HiringCompanies from "@/components/HiringCompanies";
-import Outcomes from "@/components/Outcomes";
 import Curriculum from "@/components/Curriculum";
+import Projects from "@/components/Projects";
 import Faculty from "@/components/Faculty";
 import Pricing from "@/components/Pricing";
 import Fee from "@/components/Fee";
@@ -19,8 +19,8 @@ export default function Page() {
         <HiringCompanies />
         <Pricing />
         <Fee />
-        <Outcomes />
         <Curriculum />
+        <Projects />
         <Faculty />
         <Faq />
         <SiteFooter />

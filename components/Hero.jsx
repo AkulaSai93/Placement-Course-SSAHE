@@ -137,12 +137,12 @@ export default function Hero() {
               You&rsquo;ve come this far to not come just this far.
             </span>
             <br />
-            Make the <span className="text-flame">Lastmile</span> count.
+            Now, get <span className="text-flame">LaunchReady</span>.
           </h1>
 
           <p className="max-w-[560px] font-display text-[17px] leading-[1.6] text-white/85 lg:max-w-[760px] lg:text-[20px]">
-            uGSOT Lastmile is a 6-month rapid-learning offline course aimed to make you placement
-            ready. It is open for students in year 3rd and 4th.
+            uGSOT LaunchReady is a 6-month rapid-learning offline programme designed to help
+            students better prepare for placements. It is open for students in year 3rd and 4th.
           </p>
 
           {/* fee, inline with the copy — the amount carries the accent */}
@@ -151,7 +151,7 @@ export default function Hero() {
               ₹50,000
             </span>
             <span className="font-display text-[16px] text-white/80 lg:text-[18px]">
-              with <span className="font-medium text-white">No Cost EMI</span>
+              + GST <span className="font-medium text-white">(No Cost EMI)</span>
             </span>
           </p>
 
