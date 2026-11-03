@@ -253,24 +253,48 @@ function Chevron({ className = "" }) {
 function ConceptRail({ mod }) {
   const scrollerRef = useRef(null);
   const animRef = useRef(0);
+  const animTargetRef = useRef(null);
 
   // native smooth scrolling is unreliable inside a snap container, so the
   // arrows animate scrollLeft directly
   const nudge = (dir) => {
     const el = scrollerRef.current;
     if (!el) return;
-    const card = el.firstElementChild;
-    const step = card ? card.getBoundingClientRect().width + 20 : el.clientWidth * 0.8;
-    const from = el.scrollLeft;
-    const to = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, from + dir * step));
-    if (to === from) return;
+    const cards = [...el.children];
+    if (!cards.length) return;
 
+    // step card to card by their real positions, so a second tap mid-glide
+    // still lands exactly on a card rather than between two
+    const stops = cards.map((c) => c.offsetLeft - cards[0].offsetLeft);
+    const max = el.scrollWidth - el.clientWidth;
+    const here = animTargetRef.current ?? el.scrollLeft;
+    // the next card start past where the row is now, in the arrow's
+    // direction — the row's end is rarely a card start, so going back from
+    // there must land on the card just before it, not skip one
+    const target =
+      dir > 0
+        ? stops.find((x) => x > here + 1) ?? max
+        : [...stops].reverse().find((x) => x < Math.min(here, max) - 1) ?? 0;
+    const to = Math.max(0, Math.min(max, target));
+    const from = el.scrollLeft;
+    if (Math.abs(to - from) < 1) return;
+
+    // Scroll snapping is switched off for the length of the glide: with it on,
+    // a phone snaps after every per-frame scrollLeft write, which is what made
+    // the motion stutter and jump. It comes back once the row has arrived.
     cancelAnimationFrame(animRef.current);
+    el.style.scrollSnapType = "none";
+    animTargetRef.current = to;
     const start = performance.now();
     const tick = (now) => {
-      const t = Math.min(1, (now - start) / 320);
+      const t = Math.min(1, (now - start) / 360);
       el.scrollLeft = from + (to - from) * (1 - Math.pow(1 - t, 3));
-      if (t < 1) animRef.current = requestAnimationFrame(tick);
+      if (t < 1) {
+        animRef.current = requestAnimationFrame(tick);
+      } else {
+        animTargetRef.current = null;
+        el.style.scrollSnapType = "";
+      }
     };
     animRef.current = requestAnimationFrame(tick);
   };
