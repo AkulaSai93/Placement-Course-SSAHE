@@ -1,18 +1,15 @@
 /**
  * "What you walk away with" — Figma node 40:8774.
  *
- * The tiles no longer sit on an even grid: the node lays them out as a
- * masonry, so each column breaks at its own height. On a 1280 canvas with
- * 416px columns and 16px gutters the offsets are
+ * Laid out as Figma node 188:7038 ("Frame 4"): three equal columns, with
+ * Internshala running the full height of column 1, a 2 x 2 of mock interviews,
+ * profile, aptitude and subjects in columns 2–3, and the AI tools tile across
+ * both of them underneath — all five at one height. The old deployed-project
+ * tile is gone.
  *
- *   column 1 : Internshala (h 556) → AI tools      (y 0, 572)
- *   column 2 : the shipped project spans columns 2–3 (h 236), then mock
- *              (h 236) and aptitude (h 236)          (y 0, 252, 504)
- *   column 3 : profile marks (h 303) → subjects      (y 252, 571)
- *
- * which is what the nested flex columns below reproduce — the inner stacks
- * advance independently, so column 3 breaks at 555 while column 2 breaks at
- * 488.
+ * Sizes are the frame's; the artwork is the components above, shrunk with
+ * `zoom` where the frame draws it smaller. Two columns on tablets, one on
+ * phones.
  *
  * NOTE: the node states no fee, so this section answers to `#walk-away`; the
  * price lives in its own section below, which owns `#pricing`. The node's subtitle drops the em dash ("six months not a certificate");
@@ -43,7 +40,7 @@ export const WORDMARK_CROP = {
 function Tile({ className = "", tint, children }) {
   return (
     <div
-      className={`relative flex flex-col overflow-hidden rounded-[12px] p-6 ${className}`}
+      className={`relative flex flex-col overflow-hidden rounded-[12px] p-5 ${className}`}
       style={{ backgroundColor: tint }}
     >
       {children}
@@ -55,23 +52,6 @@ function Tile({ className = "", tint, children }) {
 function Title({ children }) {
   return (
     <p className="font-display text-[19px] font-medium leading-[1.25] tracking-[-0.015em] text-ink-900 sm:text-[21px] sm:leading-[26.25px] sm:tracking-[-0.315px]">
-      {children}
-    </p>
-  );
-}
-
-/** node 40:9009 — the smaller headline */
-function TitleSm({ children }) {
-  return (
-    <p className="font-display text-[17px] font-medium leading-[1.3] tracking-[-0.01em] text-ink-900 sm:text-[18px] sm:leading-[23.4px] sm:tracking-[-0.18px]">
-      {children}
-    </p>
-  );
-}
-
-function Note({ className = "", children }) {
-  return (
-    <p className={`font-display text-[13.5px] leading-[20.25px] text-ink-900/55 ${className}`}>
       {children}
     </p>
   );
@@ -134,43 +114,15 @@ export function SubjectChips() {
   );
 }
 
-/**
- * node 40:9018 — a browser window, 364 x 167.3, clipped by the tile.
- *
- * On a phone it is drawn smaller rather than scaled: a transform would leave
- * the full-size box behind in the layout, which made this tile stand taller
- * than the five beside it, and clipping the overflow cut the badge in half.
- */
-export function DeployedApp() {
-  return (
-    <div className="w-[254px] overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white sm:h-[167.3px] sm:w-[364px] sm:rounded-[14px] sm:border-[1.4px]">
-      <div className="flex items-center gap-1.5 border-b border-[#E5E7EB] px-3 py-2 sm:w-[361.2px] sm:gap-[8.4px] sm:border-b-[1.4px] sm:px-[16.8px] sm:py-[14px]">
-        {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => (
-          <span
-            key={c}
-            className="size-2 rounded-full sm:size-[11.2px]"
-            style={{ backgroundColor: c }}
-          />
-        ))}
-      </div>
-      <div className="flex flex-col gap-1.5 p-2.5 sm:gap-[11.2px] sm:p-[19.6px]">
-        <span className="block h-2 w-[168px] rounded-full bg-ink-900/10 sm:h-[11.2px] sm:w-[241.5px]" />
-        <span className="block h-2 w-[112px] rounded-full sm:h-[11.2px] sm:w-[161px]" />
-        <span className="mt-0.5 w-fit rounded-full bg-[#047857] px-2.5 py-1 font-display text-[12px] font-medium uppercase leading-none tracking-[0.86px] text-white sm:mt-[5.6px] sm:px-[14px] sm:py-[5.6px] sm:text-[15.4px] sm:leading-[23.1px] sm:tracking-[1.232px]">
-          AI feature
-        </span>
-      </div>
-    </div>
-  );
-}
-
 /** node 40:9032 — the AI toolkit pills, one row */
-export function AiTools() {
+const AI_TOOLS = ["Coding assistants", "LLM APIs", "Embeddings", "RAG"];
+
+export function AiTools({ order = AI_TOOLS, className = "gap-[7px]" }) {
   return (
-    // the four pills come to 369px in a 368px tile, so the gap is 7px rather
-    // than 8px — otherwise RAG drops to a second line
-    <ul className="flex flex-wrap items-center gap-[7px]">
-      {["Coding assistants", "LLM APIs", "Embeddings", "RAG"].map((t) => (
+    // the four pills come to 369px in a 368px tile, so the default gap is 7px
+    // rather than 8px — otherwise RAG drops to a second line
+    <ul className={`flex flex-wrap items-center ${className}`}>
+      {order.map((t) => (
         <li
           key={t}
           className="whitespace-nowrap rounded-full border border-white/15 bg-white px-3 py-1.5 font-display text-[12.5px] font-medium leading-[18.75px] text-ink-900/65"
@@ -281,7 +233,7 @@ export default function Pricing() {
     <section
       id="walk-away"
       aria-labelledby="usps-heading"
-      className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-20"
+      className="relative z-10 bg-mist px-6 py-10 lg:px-20 lg:py-16"
     >
       <div className="mx-auto flex max-w-[1280px] flex-col items-center">
         {/* node 95:5009 — centred, title on one line with the subtitle on a
@@ -295,167 +247,129 @@ export default function Pricing() {
             What you <span className="text-flame">walk away</span> with.
           </h2>
           <p className="font-display text-[15px] leading-normal text-ink-900/60 lg:whitespace-nowrap lg:text-[18px] lg:leading-[27px]">
-            Seven things in hand at the end of six months — not a certificate and a hope.
+            Six things in hand at the end of six months — not a certificate and a hope.
           </p>
         </div>
 
-        {/* the masonry */}
-        <div className="mt-10 flex w-full flex-col gap-4 lg:mt-14 lg:flex-row">
-          {/* column 1 */}
-          <div className="flex flex-col gap-4 lg:w-[calc((100%-32px)/3)] lg:shrink-0">
-            {/* node 40:8929 — Internshala, as the live page now draws it: the
-                whole 416 x 556 tile is laid out once at full size and scaled
-                down to its column as a unit, so "1 year of [Internshala] Pro
-                free" never wraps or overflows, and the phone keeps its place */}
-            <div className="mx-auto w-full max-w-[416px] [container-type:inline-size]">
-              <div
-                className="relative overflow-hidden rounded-[12px] bg-black"
-                style={{ height: "calc(556px * min(1, 100cqw / 416px))" }}
-              >
-                <div
-                  className="absolute left-1/2 top-0 h-[556px] w-[416px]"
-                  style={{
-                    transform: "translateX(-50%) scale(min(1, 100cqw / 416px))",
-                    transformOrigin: "top center",
-                  }}
+        {/* Frame 4 — node 188:7038. Three 416px columns with 16px gutters:
+            Internshala (416 x 580) runs the full height of column 1, and the
+            five other tiles sit in three equal rows beside it — every one of
+            them the same height (182.6px in the frame). The rows are
+            "minmax(182px, 1fr)": if a tile needs more room on a narrower
+            screen, all three rows grow together, so they stay equal. */}
+        <div className="mt-8 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-[repeat(3,minmax(150px,1fr))]">
+          {/* node 188:6845 — Internshala */}
+          <div className="relative h-[440px] overflow-hidden rounded-[12px] bg-black sm:col-span-2 sm:h-[500px] lg:col-span-1 lg:row-span-3 lg:h-auto">
+            {/* node 188:6846 — the full phone, 300 wide from y 166, running
+                off the bottom edge */}
+            <img
+              src="/images/internshala-app-device.webp"
+              alt="The Internshala app, showing internships, jobs and courses"
+              width="604"
+              height="1200"
+              className="absolute left-1/2 top-[140px] w-[250px] max-w-none -translate-x-1/2 sm:top-[150px] sm:w-[270px]"
+              loading="lazy"
+              decoding="async"
+            />
+            {/* node 188:6847 — lockup and line, centred */}
+            <div className="absolute inset-x-2 top-[22px] flex flex-col items-center gap-1.5">
+              <div className="flex items-end gap-[5.4px] [zoom:0.85] sm:[zoom:1]">
+                <p className="whitespace-nowrap font-display text-[25.2px] font-medium leading-[37.8px] tracking-[0.34px] text-white">
+                  1 year of
+                </p>
+                {/* node 188:6852 — the wordmark's 160 x 48.7 crop at 0.9, which
+                    is the frame's 144 x 44.1 window */}
+                <span
+                  className="relative block h-[48.695px] w-[160px] shrink-0 overflow-hidden [zoom:0.9]"
+                  role="img"
+                  aria-label="Internshala"
                 >
                   <img
-                    src="/images/internshala-app-device.jpg"
-                    alt="The Internshala app, showing internships, jobs and courses"
-                    width="773"
-                    height="1024"
-                    // pinned to the tile's bottom edge so the phone runs off it,
-                    // with no black strip underneath: at 316px wide the image
-                    // is 418.6px tall, which puts its top at the same 138px
-                    className="absolute bottom-0 left-[calc(50%-0.5px)] w-[316px] max-w-none -translate-x-1/2"
-                    loading="lazy"
+                    src="/images/internshala-wordmark.webp"
+                    alt=""
+                    width="420"
+                    height="237"
+                    className="absolute max-w-none"
+                    style={{ ...WORDMARK_CROP, top: "-33.85px" }}
                     decoding="async"
+                    loading="lazy"
                   />
-                  <div className="absolute left-1/2 top-[27px] flex w-[400px] -translate-x-1/2 flex-col items-center gap-2">
-                    <div className="flex origin-bottom scale-[0.9] items-end gap-[6px]">
-                      <p className="whitespace-nowrap font-display text-[28px] font-medium leading-normal text-white">
-                        1 year of
-                      </p>
-                      <span className="relative block h-[48.695px] w-[160px] shrink-0 overflow-hidden">
-                        <img
-                          src="/images/internshala-wordmark.webp"
-                          alt="Internshala"
-                          width="420"
-                          height="237"
-                          className="absolute max-w-none"
-                          style={{ ...WORDMARK_CROP, top: "-33.85px" }}
-                          decoding="async"
-                          loading="lazy"
-                        />
-                      </span>
-                      <p className="whitespace-nowrap font-display text-[28px] font-medium leading-normal text-white">
-                        Pro free
-                      </p>
-                    </div>
-                    <p className="w-full text-center font-display text-[14px] leading-normal text-white/60">
-                      Thousands of job and internship opportunities at your fingertips, included
-                      with the programme for your whole hunt.
-                    </p>
-                  </div>
-                </div>
+                </span>
+                <p className="whitespace-nowrap font-display text-[25.2px] font-medium leading-[37.8px] tracking-[0.34px] text-white">
+                  Pro free
+                </p>
               </div>
-            </div>
-
-            {/* node 40:9031 — pills above, headline below */}
-            <Tile tint="rgba(8,145,178,0.09)" className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start">
-              <AiTools />
-              <Title>Hands-on with AI coding tools and LLM APIs</Title>
-            </Tile>
-          </div>
-
-          {/* columns 2–3 */}
-          <div className="flex flex-col gap-4 lg:min-w-0 lg:flex-1">
-            {/* node 45:11422 — the shipped project now spans both columns, with
-                the browser mock pinned at x=460 inside the 848-wide tile */}
-            <Tile
-              tint="rgba(14,159,110,0.09)"
-              className="min-h-[260px] gap-4 sm:gap-6 lg:min-h-[236px] lg:flex-row lg:items-center lg:justify-between lg:gap-8"
-            >
-              <div className="flex max-w-[320px] flex-col gap-2">
-                <Title>A deployed full-stack project with an AI feature</Title>
-                <Note>Shipped to the cloud and demoed, not left on your laptop.</Note>
-              </div>
-              <div className="self-start lg:absolute lg:left-[460px] lg:top-[34px] lg:self-auto">
-                <DeployedApp />
-              </div>
-            </Tile>
-
-            {/* lg:flex-1 + stretch: the row fills whatever height is left under
-                the project tile, so both sub-columns end flush with the
-                Internshala column instead of ~38px short of it */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start lg:flex-1 lg:items-stretch">
-              {/* column 2 */}
-              <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
-                {/* node 45:11441 */}
-                <Tile
-                  tint="rgba(219,39,119,0.08)"
-                  className="min-h-[260px] justify-between gap-8 sm:min-h-[236px]"
-                >
-                  <MockRounds />
-                  <div className="flex flex-col gap-2">
-                    <TitleSm>Technical and HR mock interview practice</TitleSm>
-                    <Note className="text-[13px] leading-[19.5px]">
-                      Real rounds with real feedback, before an offer is on the line.
-                    </Note>
-                  </div>
-                </Tile>
-
-                {/* node 45:11527 */}
-                <Tile
-                  tint="rgba(217,119,6,0.09)"
-                  className="min-h-[260px] justify-between gap-8 sm:min-h-[236px] lg:flex-1 lg:gap-[34px]"
-                >
-                  <div className="flex items-center gap-4">
-                    <CountdownDial />
-                    <div className="flex flex-col">
-                      <p className="font-display text-[34px] font-medium leading-[34px] tracking-[-0.68px] tabular-nums text-ink-900">
-                        45:00
-                      </p>
-                      <p className="pt-1.5 font-display text-[12px] font-medium uppercase leading-[17.25px] tracking-[1.38px] text-[#92400E]">
-                        Time left
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <TitleSm>A timed, placement-style aptitude test</TitleSm>
-                    <Note className="max-w-[260px] text-[13px] leading-[19.5px]">
-                      Sat under real conditions, so the one that counts holds no surprises.
-                    </Note>
-                  </div>
-                </Tile>
-              </div>
-
-              {/* column 3 */}
-              <div className="flex flex-col gap-4 md:min-w-0 md:flex-1">
-                {/* node 45:11495 — the profile marks, 303 tall, marks above the
-                    headline with a 70px gap between them */}
-                <Tile
-                  tint="rgba(29,111,224,0.09)"
-                  className="min-h-[260px] justify-between gap-10 sm:min-h-[303px] lg:gap-[70px]"
-                >
-                  <ProfileMarks />
-                  <div className="flex flex-col gap-2">
-                    <Title>A Resume, LinkedIn profile and GitHub portfolio</Title>
-                    <Note>An ATS-friendly resume and work you can point a recruiter at.</Note>
-                  </div>
-                </Tile>
-
-                {/* node 45:11544 — chips above, headline below */}
-                <Tile
-                  tint="rgba(124,58,237,0.08)"
-                  className="min-h-[260px] justify-between gap-[34px] sm:min-h-0 sm:justify-start lg:flex-1 lg:justify-between"
-                >
-                  <SubjectChips />
-                  <Title>Develop skills across DSA, web development and core CS</Title>
-                </Tile>
-              </div>
+              <p className="w-full max-w-[400px] text-center font-display text-[14px] leading-[21px] tracking-[-0.15px] text-white/60">
+                Thousands of job and internship opportunities at your fingertips, included with
+                the programme for your whole hunt.
+              </p>
             </div>
           </div>
+
+          {/* node 188:6860 */}
+          <Tile tint="rgba(219,39,119,0.08)" className="justify-between gap-4">
+            <div className="[zoom:0.8]">
+              <MockRounds />
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="font-display text-[18px] font-medium leading-[23.4px] tracking-[-0.62px] text-ink-900">Technical and HR mock interview practice</p>
+              <p className="font-display text-[13px] leading-[20.25px] tracking-[-0.08px] text-ink-900/55">
+                Real rounds with real feedback, before an offer is on the line.
+              </p>
+            </div>
+          </Tile>
+
+          {/* node 188:6931 — the marks card at 2/3 size: 38.4px marks */}
+          <Tile tint="rgba(29,111,224,0.09)" className="justify-between gap-4">
+            <div className="[zoom:0.58]">
+              <ProfileMarks />
+            </div>
+            <div className="flex flex-col gap-1">
+              {/* half a point under the frame's 18px: the browser's face sets it 8px
+                wider than Figma does, which pushed it to two lines */}
+              <p className="font-display text-[17.5px] font-medium leading-[23.4px] tracking-[-0.67px] text-ink-900">A Resume, LinkedIn profile and GitHub portfolio</p>
+              <p className="font-display text-[12px] leading-[20.25px] tracking-[-0.11px] text-ink-900/55">
+                An ATS-friendly resume and work you can point a recruiter at.
+              </p>
+            </div>
+          </Tile>
+
+          {/* node 188:6914 — the dial at 57.6px, 45:00 at 24.5px */}
+          <Tile tint="rgba(217,119,6,0.09)" className="justify-between gap-3">
+            <div className="flex items-center gap-4 [zoom:0.6]">
+              <CountdownDial />
+              <div className="flex flex-col">
+                <p className="font-display text-[34px] font-medium leading-[34px] tracking-[-0.68px] tabular-nums text-ink-900">
+                  45:00
+                </p>
+                <p className="pt-1.5 font-display text-[12px] font-medium uppercase leading-[17.25px] tracking-[1.38px] text-[#92400E]">
+                  Time left
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="font-display text-[18px] font-medium leading-[23.4px] tracking-[-0.62px] text-ink-900">A timed, placement-style aptitude test</p>
+              <p className="font-display text-[13px] leading-[20.25px] tracking-[-0.08px] text-ink-900/55">
+                Sat under real conditions, so the one that counts holds no surprises.
+              </p>
+            </div>
+          </Tile>
+
+          {/* node 188:6956 */}
+          <Tile tint="rgba(124,58,237,0.08)" className="justify-between gap-4">
+            <SubjectChips />
+            <div className="max-w-[369px]">
+              <Title>Develop skills across DSA, web development and core CS</Title>
+            </div>
+          </Tile>
+
+          {/* node 188:7022 — across columns 2–3, pills in one row */}
+          <Tile tint="rgba(8,145,178,0.09)" className="justify-between gap-4 sm:col-span-2">
+            <AiTools order={["RAG", "Coding assistants", "LLM APIs", "Embeddings"]} className="gap-2" />
+            <p className="font-display text-[19px] font-normal leading-[1.25] tracking-[-0.015em] text-ink-900 sm:text-[21px] sm:leading-[26.25px] sm:tracking-[-0.67px]">
+              Hands-on with AI coding tools and LLM APIs
+            </p>
+          </Tile>
         </div>
       </div>
     </section>

@@ -9,7 +9,6 @@ import { Field, PrimaryButton, SelectInput } from "@/components/FormControls";
 import {
   AiTools,
   CountdownDial,
-  DeployedApp,
   MockRounds,
   ProfileMarks,
   SubjectChips,
@@ -280,12 +279,6 @@ const PERKS = [
     zoom: 0.6,
   },
   {
-    title: "A deployed full-stack project with an AI feature",
-    tint: "rgba(14,159,110,0.09)",
-    art: <DeployedApp />,
-    zoom: 0.5,
-  },
-  {
     title: "Technical and HR mock interview practice",
     tint: "rgba(219,39,119,0.08)",
     art: <MockRounds />,
@@ -368,10 +361,13 @@ function Benefits() {
         />
       </div>
 
-      {PERKS.map((p) => (
+      {PERKS.map((p, i) => (
         <div
           key={p.title}
-          className="flex min-h-[148px] flex-col justify-between gap-4 overflow-hidden rounded-[8px] p-4"
+          // an odd count leaves the last tile alone on its row: let it span both
+          className={`flex min-h-[148px] flex-col justify-between gap-4 overflow-hidden rounded-[8px] p-4 ${
+            PERKS.length % 2 && i === PERKS.length - 1 ? "col-span-2" : ""
+          }`}
           style={{ backgroundColor: p.tint }}
         >
           <div aria-hidden="true" className="pointer-events-none" style={{ zoom: p.zoom }}>
